@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <!-- French.WithDrChan.com - 2026 -->
-<title>French 2 — Grammar Reference | French.WithDrChan.com</title>
+<title>French 2 — LAF2201 | French.WithDrChan.com</title>
 <style>
 :root{
   --primary:#003366;
@@ -321,7 +321,6 @@ body.dark .fill-sentence input.err{background:#2e0a0a;}
   }
   .tts-btn:hover { opacity: 1; transform: scale(1.2); }
 
-
 /* ── Agreement suffix flash-red animation ── */
 @keyframes suffixFlash {
   0%, 49% { color: #dc2626; font-weight: 900; text-shadow: 0 0 6px #fca5a5; }
@@ -414,7 +413,6 @@ body.dark .fr-tooltip::after {
 [data-theme="dark"] .en-tip-btn { background: #1e3a5f; border-color: #3b82f6; color: #93c5fd; }
 [data-theme="dark"] .en-tip-btn:hover { background: #1e40af; }
 
-
 /* ── Sentence-level EN hover tooltip ── */
 .fr-sent {
   cursor: help;
@@ -445,18 +443,15 @@ body.dark .fr-tooltip::after {
 .fr-sent:hover::after { display: block; }
 [data-theme="dark"] .fr-sent { border-bottom-color: #475569; }
 
-
 /* ── LEARN / REVISE TOGGLE ── */
-.mode-toggle{display:flex;background:rgba(255,255,255,.12);border-radius:50px;padding:3px;gap:2px;}
-.mode-btn{padding:5px 16px;border-radius:50px;border:none;cursor:pointer;font-size:12px;font-weight:800;color:rgba(255,255,255,.65);background:transparent;transition:all 0.2s;letter-spacing:.03em;}
-.mode-btn.active{background:#fff;color:#003366;box-shadow:0 2px 6px rgba(0,0,0,.25);}
-body.dark .mode-btn.active{background:#4da3ff;color:#0a1628;}
+
+body.dark 
 
 /* Elements hidden in Revise mode */
-body.revise-mode .learn-only{display:none!important;}
-body.revise-mode .fr-sent::after{display:none!important;}
-body.revise-mode .fr-tooltip::after{opacity:0!important;pointer-events:none!important;}
-body.revise-mode .en-tip-card{display:none!important;}
+body
+body
+body
+body
 
 /* Summary strip */
 .summary-strip{background:linear-gradient(135deg,#0f172a,#1e3a5f);color:#e2e8f0;border-radius:10px;padding:12px 14px;margin:0 0 16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
@@ -550,16 +545,16 @@ body.dark .asc-meaning{background:#1a0a2e;border-color:#a855f7;}
 
 /* PAVAN revise compression */
 .pavan-compact{display:none;background:#0f172a;color:#e2e8f0;border-radius:10px;padding:12px 16px;margin:12px 0;}
-body.revise-mode .pavan-compact{display:block;}
-body.revise-mode .pavan-full-table{display:none;}
+body
+body
 .pavan-chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;}
 .pavan-chip{background:rgba(255,255,255,.12);border-radius:20px;padding:4px 12px;font-size:13px;font-weight:700;cursor:pointer;}
 .pavan-chip:hover{background:rgba(255,255,255,.22);}
 
 /* Agreement strip (revise mode) */
 .agree-strip{display:none;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin:12px 0;}
-body.revise-mode .agree-strip{display:grid;}
-body.revise-mode .agree-full-table{display:none;}
+body
+body
 .as-cell{background:#1e3a5f;color:#e2e8f0;border-radius:8px;padding:8px;text-align:center;font-size:13px;font-weight:700;}
 .as-cell .as-label{font-size:10px;opacity:.65;display:block;margin-bottom:2px;}
 
@@ -621,12 +616,70 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 .fb-block.fb-pp{background:#fbbf24;color:#78350f;}
 .fb-block.fb-noun{background:#7c3aed;color:#fff;}
 .fb-block.fb-bangs{background:#16a34a;color:#fff;}
-.fb-block.fb-adj-after{background:#e5e7eb;color:#374151;}
+.fb-block.fb-adj-after{background:#9ca3af;color:#fff;}
 .fb-plus{font-size:18px;color:#9ca3af;font-weight:400;}
 .fb-opt{opacity:.55;font-size:13px;}
 
+
+.cloze-input {
+  border: none;
+  border-bottom: 2px solid #6b7280;
+  background: transparent;
+  font-size: 15px;
+  font-family: inherit;
+  color: #1e40af;
+  font-weight: 600;
+  padding: 0 4px;
+  outline: none;
+  text-align: center;
+}
+.cloze-input:focus {
+  border-bottom-color: #2563eb;
+  background: #eff6ff;
+  border-radius: 4px;
+}
+.cloze-input.correct { border-bottom-color: #16a34a; color: #15803d; }
+.cloze-input.wrong { border-bottom-color: #dc2626; color: #dc2626; }
+
 </style>
-<script async="" src="https://plausible.io/js/pa-ZMnJXVIi61VBsqxepueWj.js"></script>
+<script async="" src="https://plausible.io/js/pa-ZMnJXVIi61VBsqxepueWj.js">
+// ── Mixed review cloze ──────────────────────────────────────────────────────
+const clozeAnswers = {
+  cl1:'levées', cl2:'depuis', cl3:'Soyez', cl4:'vieille', cl5:'faites',
+  cl6:'montées', cl7:'qui', cl8:"qu'", cl9:'pendant', cl10:'trouvé',
+  cl11:'prises', cl12:'meilleures', cl13:'autant', cl14:"qu'",
+  cl15:'celle', cl16:'petit', cl17:'épais', cl18:'beau',
+  cl19:'depuis', cl20:'qui', cl21:'elle'
+};
+function checkCloze() {
+  let score = 0, total = 21;
+  for (let i = 1; i <= total; i++) {
+    const inp = document.getElementById('cl' + i);
+    if (!inp) continue;
+    const val = inp.value.trim().toLowerCase();
+    const ans = (clozeAnswers['cl' + i] || '').toLowerCase();
+    if (val === ans) {
+      inp.classList.remove('wrong'); inp.classList.add('correct'); score++;
+    } else {
+      inp.classList.remove('correct'); inp.classList.add('wrong');
+    }
+  }
+  const sc = document.getElementById('clozeScore');
+  sc.innerHTML = '<strong>' + score + ' / ' + total + '</strong>' + (score === total ? ' 🎉 Perfect!' : '');
+  if (score < total) {
+    document.getElementById('clozeAnswers').style.display = 'block';
+  }
+}
+function resetCloze() {
+  for (let i = 1; i <= 21; i++) {
+    const inp = document.getElementById('cl' + i);
+    if (inp) { inp.value = ''; inp.classList.remove('correct','wrong'); }
+  }
+  document.getElementById('clozeScore').innerHTML = '';
+  document.getElementById('clozeAnswers').style.display = 'none';
+}
+
+</script>
 </head>
 <body>
 <canvas id="confetti" style="position:fixed;top:0;left:0;z-index:999;pointer-events:none;width:0;height:0;"></canvas>
@@ -634,8 +687,8 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <div class="app">
 <header>
 <div class="header-title">
-<h1>French 2 — Grammar Reference</h1>
-<p class="byline"><a href="index.html" style="color:rgba(255,255,255,0.7);text-decoration:none;">← French.WithDrChan.com</a>  ·  Advanced grammar  ·  2026</p>
+<h1>Revisions</h1>
+<p class="byline"><a href="index.html" style="color:rgba(255,255,255,0.7);text-decoration:none;">← French.WithDrChan.com</a>  ·  LAF2201  ·  2026</p>
 </div>
 <div class="header-center" id="headerCenter" style="display:none;">
 <button class="neo-diff-btn diff-easy" id="diffBtn" onclick="cycleDifficulty()" title="Changer le niveau">
@@ -644,28 +697,25 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 </button>
 </div>
 <div class="header-center" style="display:flex!important;">
-<div class="mode-toggle" id="modeToggle">
-<button class="mode-btn active" id="learnBtn" onclick="setMode('learn')">📖 Learn</button>
-<button class="mode-btn" id="reviseBtn" onclick="setMode('revise')">⚡ Revise</button>
-</div>
-</div>
+
 <div class="header-right">
 <button class="secondary" id="toggleConfetti" style="background:#6b7280;color:#fff;">🎉 Confetti</button>
 <button class="secondary" onclick="toggleDark()" style="background:#4338ca;color:#fff;">🌙</button>
 </div>
+</div>
 </header>
 <nav class="tab-nav" role="tablist">
-<button class="tab-btn active" data-color="red" id="tabBtn_overviewTab" onclick="switchTab('overviewTab')" role="tab"><span class="tab-icon">🗺</span><span class="tab-num">0</span><span class="tab-label">Overview</span></button>
-<button class="tab-btn" data-color="orange" id="tabBtn_pcEtreTab" onclick="switchTab('pcEtreTab')" role="tab"><span class="tab-icon">🏃</span><span class="tab-num">1</span><span class="tab-label">PC with être</span></button>
-<button class="tab-btn" data-color="yellow" id="tabBtn_imperatifTab" onclick="switchTab('imperatifTab')" role="tab"><span class="tab-icon">📢</span><span class="tab-num">2</span><span class="tab-label">The imperative</span></button>
-<button class="tab-btn" data-color="green" id="tabBtn_quiqueTab" onclick="switchTab('quiqueTab')" role="tab"><span class="tab-icon">🔗</span><span class="tab-num">3</span><span class="tab-label">Qui and que</span></button>
-<button class="tab-btn" data-color="blue" id="tabBtn_codTab" onclick="switchTab('codTab')" role="tab"><span class="tab-icon">🔄</span><span class="tab-num">4</span><span class="tab-label">COD pronoun</span></button>
-<button class="tab-btn" data-color="violet" id="tabBtn_comparatifTab" onclick="switchTab('comparatifTab')" role="tab"><span class="tab-icon">⚖️</span><span class="tab-num">5</span><span class="tab-label">Comparative</span></button>
-<button class="tab-btn" data-color="teal" id="tabBtn_demoTab" onclick="switchTab('demoTab')" role="tab"><span class="tab-icon">👆</span><span class="tab-num">6</span><span class="tab-label">Dem. pronouns</span></button>
-<button class="tab-btn" data-color="pink" id="tabBtn_dureeTab" onclick="switchTab('dureeTab')" role="tab"><span class="tab-icon">⏳</span><span class="tab-num">7</span><span class="tab-label">Pendant/Depuis</span></button>
-<button class="tab-btn" data-color="indigo" id="tabBtn_adjectifsTab" onclick="switchTab('adjectifsTab')" role="tab"><span class="tab-icon">🎨</span><span class="tab-num">8</span><span class="tab-label">Adjective position</span></button>
-<button class="tab-btn" data-color="gray" id="tabBtn_mixedTab" onclick="switchTab('mixedTab')" role="tab"><span class="tab-icon">🔁</span><span class="tab-num">9</span><span class="tab-label">Mixed review</span></button>
-<button class="tab-btn" data-color="emerald" id="tabBtn_writingTab" onclick="switchTab('writingTab')" role="tab"><span class="tab-icon">✍️</span><span class="tab-num">10</span><span class="tab-label">Writing</span></button>
+<button class="tab-btn active" data-color="red" id="tabBtn_overviewTab" onclick="switchTab('overviewTab')" role="tab"><span class="tab-icon">🗺</span><span class="tab-num">0</span><span class="tab-label">🗺</span></button>
+<button class="tab-btn" data-color="orange" id="tabBtn_pcEtreTab" onclick="switchTab('pcEtreTab')" role="tab"><span class="tab-icon">🏃</span><span class="tab-num">1</span><span class="tab-label">PC</span></button>
+<button class="tab-btn" data-color="yellow" id="tabBtn_imperatifTab" onclick="switchTab('imperatifTab')" role="tab"><span class="tab-icon">📢</span><span class="tab-num">2</span><span class="tab-label">💬</span></button>
+<button class="tab-btn" data-color="green" id="tabBtn_quiqueTab" onclick="switchTab('quiqueTab')" role="tab"><span class="tab-icon">🔗</span><span class="tab-num">3</span><span class="tab-label">qui/que</span></button>
+<button class="tab-btn" data-color="blue" id="tabBtn_codTab" onclick="switchTab('codTab')" role="tab"><span class="tab-icon">🔄</span><span class="tab-num">4</span><span class="tab-label">COD</span></button>
+<button class="tab-btn" data-color="violet" id="tabBtn_comparatifTab" onclick="switchTab('comparatifTab')" role="tab"><span class="tab-icon">⚖️</span><span class="tab-num">5</span><span class="tab-label">⚖️</span></button>
+<button class="tab-btn" data-color="teal" id="tabBtn_demoTab" onclick="switchTab('demoTab')" role="tab"><span class="tab-icon">👆</span><span class="tab-num">6</span><span class="tab-label">👆</span></button>
+<button class="tab-btn" data-color="pink" id="tabBtn_dureeTab" onclick="switchTab('dureeTab')" role="tab"><span class="tab-icon">⏳</span><span class="tab-num">7</span><span class="tab-label">depuis/pendant</span></button>
+<button class="tab-btn" data-color="indigo" id="tabBtn_adjectifsTab" onclick="switchTab('adjectifsTab')" role="tab"><span class="tab-icon">🎨</span><span class="tab-num">8</span><span class="tab-label">Adj.</span></button>
+<button class="tab-btn" data-color="gray" id="tabBtn_mixedTab" onclick="switchTab('mixedTab')" role="tab"><span class="tab-icon">🔁</span><span class="tab-num">9</span><span class="tab-label">🌐</span></button>
+<button class="tab-btn" data-color="emerald" id="tabBtn_writingTab" onclick="switchTab('writingTab')" role="tab"><span class="tab-icon">✍️</span><span class="tab-num">10</span><span class="tab-label">✍️</span></button>
 </nav>
 <!-- ============================================================ -->
 <!-- OVERVIEW TAB                                                   -->
@@ -673,8 +723,8 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <div class="tab-panel active" id="overviewTab" role="tabpanel">
 <div class="page">
 <div class="guide-header">
-<div class="tag">French 2 · Grammar Reference</div>
-<h1>Grammar — intermediate level</h1>
+<div class="tag">French 2 · LAF2201</div>
+<h1>Revisions</h1>
 <p>Passé composé · Imperative · Relative pronouns · COD · Comparative · and more</p>
 </div>
 <div class="tab-instruction-card" style="--tab-color:#dc2626;--tab-color-light:rgba(220,38,38,0.06);">
@@ -716,7 +766,7 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <a class="nav-arrow-btn next-btn" href="#" onclick="switchTab('pcEtreTab');return false;">🏃 PC with être →</a>
 </div>
 <div class="guide-footer">
-<strong>French.WithDrChan</strong> — French 2 · Grammar Reference
+<strong>French.WithDrChan</strong> — French 2 · LAF2201
   </div>
 </div>
 </div>
@@ -731,18 +781,10 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <div class="tic-title">The passé composé with être</div>
 
 </div>
-<div class="summary-strip learn-only"><div class="ss-cell ss-rule"><span class="ss-label">⚡ Rule</span><span class="ss-text"><strong>être</strong> verbs (PAVAN-MRT-PRES-DM) → PP agrees w/ subject</span></div><div class="ss-cell ss-mistake"><span class="ss-label">⚠️ Common mistake</span><span class="ss-text">se parler / se téléphoner = COI → <strong>no agree</strong></span></div><div class="ss-cell ss-hook"><span class="ss-label">🧠 Memory hook</span><span class="ss-text">COD = agree · COI = freeze</span></div></div>
-
+<div class="summary-strip"><div class="ss-cell ss-rule"><span class="ss-label">⚡ Rule</span><span class="ss-text"><strong>être</strong> verbs (PAVAN-MRT-PRES-DM) → PP agrees w/ subject</span></div><div class="ss-cell ss-mistake"><span class="ss-label">⚠️ Common mistake</span><span class="ss-text">se lever, se regarder = COD → agree &nbsp;·&nbsp; se parler, se téléphoner = COI → no agree</span></div><div class="ss-cell ss-hook"><span class="ss-label">🧠 Memory hook</span><span class="ss-text">COD = agree · COI = freeze</span></div></div>
 
 </div>
-<div class="formula-box fb-adj learn-only">
-  <span class="fb-block fb-bangs fb-opt">(BANGS adj.)</span>
-  <span class="fb-plus">+</span>
-  <span class="fb-block fb-noun">NOUN</span>
-  <span class="fb-plus">+</span>
-  <span class="fb-block fb-adj-after fb-opt">(most adj.)</span>
-</div>
-<div class="formula-box fb-pc learn-only">
+<div class="formula-box fb-pc">
   <span class="fb-block fb-aux">Aux. (avoir / être)</span>
   <span class="fb-plus">+</span>
   <span class="fb-block fb-pp">Participe passé</span>
@@ -751,11 +793,12 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <div class="card">
 <p style="font-size:13px;color:#6b7280;margin:0 0 10px;">Each pair forms a couple of opposites (or near-opposites). Learn them together!</p>
 <div class="pavan-compact">
-<div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;opacity:.6;margin-bottom:8px;">PAVAN-MRT-PRES-DM — quick reference (Revise mode)</div>
+<div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;opacity:.6;margin-bottom:8px;">PAVAN-MRT-PRES-DM — quick reference</div>
 <div class="pavan-chips">
 <span class="pavan-chip" title="Partir / Arriver">PA</span>
 <span class="pavan-chip" title="Venir / Aller">VA</span>
-<span class="pavan-chip" title="Naître / Mourir">NM</span>
+<span class="pavan-chip" title="Naître (alone)">N</span>
+<span class="pavan-chip" title="Mourir (alone)">M</span>
 <span class="pavan-chip" title="Retourner / Tomber">RT</span>
 <span class="pavan-chip" title="Passer / Rester">PS</span>
 <span class="pavan-chip" title="Entrer / Sortir">ES</span>
@@ -792,23 +835,37 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <td>venir vers ici ↔ aller là-bas</td>
 </tr>
 <tr>
-<td>NM</td>
+<td>N</td>
 <td><span class="fr-tooltip" data-en="to be born"><em>naître</em></span></td>
 <td>né(e)(s)</td>
+<td colspan="2" style="color:#9ca3af;font-style:italic;font-size:12px;">— alone —</td>
+<td>début de vie</td>
+</tr>
+<tr>
+<td>M</td>
 <td><span class="fr-tooltip" data-en="to die"><em>mourir</em></span></td>
 <td>mort(e)(s)</td>
-<td>début de vie ↔ fin de vie</td>
+<td colspan="2" style="color:#9ca3af;font-style:italic;font-size:12px;">— alone —</td>
+<td>fin de vie</td>
 </tr>
 <tr>
 <td>RT</td>
-<td><span class="fr-tooltip" data-en="to return"><em>retourner</em></span></td>
+<td><span class="fr-tooltip" data-en="to return / to turn back"><em>retourner</em></span></td>
 <td>retourné(e)(s)</td>
-<td><span class="fr-tooltip" data-en="to pass / to spend (time)"><em>passer</em></span></td>
-<td>passé(e)(s)</td>
-<td>revenir ↔ passer (sans s'arrêter)</td>
+<td><span class="fr-tooltip" data-en="to fall"><em>tomber</em></span></td>
+<td>tombé(e)(s)</td>
+<td>retourner ↔ tomber</td>
 </tr>
 <tr>
-<td>PR</td>
+<td>PS</td>
+<td><span class="fr-tooltip" data-en="to pass / to spend (time)"><em>passer</em></span></td>
+<td>passé(e)(s)</td>
+<td><span class="fr-tooltip" data-en="to stay"><em>rester</em></span></td>
+<td>resté(e)(s)</td>
+<td>passer (sans s'arrêter) ↔ rester sur place</td>
+</tr>
+<tr>
+<td>ES</td>
 <td><span class="fr-tooltip" data-en="to enter"><em>entrer</em></span></td>
 <td>entré(e)(s)</td>
 <td><span class="fr-tooltip" data-en="to go out"><em>sortir</em></span></td>
@@ -816,25 +873,17 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <td>dedans ↔ dehors</td>
 </tr>
 <tr>
-<td>ES</td>
+<td>DM</td>
 <td><span class="fr-tooltip" data-en="to go down / to descend"><em>descendre</em></span></td>
 <td>descendu(e)(s)</td>
 <td><span class="fr-tooltip" data-en="to go up / to climb"><em>monter</em></span></td>
 <td>monté(e)(s)</td>
 <td>vers le bas ↔ vers le haut</td>
 </tr>
-<tr>
-<td>DM</td>
-<td><span class="fr-tooltip" data-en="to stay"><em>rester</em></span></td>
-<td>resté(e)(s)</td>
-<td><span class="fr-tooltip" data-en="to fall"><em>tomber</em></span></td>
-<td>tombé(e)(s)</td>
-<td>rester sur place ↔ tomber</td>
-</tr>
 </tbody>
 </table>
 <div class="tip">
-<strong>Memo:</strong> PAVAN-MRT-PRES-DM — <span class="fr-tooltip" data-en="Leave Arrive · Come Go · Be born · Die Return Fall · Pass Stay Enter Exit · Go down Go up"><em>Partir Arriver · Venir Aller · Naître · Mourir Retourner Tomber · Passer Rester Entrer Sortir · Descendre Monter</em></span><button aria-label="Écouter" class="tts-btn" onclick="speakFrench('Partir Arriver · Venir Aller · Naître · Mourir Retourner Tomber · Passer Rester Entrer Sortir · Descendre Monter')" title="Écouter">🔊</button>
+<strong>Memo:</strong> PAVAN-MRT-PRES-DM — <span class="fr-tooltip" data-en="Leave Arrive · Come Go · Be born · Die · Return Fall · Pass Stay · Enter Exit · Go down Go up"><em>Partir Arriver · Venir Aller · Naître · Mourir · Retourner Tomber · Passer Rester · Entrer Sortir · Descendre Monter</em></span><button aria-label="Écouter" class="tts-btn" onclick="speakFrench('Partir Arriver · Venir Aller · Naître · Mourir · Retourner Tomber · Passer Rester · Entrer Sortir · Descendre Monter')" title="Écouter">🔊</button>
 </div>
 </div>
 <h2>🔍 Micro-exercise A — Être or avoir?</h2>
@@ -950,12 +999,12 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <div class="card">
 <p style="font-size:13px;color:#6b7280;margin:0 0 12px;">Given the subject and the past participle stem, write the correct ending (+e / +s / +es / nothing — leave blank if nothing).</p>
 <div id="pcMiC">
-<div class="ex-item">a. <em>elle</em> + sort → sort<input id="pcC1" type="text" style="width:50px;" placeholder="?"></div>
-<div class="ex-item">b. <em>ils</em> + arriv → arriv<input id="pcC2" type="text" style="width:50px;" placeholder="?"></div>
-<div class="ex-item">c. <em>elles</em> + part → part<input id="pcC3" type="text" style="width:50px;" placeholder="?"></div>
-<div class="ex-item">d. <em>il</em> + né → n<input id="pcC4" type="text" style="width:50px;" placeholder="?"></div>
-<div class="ex-item">e. <em>ils</em> + se téléphoner → téléphoné<input id="pcC5" type="text" style="width:50px;" placeholder="?"></div>
-<div class="ex-item">f. <em>le soleil</em> + apparaître → apparu<input id="pcC6" type="text" style="width:50px;" placeholder="?"></div>
+<div class="ex-item">a. <em>elle</em> → elle <strong>est</strong> part<input id="pcC1" type="text" style="width:60px;" placeholder="?"> <span style="font-size:11px;color:#6b7280;">(partir)</span></div>
+<div class="ex-item">b. <em>ils</em> → ils <strong>sont</strong> n<input id="pcC2" type="text" style="width:60px;" placeholder="?"> <span style="font-size:11px;color:#6b7280;">(naître)</span></div>
+<div class="ex-item">c. <em>elle</em> → elle <strong>est</strong> deven<input id="pcC3" type="text" style="width:60px;" placeholder="?"> <span style="font-size:11px;color:#6b7280;">(devenir)</span></div>
+<div class="ex-item">d. <em>nous</em> [fém.] → nous nous <strong>sommes</strong> lev<input id="pcC4" type="text" style="width:60px;" placeholder="?"> <span style="font-size:11px;color:#6b7280;">(se lever)</span></div>
+<div class="ex-item">e. <em>ils</em> → ils se <strong>sont</strong> téléphon<input id="pcC5" type="text" style="width:60px;" placeholder="?"> <span style="font-size:11px;color:#6b7280;">(se téléphoner)</span></div>
+<div class="ex-item">f. <em>le soleil</em> → le soleil <strong>est / a</strong> appar<input id="pcC6" type="text" style="width:60px;" placeholder="?"> <span style="font-size:11px;color:#6b7280;">(apparaître)</span></div>
 </div>
 <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
 <button onclick="checkPcC()" style="background:#003366;color:#fff;padding:8px 18px;font-size:14px;border:none;border-radius:6px;cursor:pointer;">✅ Check</button>
@@ -1024,9 +1073,9 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <div class="tic-title">The imperative — giving orders, advice, and instructions</div>
 
 </div>
-<div class="summary-strip learn-only"><div class="ss-cell ss-rule"><span class="ss-label">⚡ Rule</span><span class="ss-text">tu / nous / vous only · no pronoun · -ER tu drops <strong>-s</strong></span></div><div class="ss-cell ss-mistake"><span class="ss-label">⚠️ Common mistake</span><span class="ss-text">être / avoir / savoir → subjunctive stems (sois, aie, sache)</span></div><div class="ss-cell ss-hook"><span class="ss-label">🧠 Memory hook</span><span class="ss-text"><strong>-s</strong> returns before <strong>-y</strong> and <strong>-en</strong> (vas-y, parles-en)</span></div></div>
+<div class="summary-strip"><div class="ss-cell ss-rule"><span class="ss-label">⚡ Rule</span><span class="ss-text">tu / nous / vous only · no pronoun · -ER tu drops <strong>-s</strong></span></div><div class="ss-cell ss-mistake"><span class="ss-label">⚠️ Common mistake</span><span class="ss-text">être / avoir / savoir → subjunctive stems (sois, aie, sache)</span></div><div class="ss-cell ss-hook"><span class="ss-label">🧠 Memory hook</span><span class="ss-text"><strong>-s</strong> returns before <strong>-y</strong> and <strong>-en</strong> (vas-y, parles-en)</span></div></div>
 
-<div class="imp-chips learn-only"><span class="imp-chip">3 forms only: tu / nous / vous</span><span class="imp-chip">No subject pronoun</span><span class="imp-chip">-ER verbs: drop -s for <em>tu</em></span><span class="imp-chip">Liaison: Va → Vas-y</span><span class="imp-chip">Irregular: être · avoir · savoir · vouloir</span></div>
+<div class="imp-chips"><span class="imp-chip">3 forms only: tu / nous / vous</span><span class="imp-chip">No subject pronoun</span><span class="imp-chip">-ER verbs: drop -s for <em>tu</em></span><span class="imp-chip">Liaison: Va → Vas-y</span><span class="imp-chip">Irregular: être · avoir · savoir · vouloir</span></div>
 
 </div>
 <h2>📌 Why only 3 forms?</h2>
@@ -1177,6 +1226,45 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 </tbody>
 </table>
 </div>
+<h2>💡 Key patterns — negation and pronominal verbs</h2>
+<div class="card">
+<table class="diff-table">
+<thead><tr><th>Pattern</th><th>Example</th><th>Structure</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>Normal verb — negative</strong></td>
+<td><span class="fr-tooltip" data-en="Don't speak so fast!"><em>Ne parle pas si vite !</em></span><button aria-label="Écouter" class="tts-btn" onclick="speakFrench('Ne parle pas si vite !')" title="Écouter">🔊</button></td>
+<td><em>ne</em> + verb + <em>pas</em></td>
+</tr>
+<tr>
+<td><strong>COD pronoun — affirmative</strong></td>
+<td><span class="fr-tooltip" data-en="Take it!"><em>Prends-le !</em></span><button aria-label="Écouter" class="tts-btn" onclick="speakFrench('Prends-le !')" title="Écouter">🔊</button></td>
+<td>verb + hyphen + <em>le / la / les</em></td>
+</tr>
+<tr>
+<td><strong>COD pronoun — negative</strong></td>
+<td><span class="fr-tooltip" data-en="Don't take it!"><em>Ne le prends pas !</em></span><button aria-label="Écouter" class="tts-btn" onclick="speakFrench('Ne le prends pas !')" title="Écouter">🔊</button></td>
+<td><em>ne</em> + <em>le / la / les</em> + verb + <em>pas</em></td>
+</tr>
+<tr>
+<td><strong>Pronominal verb — affirmative</strong></td>
+<td><span class="fr-tooltip" data-en="Get up! / Wake up!"><em>Lève-toi !</em></span><button aria-label="Écouter" class="tts-btn" onclick="speakFrench('Lève-toi !')" title="Écouter">🔊</button></td>
+<td>verb + hyphen + <em>toi/nous/vous</em></td>
+</tr>
+<tr>
+<td><strong>Pronominal verb — negative</strong></td>
+<td><span class="fr-tooltip" data-en="Don't get up!"><em>Ne te lève pas !</em></span><button aria-label="Écouter" class="tts-btn" onclick="speakFrench('Ne te lève pas !')" title="Écouter">🔊</button></td>
+<td><em>ne</em> + <em>te/nous/vous</em> + verb + <em>pas</em></td>
+</tr>
+</tbody>
+</table>
+<div class="tip">
+<strong>COD affirmative:</strong> pronoun follows the verb with a hyphen — <em>me → moi</em>, <em>te → toi</em>: <em>Prends-<strong>le</strong> !</em> · <em>Mange-<strong>la</strong> !</em> · <em>Donne-<strong>moi</strong> le livre !</em><br/>
+<strong>COD negative:</strong> pronoun returns to pre-verb position: <em>Ne <strong>le</strong> prends pas !</em><br/>
+<strong>Pronominal affirmative:</strong> reflexive pronoun follows the verb with a hyphen: <em>Lève-<strong>toi</strong> !</em> · <em>Levons-<strong>nous</strong> !</em> · <em>Levez-<strong>vous</strong> !</em><br/>
+<strong>Pronominal negative:</strong> pronoun returns to pre-verb position: <em>Ne <strong>te</strong> lève pas !</em>
+</div>
+</div>
 <h2>📝 Exercise — Conjugate in the imperative</h2>
 <div class="card">
 <p style="font-size:13px;color:#6b7280;margin:0 0 12px;">Put the verb in the imperative according to the person indicated. Watch out for exceptions and the -s!</p>
@@ -1231,9 +1319,9 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <div class="tic-title">The relative pronouns qui and que</div>
 
 </div>
-<div class="summary-strip learn-only"><div class="ss-cell ss-rule"><span class="ss-label">⚡ Rule</span><span class="ss-text">QUI = subject → verb follows · QUE = object → subject follows</span></div><div class="ss-cell ss-mistake"><span class="ss-label">⚠️ Common mistake</span><span class="ss-text">que + vowel → <strong>qu'</strong> (always elide)</span></div><div class="ss-cell ss-hook"><span class="ss-label">🧠 Memory hook</span><span class="ss-text">QUI + verb · QUE + subject</span></div></div>
+<div class="summary-strip"><div class="ss-cell ss-rule"><span class="ss-label">⚡ Rule</span><span class="ss-text">QUI = subject → verb follows · QUE = object → subject follows</span></div><div class="ss-cell ss-mistake"><span class="ss-label">⚠️ Common mistake</span><span class="ss-text">que + vowel → <strong>qu'</strong> (always elide)</span></div><div class="ss-cell ss-hook"><span class="ss-label">🧠 Memory hook</span><span class="ss-text">QUI + verb · QUE + subject</span></div></div>
 
-<div class="binary-card learn-only"><div class="binary-half left"><div class="binary-pronoun">QUI</div><div class="binary-rule">Replaces the <strong>subject</strong><br>Word order stays intact<br>→ verb follows directly</div><div class="binary-example">La femme <strong>[qui]</strong> regarde le film</div></div><div class="binary-half right"><div class="binary-pronoun">QUE</div><div class="binary-rule">Replaces the <strong>direct object</strong><br>COD moves to front<br>→ subject follows</div><div class="binary-example">Le film <strong>[que]</strong> la femme regarde</div></div></div>
+<div class="binary-card"><div class="binary-half left"><div class="binary-pronoun">QUI</div><div class="binary-rule">Replaces the <strong>subject</strong><br>Word order stays intact<br>→ verb follows directly</div><div class="binary-example">La femme <strong>[qui]</strong> regarde le film</div></div><div class="binary-half right"><div class="binary-pronoun">QUE</div><div class="binary-rule">Replaces the <strong>direct object</strong><br>COD moves to front<br>→ subject follows</div><div class="binary-example">Le film <strong>[que]</strong> la femme regarde</div></div></div>
 
 </div>
 
@@ -1259,9 +1347,9 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <div style="font-size:12px;font-weight:700;color:#2563eb;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">QUE — talking about the COD</div>
 <!-- Step 0: original sentence -->
 <div id="queStep0" style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:10px 14px;background:#eff6ff;border:2px solid #93c5fd;border-radius:10px;font-size:16px;font-weight:600;">
-<span class="qqw" style="padding:3px 6px;">La femme</span>
-<span class="qqw" style="padding:3px 6px;">regarde</span>
-<span class="qqw" id="que_cod_orig" style="background:#fde68a;color:#92400e;padding:3px 8px;border-radius:6px;">le film</span>
+<span class="qqw" id="que_lafemme" style="padding:3px 6px;transition:transform 0.5s ease;">La femme</span>
+<span class="qqw" id="que_regarde" style="padding:3px 6px;transition:transform 0.5s ease;">regarde</span>
+<span class="qqw" id="que_cod_orig" style="background:#fde68a;color:#92400e;padding:3px 8px;border-radius:6px;transition:transform 0.5s ease;">le film</span>
 <span style="color:#9ca3af;font-size:13px;margin-left:4px;">.</span>
 </div>
 <!-- Step 1: COD flies to front -->
@@ -1462,18 +1550,18 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <strong>Link with the COD pronoun:</strong> It is the same principle — in <em>la pièce qu'il a vue</em><button aria-label="Écouter" class="tts-btn" onclick="speakFrench('la pièce qu\'il a vue')" title="Écouter">🔊</button>, <em>que</em> plays the same role as <em>l'</em> in <em>il l'a vue</em><button aria-label="Écouter" class="tts-btn" onclick="speakFrench('il l\'a vue')" title="Écouter">🔊</button>. The COD is placed before the auxiliary, so the participle agrees.
     </div>
 </div>
-<h2>📝 Exercise — Complete with qui or que/qu'</h2>
+<h2>📝 Exercise — Complete with qui, que or qu'</h2>
 <div class="card">
-<p style="font-size:13px;color:#6b7280;margin:0 0 12px;">Choose <em>qui</em> or <em>que/qu'</em> based on the grammatical role of the relative pronoun.</p>
+<p style="font-size:13px;color:#6b7280;margin:0 0 12px;">Choose <em>qui</em>, <em>que</em> or <em>qu'</em> based on the grammatical role of the relative pronoun.</p>
 <div id="qqExercises">
-<div class="fill-sentence">a. C'est le film <select id="qq1"><option value="">—</option><option>qui</option><option>que</option><option>dont</option></select> tout le monde a adoré.</div>
-<div class="fill-sentence">b. La chanteuse <select id="qq2"><option value="">—</option><option>qui</option><option>que</option><option>dont</option></select> chante sur scène est incroyable.</div>
-<div class="fill-sentence">c. C'est l'acteur <select id="qq3"><option value="">—</option><option>qui</option><option>qu'</option><option>dont</option></select> elle admire le plus.</div>
-<div class="fill-sentence">d. Les professeurs <select id="qq4"><option value="">—</option><option>qui</option><option>que</option><option>dont</option></select> nous enseignent le français sont tous tombés malades.</div>
-<div class="fill-sentence">e. Voici le livre <select id="qq5"><option value="">—</option><option>qui</option><option>que</option><option>dont</option></select> j'ai acheté hier.</div>
-<div class="fill-sentence">f. Les étudiants <select id="qq6"><option value="">—</option><option>qui</option><option>que</option><option>dont</option></select> vous avez rencontrés sont très motivés.</div>
-<div class="fill-sentence">g. C'est une idée <select id="qq7"><option value="">—</option><option>qui</option><option>que</option><option>dont</option></select> me plaît beaucoup.</div>
-<div class="fill-sentence">h. Le restaurant <select id="qq8"><option value="">—</option><option>qui</option><option>qu'</option><option>dont</option></select> ils ont recommandé était excellent.</div>
+<div class="fill-sentence">a. C'est le film <select id="qq1"><option value="">—</option><option>qui</option><option>que</option><option>qu'</option></select> tout le monde a adoré.</div>
+<div class="fill-sentence">b. La chanteuse <select id="qq2"><option value="">—</option><option>qui</option><option>que</option><option>qu'</option></select> chante sur scène est incroyable.</div>
+<div class="fill-sentence">c. C'est l'acteur <select id="qq3"><option value="">—</option><option>qui</option><option>que</option><option>qu'</option></select> elle admire le plus.</div>
+<div class="fill-sentence">d. Les professeurs <select id="qq4"><option value="">—</option><option>qui</option><option>que</option><option>qu'</option></select> nous enseignent le français sont tous tombés malades.</div>
+<div class="fill-sentence">e. Voici le livre <select id="qq5"><option value="">—</option><option>qui</option><option>que</option><option>qu'</option></select> j'ai acheté hier.</div>
+<div class="fill-sentence">f. Les étudiants <select id="qq6"><option value="">—</option><option>qui</option><option>que</option><option>qu'</option></select> vous avez rencontrés sont très motivés.</div>
+<div class="fill-sentence">g. C'est une idée <select id="qq7"><option value="">—</option><option>qui</option><option>que</option><option>qu'</option></select> me plaît beaucoup.</div>
+<div class="fill-sentence">h. Le restaurant <select id="qq8"><option value="">—</option><option>qui</option><option>que</option><option>qu'</option></select> ils ont recommandé était excellent.</div>
 </div>
 <div class="centerButtons" style="margin-top:16px;">
 <button onclick="checkQQ()" style="background:#16a34a;color:#fff;padding:10px 22px;font-size:15px;">✅ Check</button>
@@ -1557,8 +1645,8 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 
 </div>
 </div>
-<div class="summary-strip learn-only"><div class="ss-cell ss-rule"><span class="ss-label">⚡ Rule</span><span class="ss-text">COD before <strong>avoir</strong> → agree · COD after → no agree</span></div><div class="ss-cell ss-mistake"><span class="ss-label">⚠️ Common mistake</span><span class="ss-text"><em>les</em> avons regardé → regardé<strong>s</strong> (don't forget!)</span></div><div class="ss-cell ss-hook"><span class="ss-label">🧠 Memory hook</span><span class="ss-text">Before = agree · After = freeze</span></div></div>
-<div class="cod-agree-visual learn-only"><div class="cav-cell cav-before"><div class="cav-label">COD after verb</div><div class="cav-rule">❌ No agreement</div><div class="cav-example">Nous avons regardé <em>les films</em>.</div></div><div class="cav-cell cav-after"><div class="cav-label">COD before verb</div><div class="cav-rule">✔ Agreement!</div><div class="cav-example">Nous <em>les</em> avons regardé<strong>s</strong>.</div></div></div>
+<div class="summary-strip"><div class="ss-cell ss-rule"><span class="ss-label">⚡ Rule</span><span class="ss-text">COD before <strong>avoir</strong> → agree · COD after → no agree</span></div><div class="ss-cell ss-mistake"><span class="ss-label">⚠️ Common mistake</span><span class="ss-text"><em>les</em> avons regardé → regardé<strong>s</strong> (don't forget!)</span></div><div class="ss-cell ss-hook"><span class="ss-label">🧠 Memory hook</span><span class="ss-text">Before = agree · After = freeze</span></div></div>
+<div class="cod-agree-visual"><div class="cav-cell cav-before"><div class="cav-label">COD after verb</div><div class="cav-rule">❌ No agreement</div><div class="cav-example">Nous avons regardé <em>les films</em>.</div></div><div class="cav-cell cav-after"><div class="cav-label">COD before verb</div><div class="cav-rule">✔ Agreement!</div><div class="cav-example">Nous <em>les</em> avons regardé<strong>s</strong>.</div></div></div>
 
 <h2>📋 COD pronoun forms</h2>
 <div class="card">
@@ -1639,6 +1727,7 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 </tbody>
 </table>
 <!-- ANIMATION: COD pronoun flies to front, agreement shown -->
+<div style="border:4px solid #dc2626;border-radius:12px;padding:4px 4px 0;margin:16px 0 20px;">
 <div style="margin:18px 0 0;background:var(--bg);border-radius:10px;padding:18px 20px;">
 <div style="font-size:13px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">🎥 Animation — the COD pronoun flies to the front, agreement is triggered</div>
 <p style="font-size:13px;color:#6b7280;margin:0 0 10px;">Click to see <em>les films</em> become the pronoun <em>les</em> and move before the auxiliary, triggering past participle agreement.</p>
@@ -1659,6 +1748,7 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <button id="codPcAnimBtn" onclick="animateCodPc()" style="background:#dc2626;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:700;cursor:pointer;display:block;margin:12px auto 0;">▶ CLICK TO SEE ANIMATION</button>
 </div>
 <div id="codPcAnimLabel" style="margin-top:8px;font-size:13px;color:#374151;"></div>
+</div>
 </div>
 <div class="warn">
 <strong>Reminder:</strong> Agreement only occurs when the COD is <strong>placed before</strong> the verb. If the COD follows the verb, there is no agreement: <span class="fr-tooltip" data-en="We have seen these movies."><em>Nous avons vu ces films.</em></span> (no agreement).
@@ -1735,8 +1825,7 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <div class="tic-title">The comparative — comparing people, things, and quantities</div>
 
 </div>
-<div class="summary-strip learn-only"><div class="ss-cell ss-rule"><span class="ss-label">⚡ Rule</span><span class="ss-text">ADJ/ADV: plus/moins/aussi · NOUN: plus de/autant de · bon → <strong>meilleur</strong></span></div><div class="ss-cell ss-mistake"><span class="ss-label">⚠️ Common mistake</span><span class="ss-text"><span class="trap-wrong">plus bon</span> → <span class="trap-right">meilleur</span> · <span class="trap-wrong">aussi de</span> → <span class="trap-right">autant de</span></span></div><div class="ss-cell ss-hook"><span class="ss-label">🧠 Memory hook</span><span class="ss-text">bon → meilleur · mauvais → pire</span></div></div>
-
+<div class="summary-strip"><div class="ss-cell ss-rule"><span class="ss-label">⚡ Rule</span><span class="ss-text">ADJ/ADV: plus/moins/aussi · NOUN: plus de/autant de · bon → <strong>meilleur</strong></span></div><div class="ss-cell ss-mistake"><span class="ss-label">⚠️ Common mistake</span><span class="ss-text"><span class="trap-wrong">plus bon</span> → <span class="trap-right">meilleur</span> · <span class="trap-wrong">aussi de</span> → <span class="trap-right">autant de</span></span></div><div class="ss-cell ss-hook"><span class="ss-label">🧠 Memory hook</span><span class="ss-text">bon → meilleur · mauvais → pire</span></div></div>
 
 </div>
 <h2>📐 Comparative with an adjective or adverb</h2>
@@ -1969,9 +2058,11 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <div class="tic-title">Demonstrative pronouns — celui, celle, ceux, celles</div>
 
 </div>
-<div class="summary-strip learn-only"><div class="ss-cell ss-rule"><span class="ss-label">⚡ Rule</span><span class="ss-text">celui/celle/ceux/celles + <strong>-ci/-là · qui/que · de</strong></span></div><div class="ss-cell ss-mistake"><span class="ss-label">⚠️ Common mistake</span><span class="ss-text"><strong>Never bare</strong>: celui must have -ci/-là, qui, que, or de</span></div><div class="ss-cell ss-hook"><span class="ss-label">🧠 Memory hook</span><span class="ss-text">-ci = near · -là = far (but -là dominates in speech)</span></div></div>
+<div class="summary-strip"><div class="ss-cell ss-rule"><span class="ss-label">⚡ Rule</span><span class="ss-text">celui/celle/ceux/celles + <strong>-ci/-là · qui/que · de</strong></span></div><div class="ss-cell ss-mistake"><span class="ss-label">⚠️ Common mistake</span><span class="ss-text"><strong>Never bare</strong>: celui must have -ci/-là, qui, que, or de</span></div><div class="ss-cell ss-hook"><span class="ss-label">🧠 Memory hook</span><span class="ss-text">-ci = near · -là = far (but -là dominates in speech)</span></div></div>
 
-<div class="learn-only" style="margin:0 0 16px;">
+</div>
+
+<div class="card" style="margin:0 0 16px;">
 <table class="demo-grid-table">
 <thead>
 <tr>
@@ -2004,7 +2095,6 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 </tr>
 </tbody>
 </table>
-
 </div>
 
 <h2>📋 The forms</h2>
@@ -2142,7 +2232,6 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
   </div>
 </div>
 </div>
-</div>
 <!-- ============================================================ -->
 <!-- TAB 7 — PENDANT ET DEPUIS                                    -->
 <!-- ============================================================ -->
@@ -2154,9 +2243,9 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <div class="tic-title">Pendant and depuis — expressing duration</div>
 
 </div>
-<div class="summary-strip learn-only"><div class="ss-cell ss-rule"><span class="ss-label">⚡ Rule</span><span class="ss-text">pendant = finished block (droppable) · depuis = still going (required)</span></div><div class="ss-cell ss-mistake"><span class="ss-label">⚠️ Common mistake</span><span class="ss-text">depuis → <strong>present tense</strong> · <span class="trap-wrong">passé composé</span></span></div><div class="ss-cell ss-hook"><span class="ss-label">🧠 Memory hook</span><span class="ss-text">depuis = present · pendant = any tense</span></div></div>
+<div class="summary-strip"><div class="ss-cell ss-rule"><span class="ss-label">⚡ Rule</span><span class="ss-text">pendant = finished block (droppable) · depuis = still going (required)</span></div><div class="ss-cell ss-mistake"><span class="ss-label">⚠️ Common mistake</span><span class="ss-text">depuis → <strong>present tense</strong> · <span class="trap-wrong">passé composé</span></span></div><div class="ss-cell ss-hook"><span class="ss-label">🧠 Memory hook</span><span class="ss-text">depuis = present · pendant = any tense</span></div></div>
 
-<div class="pd-timeline learn-only"><div class="pd-lane pd-pendant"><div class="pd-title">⏱ PENDANT — duration</div><div class="pd-rule">Indicates <strong>how long</strong> something lasted.<br>The start and end are not necessarily known.<br>Can be dropped from the sentence.</div><div class="pd-example">J'ai étudié <em>(pendant)</em> deux heures. ✔</div></div><div class="pd-lane pd-depuis"><div class="pd-title">📍 DEPUIS — ongoing start</div><div class="pd-rule">Indicates the <strong>start</strong> of something still happening.<br>No visible end yet → use <strong>present tense</strong>.<br>Cannot be dropped.</div><div class="pd-example">J'étudie le français depuis 2 ans. ✔</div></div></div>
+<div class="pd-timeline"><div class="pd-lane pd-pendant"><div class="pd-title">⏱ PENDANT — duration</div><div class="pd-rule">Indicates <strong>how long</strong> something lasted.<br>The start and end are not necessarily known.<br>Can be dropped from the sentence.</div><div class="pd-example">J'ai étudié <em>(pendant)</em> deux heures. ✔</div></div><div class="pd-lane pd-depuis"><div class="pd-title">📍 DEPUIS — ongoing start</div><div class="pd-rule">Indicates the <strong>start</strong> of something still happening.<br>No visible end yet → use <strong>present tense</strong>.<br>Cannot be dropped.</div><div class="pd-example">J'étudie le français depuis 2 ans. ✔</div></div></div>
 
 </div>
 
@@ -2320,10 +2409,17 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <div class="tic-title">Adjective position — before or after the noun?</div>
 
 </div>
-<div class="summary-strip learn-only"><div class="ss-cell ss-rule"><span class="ss-label">⚡ Rule</span><span class="ss-text">Default = after · BANGS = before · some flip meaning</span></div><div class="ss-cell ss-mistake"><span class="ss-label">⚠️ Common mistake</span><span class="ss-text"><em>pauvre homme</em> ≠ <em>homme pauvre</em> · <em>propre chambre</em> ≠ <em>chambre propre</em></span></div><div class="ss-cell ss-hook"><span class="ss-label">🧠 Memory hook</span><span class="ss-text"><strong>B</strong>eauty <strong>A</strong>ge <strong>N</strong>umber <strong>G</strong>oodness <strong>S</strong>ize</span></div></div>
+<div class="summary-strip"><div class="ss-cell ss-rule"><span class="ss-label">⚡ Rule</span><span class="ss-text">Default = after · BANGS = before</span></div><div class="ss-cell ss-hook"><span class="ss-label">🧠 Memory hook</span><span class="ss-text"><strong>B</strong>eauty <strong>A</strong>ge <strong>N</strong>umber <strong>G</strong>oodness <strong>S</strong>ize</span></div></div>
 
-<div class="adj-strip learn-only"><div class="adj-strip-cell asc-default"><div class="asc-label">Default position</div><div class="asc-text">After the noun<br><em>un film intéressant</em></div></div><div class="adj-strip-cell asc-before"><div class="asc-label">BANGS — before noun</div><div class="asc-text">Beauty · Age · Number · Goodness · Size<br><em>un beau film</em></div></div><div class="adj-strip-cell asc-meaning"><div class="asc-label">Meaning changes</div><div class="asc-text">Before = figurative<br>After = literal<br><em>un ancien ami / un ami ancien</em></div></div></div>
+<div class="adj-strip"><div class="adj-strip-cell asc-before"><div class="asc-label">BANGS — before noun</div><div class="asc-text">Beauty · Age · Number · Goodness · Size<br><em>un beau film</em></div></div><div class="adj-strip-cell asc-default"><div class="asc-label">Default position</div><div class="asc-text">After the noun<br><em>un film intéressant</em></div></div></div>
 
+</div>
+<div class="formula-box fb-adj">
+  <span class="fb-block fb-adj-after fb-opt">(most adj.)</span>
+  <span class="fb-plus">+</span>
+  <span class="fb-block fb-noun">NOUN</span>
+  <span class="fb-plus">+</span>
+  <span class="fb-block fb-bangs fb-opt">(BANGS adj.)</span>
 </div>
 <h2>📌 General rule</h2>
 <div class="card">
@@ -2370,75 +2466,6 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 <button onclick="resetAdjP()" style="background:#6b7280;color:#fff;padding:8px 18px;font-size:14px;border:none;border-radius:6px;cursor:pointer;">🔄 Reset</button>
 </div>
 <div id="adjPResult" style="margin-top:10px;font-weight:700;"></div>
-</div>
-<h2>🔄 Adjectives that change meaning by position</h2>
-<div class="card">
-<p style="font-size:13px;color:#6b7280;margin:0 0 10px;"><strong>Before the noun</strong> → figurative or subjective meaning. | <strong>After the noun</strong> → literal or objective meaning (dimension, physical state, etc.).</p>
-<table class="diff-table">
-<thead><tr><th>Adjective</th><th>⬅️ Before the noun <span style="font-weight:400;font-size:11px;">(figurative / subjective)</span></th><th>After the noun ➡️ <span style="font-weight:400;font-size:11px;">(literal / objective)</span></th></tr></thead>
-<tbody>
-<tr>
-<td><span class="fr-tooltip" data-en="ancient / former"><em>ancien</em></span></td>
-<td><span class="fr-tooltip" data-en="my former teacher"><em>mon <strong>ancien</strong> professeur</em></span><br/><span style="font-size:11px;color:#6b7280;">= former teacher (figurative temporal meaning)</span></td>
-<td><span class="fr-tooltip" data-en="an old piece of furniture"><em>un meuble <strong>ancien</strong></em></span><br/><span style="font-size:11px;color:#6b7280;">= literally old, antique</span></td>
-</tr>
-<tr>
-<td><span class="fr-tooltip" data-en="short (masc.)"><em>court</em></span></td>
-<td><span class="fr-tooltip" data-en="a short answer"><em>une <strong>courte</strong> réponse</em></span><br/><span style="font-size:11px;color:#6b7280;">= brief, concise (figurative / evaluative meaning)</span></td>
-<td><span class="fr-tooltip" data-en="a short skirt"><em>une jupe <strong>courte</strong></em></span><br/><span style="font-size:11px;color:#6b7280;">= literally short in dimension</span></td>
-</tr>
-<tr>
-<td><span class="fr-tooltip" data-en="curious (masc.)"><em>curieux</em></span></td>
-<td><span class="fr-tooltip" data-en="a curious character"><em>un <strong>curieux</strong> personnage</em></span><br/><span style="font-size:11px;color:#6b7280;">= strange, odd (figurative meaning)</span></td>
-<td><span class="fr-tooltip" data-en="a curious child"><em>un enfant <strong>curieux</strong></em></span><br/><span style="font-size:11px;color:#6b7280;">= literally curious, wanting to know</span></td>
-</tr>
-<tr>
-<td><span class="fr-tooltip" data-en="big / tall (masc.)"><em>grand</em></span></td>
-<td><span class="fr-tooltip" data-en="a great man"><em>un <strong>grand</strong> homme</em></span><br/><span style="font-size:11px;color:#6b7280;">= remarkable man (figurative meaning)</span></td>
-<td><span class="fr-tooltip" data-en="a tall man"><em>un homme <strong>grand</strong></em></span><br/><span style="font-size:11px;color:#6b7280;">= literally tall in stature</span></td>
-</tr>
-<tr>
-<td><span class="fr-tooltip" data-en="poor"><em>pauvre</em></span></td>
-<td><span class="fr-tooltip" data-en="that poor child"><em>ce <strong>pauvre</strong> enfant</em></span><br/><span style="font-size:11px;color:#6b7280;">= pitiable (figurative / emotional meaning)</span></td>
-<td><span class="fr-tooltip" data-en="a poor family"><em>une famille <strong>pauvre</strong></em></span><br/><span style="font-size:11px;color:#6b7280;">= literally without money</span></td>
-</tr>
-<tr>
-<td><span class="fr-tooltip" data-en="clean / own"><em>propre</em></span></td>
-<td><span class="fr-tooltip" data-en="my own hands"><em>mes <strong>propres</strong> mains</em></span><br/><span style="font-size:11px;color:#6b7280;">= my own hands (figurative / possessive meaning)</span></td>
-<td><span class="fr-tooltip" data-en="clean hands"><em>des mains <strong>propres</strong></em></span><br/><span style="font-size:11px;color:#6b7280;">= literally washed, clean</span></td>
-</tr>
-<tr>
-<td><span class="fr-tooltip" data-en="alone"><em>seul</em></span></td>
-<td><span class="fr-tooltip" data-en="the only solution"><em>la <strong>seule</strong> solution</em></span><br/><span style="font-size:11px;color:#6b7280;">= unique (figurative / restrictive meaning)</span></td>
-<td><span class="fr-tooltip" data-en="a lonely man"><em>un homme <strong>seul</strong></em></span><br/><span style="font-size:11px;color:#6b7280;">= literally alone, solitary</span></td>
-</tr>
-<tr>
-<td><span class="fr-tooltip" data-en="certain / sure (masc.)"><em>certain</em></span></td>
-<td><span class="fr-tooltip" data-en="uncertain charm"><em>un <strong>certain</strong> charme</em></span><br/><span style="font-size:11px;color:#6b7280;">= indefinite, vague (figurative meaning)</span></td>
-<td><span class="fr-tooltip" data-en="a certain victory"><em>une victoire <strong>certaine</strong></em></span><br/><span style="font-size:11px;color:#6b7280;">= literally sure, assured</span></td>
-</tr>
-</tbody>
-</table>
-<div class="tip">
-<strong>Practical rule:</strong> if you can replace the adjective with a measurable or verifiable physical state, it goes <strong>after</strong> the noun. If the adjective expresses a judgement, emotion, or derived meaning, it goes <strong>before</strong>.
-    </div>
-</div>
-<h2>🔍 Micro-exercise Q — Which meaning? (before or after the noun)</h2>
-<div class="card">
-<p style="font-size:13px;color:#6b7280;margin:0 0 12px;">Choose the correct English translation based on the position of the adjective in the sentence.</p>
-<div id="adjMiQ">
-<div class="ex-item">a. <em>mon ancien professeur</em> = <select id="adjQ1"><option value="">—</option><option>my former teacher</option><option>my old teacher (aged)</option></select></div>
-<div class="ex-item">b. <em>un meuble ancien</em> = <select id="adjQ2"><option value="">—</option><option>a former piece of furniture</option><option>an antique piece of furniture</option></select></div>
-<div class="ex-item">c. <em>ma propre chambre</em> = <select id="adjQ3"><option value="">—</option><option>my own room</option><option>my clean room</option></select></div>
-<div class="ex-item">d. <em>une chambre propre</em> = <select id="adjQ4"><option value="">—</option><option>my own room</option><option>a clean room</option></select></div>
-<div class="ex-item">e. <em>un curieux personnage</em> = <select id="adjQ5"><option value="">—</option><option>a strange character</option><option>an inquisitive character</option></select></div>
-<div class="ex-item">f. <em>un enfant curieux</em> = <select id="adjQ6"><option value="">—</option><option>a strange child</option><option>an inquisitive child</option></select></div>
-</div>
-<div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
-<button onclick="checkAdjQ()" style="background:#4f46e5;color:#fff;padding:8px 18px;font-size:14px;border:none;border-radius:6px;cursor:pointer;">✅ Check</button>
-<button onclick="resetAdjQ()" style="background:#6b7280;color:#fff;padding:8px 18px;font-size:14px;border:none;border-radius:6px;cursor:pointer;">🔄 Reset</button>
-</div>
-<div id="adjQResult" style="margin-top:10px;font-weight:700;"></div>
 </div>
 <h2>📝 Exercise — Place the adjective correctly</h2>
 <div class="card">
@@ -2487,105 +2514,61 @@ body.dark .imp-chip{background:#0c2a40;border-color:#3b82f6;color:#93c5fd;}
 </div>
 </div>
 
-<h2>🔁 Mixed review exercise</h2>
+<h2>🔁 Mixed review — cloze passage</h2>
 <div class="card">
-<p style="font-size:13px;color:#6b7280;margin-bottom:16px;">Complete each sentence. Subjects are mixed.</p>
+<p style="font-size:13px;color:#6b7280;margin-bottom:12px;">Read the English translation, then fill in the gaps in the French text. The answer bank above contains all the missing words — use each once.</p>
 
-<!-- Q1: PC avec être -->
-<div class="ex-item">
-<span class="ex-num">1.</span>
-<span class="ex-label">Hier, Marie <input class="ex-input" id="mx1" placeholder="…" size="10"> au cinéma. <em>(aller)</em></span>
+<div style="background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;padding:14px 18px;margin-bottom:18px;">
+<div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Answer bank — drag or type</div>
+<div id="answerBank" style="display:flex;flex-wrap:wrap;gap:8px;font-size:14px;">
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">levées</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">depuis</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">Soyez</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">vieille</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">faites</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">montées</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">qui</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">qu'</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">pendant</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">trouvé</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">prises</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">meilleures</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">autant</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">qu'</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">celle</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">petit</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">épais</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">beau</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">depuis</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">qui</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">elle</span>
+</div>
 </div>
 
-<!-- Q2: Impératif -->
-<div class="ex-item">
-<span class="ex-num">2.</span>
-<span class="ex-label"><input class="ex-input" id="mx2" placeholder="…" size="8"> sage ! <em>(être, vous)</em></span>
+<div style="background:#fefce8;border-left:4px solid #ca8a04;border-radius:6px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#78350f;">
+<strong>English translation:</strong> Madeleine and her sister Éléonore got up early — as they had done every day for three weeks. They had a mission. "Be careful," their old neighbour had said. "Don't make any noise." The two women went straight to the attic, where the letters had been hidden — those that bore no signature, and those they had received over the years. Madeleine finally spotted them in a large box and took them without hesitating. These letters were better than Éléonore's — more revealing. Yet Éléonore had written just as many versions as she had. Éléonore, meanwhile, was looking for the one she had been told about: a small black notebook — thicker than she had imagined, with a beautiful gold clasp. She opened it. The notebook belonged to their neighbour. She had been writing about their lives in detail since the very first day. Every outing. Every silence. It wasn't they who were watching. It was her.
 </div>
 
-<!-- Q3: Qui -->
-<div class="ex-item">
-<span class="ex-num">3.</span>
-<span class="ex-label">C'est le professeur <input class="ex-input" id="mx3" placeholder="…" size="8"> nous enseigne le français.</span>
+<div id="clozeText" style="font-size:15px;line-height:2.2;">
+<p>Madeleine et sa sœur Éléonore se sont (<input class="cloze-input" id="cl1" type="text" placeholder="1" style="width:80px;">) tôt — comme chaque jour (<input class="cloze-input" id="cl2" type="text" placeholder="2" style="width:60px;">) trois semaines. Elles avaient une mission.</p>
+<p>« (<input class="cloze-input" id="cl3" type="text" placeholder="3" style="width:70px;">) prudentes », avait dit leur (<input class="cloze-input" id="cl4" type="text" placeholder="4" style="width:70px;">) voisine. « Ne (<input class="cloze-input" id="cl5" type="text" placeholder="5" style="width:60px;">) pas de bruit. »</p>
+<p>Les deux femmes sont (<input class="cloze-input" id="cl6" type="text" placeholder="6" style="width:90px;">) directement au grenier, là où étaient cachées les lettres — celles (<input class="cloze-input" id="cl7" type="text" placeholder="7" style="width:50px;">) ne portaient aucune signature, et celles (<input class="cloze-input" id="cl8" type="text" placeholder="8" style="width:50px;">) elles avaient reçues (<input class="cloze-input" id="cl9" type="text" placeholder="9" style="width:70px;">) des années.</p>
+<p>Madeleine les a finalement (<input class="cloze-input" id="cl10" type="text" placeholder="10" style="width:80px;">) dans une grande boîte et les a (<input class="cloze-input" id="cl11" type="text" placeholder="11" style="width:70px;">) sans hésiter. Ces lettres étaient (<input class="cloze-input" id="cl12" type="text" placeholder="12" style="width:100px;">) que celles d'Éléonore — plus révélatrices. Pourtant, Éléonore en avait écrit (<input class="cloze-input" id="cl13" type="text" placeholder="13" style="width:70px;">) de versions (<input class="cloze-input" id="cl14" type="text" placeholder="14" style="width:50px;">) elle.</p>
+<p>Éléonore, elle, cherchait (<input class="cloze-input" id="cl15" type="text" placeholder="15" style="width:60px;">) qu'on lui avait décrit : un (<input class="cloze-input" id="cl16" type="text" placeholder="16" style="width:60px;">) carnet noir — plus (<input class="cloze-input" id="cl17" type="text" placeholder="17" style="width:60px;">) qu'elle ne l'imaginait, avec un (<input class="cloze-input" id="cl18" type="text" placeholder="18" style="width:60px;">) rabat doré. Elle l'a ouvert.</p>
+<p>Ce carnet appartenait à leur voisine. Elle écrivait leur vie en détail (<input class="cloze-input" id="cl19" type="text" placeholder="19" style="width:70px;">) le premier jour. Chaque sortie. Chaque silence.</p>
+<p>Ce n'était pas elles (<input class="cloze-input" id="cl20" type="text" placeholder="20" style="width:50px;">) surveillaient. C'était (<input class="cloze-input" id="cl21" type="text" placeholder="21" style="width:50px;">).</p>
 </div>
 
-<!-- Q4: Que -->
-<div class="ex-item">
-<span class="ex-num">4.</span>
-<span class="ex-label">Le livre <input class="ex-input" id="mx4" placeholder="…" size="8"> tu lis est très intéressant.</span>
+<div class="ex-btns" style="margin-top:18px;">
+<button class="check-btn" onclick="checkCloze()">Check ✔</button>
+<button class="reset-btn" onclick="resetCloze()">Reset ↺</button>
 </div>
-
-<!-- Q5: COD pronoun -->
-<div class="ex-item">
-<span class="ex-num">5.</span>
-<span class="ex-label">Tu as vu la pièce ? — Oui, je <input class="ex-input" id="mx5" placeholder="…" size="8"> ai vue hier soir.</span>
+<div class="score-display" id="clozeScore"></div>
+<div id="clozeAnswers" style="display:none;margin-top:12px;">
+<div class="tip">
+<strong>Answers:</strong> 1. <em>levées</em> (se lever, PC, être, fém. pl.) · 2. <em>depuis</em> (ongoing since 3 weeks) · 3. <em>Soyez</em> (être, vous, impératif) · 4. <em>vieille</em> (BANGS adj., before noun) · 5. <em>faites</em> (faire, vous, impératif négatif) · 6. <em>montées</em> (monter, PC, être, fém. pl.) · 7. <em>qui</em> (subject of ne portaient) · 8. <em>qu'</em> (COD of avaient reçues, before vowel) · 9. <em>pendant</em> (completed duration) · 10. <em>trouvé</em> (trouver, PC, avoir, masc. sg. — COD follows) · 11. <em>prises</em> (prendre, PC, avoir — COD les precedes → fém. pl. agreement) · 12. <em>meilleures</em> (meilleur = comparative of bon, fém. pl.) · 13. <em>autant</em> (autant de versions que) · 14. <em>qu'</em> (que before elle) · 15. <em>celle</em> (fém. sg. dem. pronoun) · 16. <em>petit</em> (BANGS adj., before noun) · 17. <em>épais</em> (most adj. after noun) · 18. <em>beau</em> (BANGS adj., before noun) · 19. <em>depuis</em> (ongoing since first day) · 20. <em>qui</em> (subject of surveillaient) · 21. <em>elle</em> (stressed pronoun)
 </div>
-
-<!-- Q6: COD agreement -->
-<div class="ex-item">
-<span class="ex-num">6.</span>
-<span class="ex-label">Ces robes ? Nous <input class="ex-input" id="mx6" placeholder="…" size="8"> avons achetées au marché. <em>(pronom COD)</em></span>
 </div>
-
-<!-- Q7: Comparatif adj -->
-<div class="ex-item">
-<span class="ex-num">7.</span>
-<span class="ex-label">Alice est <input class="ex-input" id="mx7" placeholder="…" size="14"> Bob. <em>(tall — Alice taller)</em></span>
-</div>
-
-<!-- Q8: meilleur -->
-<div class="ex-item">
-<span class="ex-num">8.</span>
-<span class="ex-label">Ce restaurant est <input class="ex-input" id="mx8" placeholder="…" size="12"> que l'autre. <em>(good — this one better)</em></span>
-</div>
-
-<!-- Q9: Démonstratif -->
-<div class="ex-item">
-<span class="ex-num">9.</span>
-<span class="ex-label">J'aime ce sac, mais <input class="ex-input" id="mx9" placeholder="…" size="14"> de ma sœur est plus joli. <em>(celui/celle…)</em></span>
-</div>
-
-<!-- Q10: Depuis -->
-<div class="ex-item">
-<span class="ex-num">10.</span>
-<span class="ex-label">Il <input class="ex-input" id="mx10" placeholder="…" size="14"> le français depuis trois ans. <em>(étudier — ongoing)</em></span>
-</div>
-
-<!-- Q11: Pendant -->
-<div class="ex-item">
-<span class="ex-num">11.</span>
-<span class="ex-label">J'ai travaillé <input class="ex-input" id="mx11" placeholder="…" size="18"> deux heures. <em>(pendant — optional)</em></span>
-</div>
-
-<!-- Q12: PC avec être pronominal -->
-<div class="ex-item">
-<span class="ex-num">12.</span>
-<span class="ex-label">Elles <input class="ex-input" id="mx12" placeholder="…" size="22"> avant le cours. <em>(se lever — elles)</em></span>
-</div>
-
-<!-- Q13: Adjectif BANGS -->
-<div class="ex-item">
-<span class="ex-num">13.</span>
-<span class="ex-label">C'est une <input class="ex-input" id="mx13" placeholder="…" size="18"> <em>(grande / belle / intéressante — choose the one that goes before the noun)</em></span>
-</div>
-
-<!-- Q14: Impératif négatif -->
-<div class="ex-item">
-<span class="ex-num">14.</span>
-<span class="ex-label"><input class="ex-input" id="mx14" placeholder="…" size="20"> pas ça ! <em>(ne faire, tu)</em></span>
-</div>
-
-<!-- Q15: Comparatif autant de -->
-<div class="ex-item">
-<span class="ex-num">15.</span>
-<span class="ex-label">Il a <input class="ex-input" id="mx15" placeholder="…" size="20"> livres que moi. <em>(as many)</em></span>
-</div>
-
-<div class="ex-btns">
-<button class="check-btn" onclick="checkMixed()">Check ✔</button>
-<button class="reset-btn" onclick="resetMixed()">Reset ↺</button>
-</div>
-<div class="score-display" id="mixedScore"></div>
 </div>
 
 <div class="nav-arrows">
@@ -2852,20 +2835,6 @@ function switchTab(tabId) {
   updateFloatingBar();
   document.getElementById('cheatPanel').classList.remove('open');
   window.scrollTo(0,0);
-}
-
-function setMode(mode) {
-  const body = document.body;
-  body.classList.remove('revise-mode','mode-learn','mode-revise');
-  if(mode === 'revise') {
-    body.classList.add('revise-mode');
-    document.getElementById('learnBtn').classList.remove('active');
-    document.getElementById('reviseBtn').classList.add('active');
-  } else {
-    document.getElementById('reviseBtn').classList.remove('active');
-    document.getElementById('learnBtn').classList.add('active');
-  }
-  localStorage.setItem('fr2mode', mode);
 }
 
 function updateFloatingBar() {
@@ -3348,25 +3317,39 @@ function animateQue(){
   const codMoved = document.getElementById('que_cod_moved');
   const queSpan = document.getElementById('que_que');
   if(!queDone){
-    // Fade out original sentence
-    step0.style.transition = 'opacity 0.3s';
-    step0.style.opacity = '0';
+    // Step 1: "la femme regarde" shifts right to show COD being extracted
+    const lafemme = document.getElementById('que_lafemme');
+    const regarde = document.getElementById('que_regarde');
+    const codOrig = document.getElementById('que_cod_orig');
+    if(lafemme) lafemme.style.transform = 'translateX(30px)';
+    if(regarde) regarde.style.transform = 'translateX(30px)';
+    if(codOrig) { codOrig.style.transform = 'translateX(-10px)'; codOrig.style.boxShadow = '0 0 0 3px #f59e0b'; }
+    label.innerHTML = '\u27a1\ufe0f <em>la femme regarde</em> shifts right — the COD <em>le film</em> is being extracted\u2026';
+    // Step 2: after 700ms, fade out step 0 and show the flying animation
     setTimeout(()=>{
-      step0.style.display = 'none';
-      step1.style.display = 'block';
-      // Reset token to invisible before animating
-      codMoved.style.animation = 'none';
-      codMoved.style.opacity = '0';
-      void codMoved.offsetWidth; // force reflow
-      // Apply parabolic keyframe animation
-      codMoved.style.animation = 'codFlyParabola 0.75s cubic-bezier(.25,.46,.45,.94) forwards';
-      // Pop in QUE after COD lands
+      step0.style.transition = 'opacity 0.3s';
+      step0.style.opacity = '0';
       setTimeout(()=>{
-        queSpan.style.opacity = '1';
-        queSpan.style.transform = 'scale(1)';
-      }, 650);
-    }, 300);
-    label.innerHTML = '✅ <strong>COD displaced</strong> — <em>le film</em> flies to the front. <em>que</em> appears between the COD and the subject. New order: COD → <em>que</em> → subject → verb.';
+        step0.style.display = 'none';
+        // Reset transforms for next time
+        if(lafemme) lafemme.style.transform = '';
+        if(regarde) regarde.style.transform = '';
+        if(codOrig) { codOrig.style.transform = ''; codOrig.style.boxShadow = ''; }
+        step1.style.display = 'block';
+        // Reset token to invisible before animating
+        codMoved.style.animation = 'none';
+        codMoved.style.opacity = '0';
+        void codMoved.offsetWidth; // force reflow
+        // Apply parabolic keyframe animation
+        codMoved.style.animation = 'codFlyParabola 0.75s cubic-bezier(.25,.46,.45,.94) forwards';
+        // Pop in QUE after COD lands
+        setTimeout(()=>{
+          queSpan.style.opacity = '1';
+          queSpan.style.transform = 'scale(1)';
+        }, 650);
+      }, 300);
+      label.innerHTML = '\u2705 <strong>COD displaced</strong> — <em>le film</em> flies to the front. <em>que</em> appears between the COD and the subject. New order: COD \u2192 <em>que</em> \u2192 subject \u2192 verb.';
+    }, 700);
     btn.textContent = 'Reset';
     queDone = true;
   } else {
@@ -4040,5 +4023,6 @@ const db=firebase.firestore();
   };
 })();
 </script>
+</div>
 </body>
 </html>
