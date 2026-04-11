@@ -1116,9 +1116,9 @@ function resetCloze() {
 <div class="ex-item">a. (parler / tu) → <input id="impD1" type="text" style="width:120px;" placeholder="?"> !</div>
 <div class="ex-item">b. (finir / nous) → <input id="impD2" type="text" style="width:120px;" placeholder="?"> !</div>
 <div class="ex-item">c. (attendre / vous) → <input id="impD3" type="text" style="width:120px;" placeholder="?"> !</div>
-<div class="ex-item">d. (manger / tu) → <input id="impD4" type="text" style="width:120px;" placeholder="?"> !</div>
-<div class="ex-item">e. (choisir / vous) → <input id="impD5" type="text" style="width:120px;" placeholder="?"> !</div>
-<div class="ex-item">f. (répondre / nous) → <input id="impD6" type="text" style="width:120px;" placeholder="?"> !</div>
+<div class="ex-item">d. (ne pas manger / tu) → <input id="impD4" type="text" style="width:160px;" placeholder="?"> !</div>
+<div class="ex-item">e. (se lever / vous) → <input id="impD5" type="text" style="width:120px;" placeholder="?"> !</div>
+<div class="ex-item">f. (ne pas lui répondre / nous) → <input id="impD6" type="text" style="width:200px;" placeholder="?"> !</div>
 </div>
 <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
 <button onclick="checkImpD()" style="background:#ca8a04;color:#fff;padding:8px 18px;font-size:14px;border:none;border-radius:6px;cursor:pointer;">✅ Check</button>
@@ -1140,21 +1140,6 @@ function resetCloze() {
 <div class="warn">
 <strong>Why?</strong> Without the -s, you would get <em>*Va-y</em>, which creates a hiatus (two vowels in contact). The -s serves only as a liaison consonant: it is heard as [z] in <em>Vas-y</em> [va.zi].
     </div>
-</div>
-<h2>🔍 Micro-exercise E — With or without -s?</h2>
-<div class="card">
-<p style="font-size:13px;color:#6b7280;margin:0 0 12px;">Complete with the correct form (with or without -s depending on context).</p>
-<div id="impMiE">
-<div class="ex-item">a. ___ à la bibliothèque ! (aller, sans pronom) → <input id="impE1" type="text" style="width:80px;" placeholder="?"></div>
-<div class="ex-item">b. ___ ! (aller + y) → <input id="impE2" type="text" style="width:80px;" placeholder="?"></div>
-<div class="ex-item">c. ___ de ce problème ! (parler, sans pronom) → <input id="impE3" type="text" style="width:80px;" placeholder="?"></div>
-<div class="ex-item">d. ___ ! (parler + en) → <input id="impE4" type="text" style="width:80px;" placeholder="?"></div>
-</div>
-<div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
-<button onclick="checkImpE()" style="background:#ca8a04;color:#fff;padding:8px 18px;font-size:14px;border:none;border-radius:6px;cursor:pointer;">✅ Check</button>
-<button onclick="resetImpE()" style="background:#6b7280;color:#fff;padding:8px 18px;font-size:14px;border:none;border-radius:6px;cursor:pointer;">🔄 Reset</button>
-</div>
-<div id="impEResult" style="margin-top:10px;font-weight:700;"></div>
 </div>
 <h2>🚨 Irregular forms: avoir, être, savoir</h2>
 <div class="card">
@@ -1272,10 +1257,10 @@ function resetCloze() {
 <div class="fill-sentence">a. (être / tu) <input autocomplete="off" id="imp1" placeholder="…" type="text"/> courageux !</div>
 <div class="fill-sentence">b. (avoir / vous) <input autocomplete="off" id="imp2" placeholder="…" type="text"/> la bonté de vous asseoir.</div>
 <div class="fill-sentence">c. (savoir / tu) <input autocomplete="off" id="imp3" placeholder="…" type="text"/> que nous t'attendons.</div>
-<div class="fill-sentence">d. (aller / tu + y) <input autocomplete="off" id="imp4" placeholder="…" type="text"/> si tu veux !</div>
-<div class="fill-sentence">e. (parler / tu + en) <input autocomplete="off" id="imp5" placeholder="…" type="text"/> à tes parents !</div>
-<div class="fill-sentence">f. (faire / nous) <input autocomplete="off" id="imp6" placeholder="…" type="text"/> de notre mieux.</div>
-<div class="fill-sentence">g. (finir / vous) <input autocomplete="off" id="imp7" placeholder="…" type="text"/> vos exercices avant midi.</div>
+<div class="fill-sentence">d. (y aller / tu) <input autocomplete="off" id="imp4" placeholder="…" type="text"/> si tu veux !</div>
+<div class="fill-sentence">e. (ne pas se coucher tard / tu) <input autocomplete="off" id="imp5" placeholder="…" style="width:220px;" type="text"/> !</div>
+<div class="fill-sentence">f. (se demander / vous) <input autocomplete="off" id="imp6" placeholder="…" style="width:180px;" type="text"/> pourquoi.</div>
+<div class="fill-sentence">g. (me rendre / vous) <input autocomplete="off" id="imp7" placeholder="…" style="width:160px;" type="text"/> ce livre !</div>
 <div class="fill-sentence">h. (être / nous) <input autocomplete="off" id="imp8" placeholder="…" type="text"/> honnêtes avec nous-mêmes.</div>
 </div>
 <p style="font-size:13px;color:#6b7280;margin:14px 0 8px;"><strong>Negative imperative</strong> — write the full negative form (ne… pas):</p>
@@ -1293,7 +1278,7 @@ function resetCloze() {
 <div id="impAnswers" style="display:none;margin-top:12px;">
 <div class="tip">
 <strong>Answers:</strong><br/>
-        a. <em>Sois</em>   b. <em>Ayez</em>   c. <em>Sache</em>   d. <em>Vas-y</em>   e. <em>Parles-en</em>   f. <em>Faisons</em>   g. <em>Finissez</em>   h. <em>Soyons</em><br/>
+        a. <em>Sois</em>   b. <em>Ayez</em>   c. <em>Sache</em>   d. <em>Vas-y</em>   e. <em>Ne te couche pas tard</em>   f. <em>Demandez-vous</em>   g. <em>Rendez-moi</em>   h. <em>Soyons</em><br/>
         i. <em>Ne sois pas</em>   j. <em>N'ayez pas</em><button aria-label="Écouter" class="tts-btn" onclick="speakFrench('N\'ayez pas')" title="Écouter">🔊</button>   k. <em>Ne va pas</em>
 </div>
 </div>
@@ -1409,7 +1394,7 @@ function resetCloze() {
 <div class="ex-item">a. <em>La chanson <strong>que</strong> tu écoutes est magnifique.</em> → <select id="qqG1"><option value="">—</option><option>subject</option><option>displaced COD</option></select></div>
 <div class="ex-item">b. <em>Le professeur <strong>qui</strong> enseigne ce cours est excellent.</em> → <select id="qqG2"><option value="">—</option><option>subject</option><option>displaced COD</option></select></div>
 <div class="ex-item">c. <em>C'est le livre <strong>que</strong> j'ai lu hier.</em> → <select id="qqG3"><option value="">—</option><option>subject</option><option>displaced COD</option></select></div>
-<div class="ex-item">d. <em>Les étudiants <strong>qui</strong> travaillent dur réussissent.</em> → <select id="qqG4"><option value="">—</option><option>subject</option><option>displaced COD</option></select></div>
+<div class="ex-item">d. <em>Le travail <strong>que</strong> font les étudiants est difficile.</em> → <select id="qqG4"><option value="">—</option><option>subject</option><option>displaced COD</option></select></div>
 <div class="ex-item">e. <em>Les étudiants <strong>qui</strong> étudient bien réussissent.</em> → <select id="qqG5"><option value="">—</option><option>subject</option><option>displaced COD</option></select></div>
 </div>
 <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
@@ -1558,7 +1543,7 @@ function resetCloze() {
 <div class="fill-sentence">b. La chanteuse <select id="qq2"><option value="">—</option><option>qui</option><option>que</option><option>qu'</option></select> chante sur scène est incroyable.</div>
 <div class="fill-sentence">c. C'est l'acteur <select id="qq3"><option value="">—</option><option>qui</option><option>que</option><option>qu'</option></select> elle admire le plus.</div>
 <div class="fill-sentence">d. Les professeurs <select id="qq4"><option value="">—</option><option>qui</option><option>que</option><option>qu'</option></select> nous enseignent le français sont tous tombés malades.</div>
-<div class="fill-sentence">e. Voici le livre <select id="qq5"><option value="">—</option><option>qui</option><option>que</option><option>qu'</option></select> j'ai acheté hier.</div>
+<div class="fill-sentence">e. C'est le livre <select id="qq5"><option value="">—</option><option>qui</option><option>que</option><option>qu'</option></select> lisent les enfants.</div>
 <div class="fill-sentence">f. Les étudiants <select id="qq6"><option value="">—</option><option>qui</option><option>que</option><option>qu'</option></select> vous avez rencontrés sont très motivés.</div>
 <div class="fill-sentence">g. C'est une idée <select id="qq7"><option value="">—</option><option>qui</option><option>que</option><option>qu'</option></select> me plaît beaucoup.</div>
 <div class="fill-sentence">h. Le restaurant <select id="qq8"><option value="">—</option><option>qui</option><option>que</option><option>qu'</option></select> ils ont recommandé était excellent.</div>
@@ -2415,11 +2400,11 @@ function resetCloze() {
 
 </div>
 <div class="formula-box fb-adj">
-  <span class="fb-block fb-adj-after fb-opt">(most adj.)</span>
+  <span class="fb-block fb-bangs fb-opt">(BANGS adj.)</span>
   <span class="fb-plus">+</span>
   <span class="fb-block fb-noun">NOUN</span>
   <span class="fb-plus">+</span>
-  <span class="fb-block fb-bangs fb-opt">(BANGS adj.)</span>
+  <span class="fb-block fb-adj-after fb-opt">(most adj.)</span>
 </div>
 <h2>📌 General rule</h2>
 <div class="card">
@@ -2450,16 +2435,83 @@ function resetCloze() {
 <strong>Règle générale :</strong> tout adjectif qui n'appartient pas à BANGS se place <strong>après</strong> le nom. Cela inclut la plupart des adjectifs de couleur, de nationalité, de forme, de matière, et les adjectifs longs.
     </div>
 </div>
-<h2>🔍 Micro-exercise P — Before or after the noun? (BANGS)</h2>
+<h2>🔍 Micro-exercise P — Build the noun phrase (BANGS)</h2>
 <div class="card">
-<p style="font-size:13px;color:#6b7280;margin:0 0 12px;">Choose the correct position for the adjective. Si l'adjectif appartient à BANGS, il se place <strong>avant</strong> le nom ; sinon, il se place <strong>après</strong>.</p>
+<p style="font-size:13px;color:#6b7280;margin:0 0 12px;">Drag or click the words into the correct order to form each noun phrase. Remember: BANGS adjectives go <strong>before</strong> the noun; most other adjectives go <strong>after</strong>.</p>
 <div id="adjMiP">
-<div class="ex-item">a. une maison (beau) <select id="adjP1"><option value="">—</option><option>avant le nom</option><option>après le nom</option></select></div>
-<div class="ex-item">b. un étudiant (français) <select id="adjP2"><option value="">—</option><option>avant le nom</option><option>après le nom</option></select></div>
-<div class="ex-item">c. un repas (bon) <select id="adjP3"><option value="">—</option><option>avant le nom</option><option>après le nom</option></select></div>
-<div class="ex-item">d. une voiture (rouge) <select id="adjP4"><option value="">—</option><option>avant le nom</option><option>après le nom</option></select></div>
-<div class="ex-item">e. le (premier) jour <select id="adjP5"><option value="">—</option><option>avant le nom</option><option>après le nom</option></select></div>
-<div class="ex-item">f. une fille (petit) <select id="adjP6"><option value="">—</option><option>avant le nom</option><option>après le nom</option></select></div>
+
+<div class="ex-item" style="margin-bottom:16px;">
+<div style="font-weight:700;margin-bottom:6px;">a. (beau) + maison → article: une</div>
+<div class="adjP-bank" id="adjPBank1" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+<span class="adjP-word" draggable="true" data-word="belle" style="background:#dbeafe;color:#1e40af;padding:6px 12px;border-radius:6px;cursor:grab;font-weight:600;user-select:none;">belle</span>
+<span class="adjP-word" draggable="true" data-word="maison" style="background:#dbeafe;color:#1e40af;padding:6px 12px;border-radius:6px;cursor:grab;font-weight:600;user-select:none;">maison</span>
+</div>
+<div style="display:flex;align-items:center;gap:6px;">
+<span style="font-weight:600;">une</span>
+<div class="adjP-drop" id="adjPDrop1" data-answer="belle,maison" style="min-width:200px;min-height:36px;border:2px dashed #c7d2fe;border-radius:8px;padding:4px 8px;display:flex;gap:6px;flex-wrap:wrap;"></div>
+</div>
+</div>
+
+<div class="ex-item" style="margin-bottom:16px;">
+<div style="font-weight:700;margin-bottom:6px;">b. (français) + étudiant → article: un</div>
+<div class="adjP-bank" id="adjPBank2" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+<span class="adjP-word" draggable="true" data-word="français" style="background:#dbeafe;color:#1e40af;padding:6px 12px;border-radius:6px;cursor:grab;font-weight:600;user-select:none;">français</span>
+<span class="adjP-word" draggable="true" data-word="étudiant" style="background:#dbeafe;color:#1e40af;padding:6px 12px;border-radius:6px;cursor:grab;font-weight:600;user-select:none;">étudiant</span>
+</div>
+<div style="display:flex;align-items:center;gap:6px;">
+<span style="font-weight:600;">un</span>
+<div class="adjP-drop" id="adjPDrop2" data-answer="étudiant,français" style="min-width:200px;min-height:36px;border:2px dashed #c7d2fe;border-radius:8px;padding:4px 8px;display:flex;gap:6px;flex-wrap:wrap;"></div>
+</div>
+</div>
+
+<div class="ex-item" style="margin-bottom:16px;">
+<div style="font-weight:700;margin-bottom:6px;">c. (bon) + repas → article: un</div>
+<div class="adjP-bank" id="adjPBank3" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+<span class="adjP-word" draggable="true" data-word="bon" style="background:#dbeafe;color:#1e40af;padding:6px 12px;border-radius:6px;cursor:grab;font-weight:600;user-select:none;">bon</span>
+<span class="adjP-word" draggable="true" data-word="repas" style="background:#dbeafe;color:#1e40af;padding:6px 12px;border-radius:6px;cursor:grab;font-weight:600;user-select:none;">repas</span>
+</div>
+<div style="display:flex;align-items:center;gap:6px;">
+<span style="font-weight:600;">un</span>
+<div class="adjP-drop" id="adjPDrop3" data-answer="bon,repas" style="min-width:200px;min-height:36px;border:2px dashed #c7d2fe;border-radius:8px;padding:4px 8px;display:flex;gap:6px;flex-wrap:wrap;"></div>
+</div>
+</div>
+
+<div class="ex-item" style="margin-bottom:16px;">
+<div style="font-weight:700;margin-bottom:6px;">d. (rouge) + voiture → article: une</div>
+<div class="adjP-bank" id="adjPBank4" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+<span class="adjP-word" draggable="true" data-word="rouge" style="background:#dbeafe;color:#1e40af;padding:6px 12px;border-radius:6px;cursor:grab;font-weight:600;user-select:none;">rouge</span>
+<span class="adjP-word" draggable="true" data-word="voiture" style="background:#dbeafe;color:#1e40af;padding:6px 12px;border-radius:6px;cursor:grab;font-weight:600;user-select:none;">voiture</span>
+</div>
+<div style="display:flex;align-items:center;gap:6px;">
+<span style="font-weight:600;">une</span>
+<div class="adjP-drop" id="adjPDrop4" data-answer="voiture,rouge" style="min-width:200px;min-height:36px;border:2px dashed #c7d2fe;border-radius:8px;padding:4px 8px;display:flex;gap:6px;flex-wrap:wrap;"></div>
+</div>
+</div>
+
+<div class="ex-item" style="margin-bottom:16px;">
+<div style="font-weight:700;margin-bottom:6px;">e. (premier) + jour → article: le</div>
+<div class="adjP-bank" id="adjPBank5" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+<span class="adjP-word" draggable="true" data-word="premier" style="background:#dbeafe;color:#1e40af;padding:6px 12px;border-radius:6px;cursor:grab;font-weight:600;user-select:none;">premier</span>
+<span class="adjP-word" draggable="true" data-word="jour" style="background:#dbeafe;color:#1e40af;padding:6px 12px;border-radius:6px;cursor:grab;font-weight:600;user-select:none;">jour</span>
+</div>
+<div style="display:flex;align-items:center;gap:6px;">
+<span style="font-weight:600;">le</span>
+<div class="adjP-drop" id="adjPDrop5" data-answer="premier,jour" style="min-width:200px;min-height:36px;border:2px dashed #c7d2fe;border-radius:8px;padding:4px 8px;display:flex;gap:6px;flex-wrap:wrap;"></div>
+</div>
+</div>
+
+<div class="ex-item" style="margin-bottom:16px;">
+<div style="font-weight:700;margin-bottom:6px;">f. (petit) + fille → article: une</div>
+<div class="adjP-bank" id="adjPBank6" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+<span class="adjP-word" draggable="true" data-word="petite" style="background:#dbeafe;color:#1e40af;padding:6px 12px;border-radius:6px;cursor:grab;font-weight:600;user-select:none;">petite</span>
+<span class="adjP-word" draggable="true" data-word="fille" style="background:#dbeafe;color:#1e40af;padding:6px 12px;border-radius:6px;cursor:grab;font-weight:600;user-select:none;">fille</span>
+</div>
+<div style="display:flex;align-items:center;gap:6px;">
+<span style="font-weight:600;">une</span>
+<div class="adjP-drop" id="adjPDrop6" data-answer="petite,fille" style="min-width:200px;min-height:36px;border:2px dashed #c7d2fe;border-radius:8px;padding:4px 8px;display:flex;gap:6px;flex-wrap:wrap;"></div>
+</div>
+</div>
+
 </div>
 <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
 <button onclick="checkAdjP()" style="background:#4f46e5;color:#fff;padding:8px 18px;font-size:14px;border:none;border-radius:6px;cursor:pointer;">✅ Check</button>
@@ -2473,7 +2525,7 @@ function resetCloze() {
 <div id="adjExercises">
 <div class="fill-sentence">a. une maison (grand) → <input autocomplete="off" id="adj1" placeholder="…" type="text"/></div>
 <div class="fill-sentence">b. un film (intéressant) → <input autocomplete="off" id="adj2" placeholder="…" type="text"/></div>
-<div class="fill-sentence">c. une (vieux) voiture → <input autocomplete="off" id="adj3" placeholder="…" type="text"/></div>
+<div class="fill-sentence">c. une voiture (vieux) → <input autocomplete="off" id="adj3" placeholder="…" type="text"/></div>
 <div class="fill-sentence">d. un repas (bon) → <input autocomplete="off" id="adj4" placeholder="…" type="text"/></div>
 <div class="fill-sentence">e. une idée (mauvais) → <input autocomplete="off" id="adj5" placeholder="…" type="text"/></div>
 <div class="fill-sentence">f. un professeur (ancien) [= ex-professeur] → <input autocomplete="off" id="adj6" placeholder="…" type="text"/></div>
@@ -2519,29 +2571,29 @@ function resetCloze() {
 <p style="font-size:13px;color:#6b7280;margin-bottom:12px;">Read the English translation, then fill in the gaps in the French text. The answer bank above contains all the missing words — use each once.</p>
 
 <div style="background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;padding:14px 18px;margin-bottom:18px;">
-<div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Answer bank — drag or type</div>
+<div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Answer bank</div>
 <div id="answerBank" style="display:flex;flex-wrap:wrap;gap:8px;font-size:14px;">
-<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">levées</span>
-<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">depuis</span>
-<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">Soyez</span>
-<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">vieille</span>
-<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">faites</span>
-<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">montées</span>
-<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">qui</span>
-<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">qu'</span>
-<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">pendant</span>
-<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">trouvé</span>
-<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">prises</span>
-<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">meilleures</span>
 <span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">autant</span>
-<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">qu'</span>
-<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">celle</span>
-<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">petit</span>
-<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">épais</span>
 <span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">beau</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">celle</span>
 <span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">depuis</span>
-<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">qui</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">depuis</span>
 <span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">elle</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">épais</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">faites</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">levées</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">meilleures</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">montées</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">pendant</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">petit</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">prises</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">qu'</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">qu'</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">qui</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">qui</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">Soyez</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">trouvé</span>
+<span class="bank-word" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;cursor:default;font-weight:600;">vieille</span>
 </div>
 </div>
 
@@ -2596,78 +2648,88 @@ function resetCloze() {
 <div class="summary-strip"><div class="ss-cell ss-rule"><span class="ss-label">⚡ Objective</span><span class="ss-text">≈80 words · 8-part structure · polite, informal tone</span></div><div class="ss-cell ss-mistake"><span class="ss-label">⚠️ Common mistake</span><span class="ss-text">Refusing without a reason or alternative sounds abrupt</span></div><div class="ss-cell ss-hook"><span class="ss-label">🧠 Memory hook</span><span class="ss-text">Thank → React → Refuse → Reason → Apologise → Suggest</span></div></div>
 </div>
 
-<h2>📋 Step 1 — The 8-part structure</h2>
+<!-- ===== STEP 1 — Read the model email ===== -->
+<h2>📋 Step 1 — Read the model email</h2>
 <div class="card">
-<ol style="margin:0;padding-left:20px;line-height:2;font-size:14px;color:#374151;">
-<li>Greeting</li>
-<li>Thanking</li>
-<li>Positive reaction</li>
-<li>Refusal</li>
-<li>Reason</li>
-<li>Apology</li>
-<li>Alternative suggestion</li>
-<li>Closing</li>
-</ol>
+<div style="background:#f0fdf4;border-radius:8px;padding:14px 16px;font-size:14px;color:#374151;line-height:1.8;font-family:Georgia,serif;">
+Salut Lucas,<br><br>
+Merci beaucoup pour ton message ! Organiser un événement de la classe est une très bonne idée et ça m'intéresse beaucoup. J'aimerais vraiment participer et aider.<br><br>
+Malheureusement, je ne peux pas m'en occuper la semaine prochaine parce que j'ai beaucoup de devoirs et aussi des examens à préparer, donc je suis assez occupé(e).<br><br>
+Mais je veux quand même aider ! Par exemple, je peux préparer des affiches, aider avec la musique ou apporter des boissons et de la nourriture.<br><br>
+À bientôt,<br>
+Daniel
+</div>
 </div>
 
-<h2>💬 Step 2 — Language bank</h2>
+<!-- ===== STEP 2 — Identify the 8 parts ===== -->
+<h2>🔀 Step 2 — Put the 8 parts in order</h2>
 <div class="card">
-<table style="width:100%;border-collapse:collapse;font-size:14px;">
-<thead><tr style="background:#059669;color:#fff;"><th style="padding:8px 12px;text-align:left;">Function</th><th style="padding:8px 12px;text-align:left;">Expressions</th></tr></thead>
+<p style="font-size:13px;color:#6b7280;margin:0 0 10px;">The email above follows the 8-part structure. Drag the tags into the correct order:</p>
+<div id="writingOrderTags" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+<span class="wrt-tag" draggable="true" style="padding:8px 14px;border-radius:20px;background:#dbeafe;color:#1e40af;font-weight:600;cursor:grab;user-select:none;font-size:13px;">Reason</span>
+<span class="wrt-tag" draggable="true" style="padding:8px 14px;border-radius:20px;background:#dbeafe;color:#1e40af;font-weight:600;cursor:grab;user-select:none;font-size:13px;">Greeting</span>
+<span class="wrt-tag" draggable="true" style="padding:8px 14px;border-radius:20px;background:#dbeafe;color:#1e40af;font-weight:600;cursor:grab;user-select:none;font-size:13px;">Alternative suggestion</span>
+<span class="wrt-tag" draggable="true" style="padding:8px 14px;border-radius:20px;background:#dbeafe;color:#1e40af;font-weight:600;cursor:grab;user-select:none;font-size:13px;">Positive reaction</span>
+<span class="wrt-tag" draggable="true" style="padding:8px 14px;border-radius:20px;background:#dbeafe;color:#1e40af;font-weight:600;cursor:grab;user-select:none;font-size:13px;">Closing</span>
+<span class="wrt-tag" draggable="true" style="padding:8px 14px;border-radius:20px;background:#dbeafe;color:#1e40af;font-weight:600;cursor:grab;user-select:none;font-size:13px;">Thanking</span>
+<span class="wrt-tag" draggable="true" style="padding:8px 14px;border-radius:20px;background:#dbeafe;color:#1e40af;font-weight:600;cursor:grab;user-select:none;font-size:13px;">Refusal</span>
+<span class="wrt-tag" draggable="true" style="padding:8px 14px;border-radius:20px;background:#dbeafe;color:#1e40af;font-weight:600;cursor:grab;user-select:none;font-size:13px;">Apology</span>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+<button onclick="checkWritingOrder()" style="background:#059669;color:#fff;padding:8px 18px;font-size:14px;border:none;border-radius:6px;cursor:pointer;">✅ Check order</button>
+<button onclick="resetWritingOrder()" style="background:#6b7280;color:#fff;padding:8px 18px;font-size:14px;border:none;border-radius:6px;cursor:pointer;">🔄 Reset</button>
+<span id="writingOrderResult" style="font-weight:700;font-size:14px;"></span>
+</div>
+</div>
+
+<!-- ===== STEP 3 — Match parts to the email ===== -->
+<h2>🔍 Step 3 — Match each part to the email text</h2>
+<div class="card">
+<p style="font-size:13px;color:#6b7280;margin:0 0 12px;">Now that you know the correct order, here is how each part maps to the model email:</p>
+<table style="width:100%;border-collapse:collapse;font-size:13px;">
+<thead><tr style="background:#059669;color:#fff;"><th style="padding:8px 12px;text-align:left;">Part</th><th style="padding:8px 12px;text-align:left;">Text from the email</th></tr></thead>
 <tbody>
-<tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">Thanking</td><td style="padding:8px 12px;"><em>Merci pour… &nbsp;·&nbsp; Merci de…</em></td></tr>
-<tr style="background:#f0fdf4;border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">Positive reaction</td><td style="padding:8px 12px;"><em>Ça m'intéresse… &nbsp;·&nbsp; Je veux bien…</em></td></tr>
-<tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">Refusal</td><td style="padding:8px 12px;"><em>Je ne peux pas… &nbsp;·&nbsp; Ce n'est pas possible…</em></td></tr>
-<tr style="background:#f0fdf4;border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">Reason</td><td style="padding:8px 12px;"><em>parce que… &nbsp;·&nbsp; car…</em></td></tr>
-<tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">Apology</td><td style="padding:8px 12px;"><em>Désolé(e)… &nbsp;·&nbsp; Je suis désolé(e)…</em></td></tr>
-<tr style="background:#f0fdf4;"><td style="padding:8px 12px;font-weight:700;">Alternative</td><td style="padding:8px 12px;"><em>On peut… &nbsp;·&nbsp; Une autre fois… &nbsp;·&nbsp; Je peux…</em></td></tr>
+<tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">1. Greeting</td><td style="padding:8px 12px;"><em>Salut Lucas,</em></td></tr>
+<tr style="background:#f0fdf4;border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">2. Thanking</td><td style="padding:8px 12px;"><em>Merci beaucoup pour ton message !</em></td></tr>
+<tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">3. Positive reaction</td><td style="padding:8px 12px;"><em>Organiser un événement de la classe est une très bonne idée et ça m'intéresse beaucoup. J'aimerais vraiment participer et aider.</em></td></tr>
+<tr style="background:#f0fdf4;border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">4. Refusal</td><td style="padding:8px 12px;"><em>Malheureusement, je ne peux pas m'en occuper la semaine prochaine</em></td></tr>
+<tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">5. Reason</td><td style="padding:8px 12px;"><em>parce que j'ai beaucoup de devoirs et aussi des examens à préparer, donc je suis assez occupé(e).</em></td></tr>
+<tr style="background:#f0fdf4;border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">6. Apology</td><td style="padding:8px 12px;"><em>(implicit — "Malheureusement" softens the refusal)</em></td></tr>
+<tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">7. Alternative suggestion</td><td style="padding:8px 12px;"><em>Mais je veux quand même aider ! Par exemple, je peux préparer des affiches, aider avec la musique ou apporter des boissons et de la nourriture.</em></td></tr>
+<tr style="background:#f0fdf4;"><td style="padding:8px 12px;font-weight:700;">8. Closing</td><td style="padding:8px 12px;"><em>À bientôt, Daniel</em></td></tr>
 </tbody>
 </table>
 </div>
 
-<h2>✏️ Step 3 — Controlled practice</h2>
+<!-- ===== STEP 4 — Alternative phrasings ===== -->
+<h2>💬 Step 4 — Alternative phrasings for each part</h2>
 <div class="card">
-<p style="font-size:14px;color:#374151;margin:0 0 10px;">Complete the sentences:</p>
-<ol style="margin:0;padding-left:20px;line-height:2.4;font-size:14px;color:#374151;">
-<li>Merci pour _______________</li>
-<li>Je veux bien, mais _______________</li>
-<li>Je ne peux pas parce que _______________</li>
-<li>Désolé(e), on peut _______________</li>
-</ol>
+<p style="font-size:13px;color:#6b7280;margin:0 0 12px;">You can swap in these alternatives to personalise your own email:</p>
+<table style="width:100%;border-collapse:collapse;font-size:13px;">
+<thead><tr style="background:#059669;color:#fff;"><th style="padding:8px 12px;text-align:left;">Part</th><th style="padding:8px 12px;text-align:left;">Model phrase</th><th style="padding:8px 12px;text-align:left;">Alternatives</th></tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">Greeting</td><td style="padding:8px 12px;"><em>Salut Lucas,</em></td><td style="padding:8px 12px;"><em>Cher Lucas, · Coucou Lucas, · Bonjour Lucas,</em></td></tr>
+<tr style="background:#f0fdf4;border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">Thanking</td><td style="padding:8px 12px;"><em>Merci beaucoup pour ton message !</em></td><td style="padding:8px 12px;"><em>Merci pour ton e-mail ! · Merci de m'avoir écrit !</em></td></tr>
+<tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">Positive reaction</td><td style="padding:8px 12px;"><em>…une très bonne idée et ça m'intéresse beaucoup.</em></td><td style="padding:8px 12px;"><em>Ça a l'air super ! · Quelle bonne idée ! · Je veux bien !</em></td></tr>
+<tr style="background:#f0fdf4;border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">Refusal</td><td style="padding:8px 12px;"><em>je ne peux pas m'en occuper</em></td><td style="padding:8px 12px;"><em>Ce n'est pas possible pour moi · Je ne suis pas disponible</em></td></tr>
+<tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">Reason</td><td style="padding:8px 12px;"><em>parce que j'ai beaucoup de devoirs…</em></td><td style="padding:8px 12px;"><em>car j'ai un rendez-vous · parce que je suis malade</em></td></tr>
+<tr style="background:#f0fdf4;border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">Apology</td><td style="padding:8px 12px;"><em>Malheureusement…</em></td><td style="padding:8px 12px;"><em>Désolé(e) · Je suis vraiment désolé(e) · Pardonne-moi</em></td></tr>
+<tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:8px 12px;font-weight:700;">Alternative</td><td style="padding:8px 12px;"><em>je peux préparer des affiches…</em></td><td style="padding:8px 12px;"><em>On peut faire ça une autre fois · Je peux aider autrement</em></td></tr>
+<tr style="background:#f0fdf4;"><td style="padding:8px 12px;font-weight:700;">Closing</td><td style="padding:8px 12px;"><em>À bientôt,</em></td><td style="padding:8px 12px;"><em>À plus ! · Bisous · Amicalement,</em></td></tr>
+</tbody>
+</table>
 </div>
 
-<h2>📝 Step 4 — Guided writing</h2>
-<div class="card">
-<p style="font-size:14px;color:#374151;margin:0;">Write a short response using the prompts provided by your teacher. Aim to use at least one expression from each row of the language bank.</p>
-</div>
-
-<h2>🎯 Step 5 — Independent task</h2>
-<p style="font-size:13px;color:#6b7280;margin:0 0 12px;">Choose one of the three tasks below. Write an email of approximately 80 words.</p>
+<!-- ===== STEP 5 — Practice writing with typing simulation ===== -->
+<h2>✏️ Step 5 — Practice writing</h2>
+<p style="font-size:13px;color:#6b7280;margin:0 0 12px;">Choose a task below, write your email in the text area, and watch it appear on the simulated screen.</p>
 
 <div class="card" style="border-left:4px solid #059669;margin-bottom:14px;">
-<div style="font-weight:800;font-size:14px;color:#059669;margin-bottom:8px;">Task 1 — Declining extra responsibility</div>
-<div style="background:#f0fdf4;border-radius:8px;padding:10px 14px;font-size:13px;color:#374151;margin-bottom:10px;font-style:italic;">
-Tu reçois cet e-mail de ton ami Lucas :<br><br>
-Salut !<br>
-On cherche quelqu’un pour organiser l’événement de la classe la semaine prochaine. Tu veux bien t’en occuper ?
-</div>
-<p style="font-size:13px;color:#374151;margin:0 0 6px;">Write an email to Lucas to:</p>
-<ul style="margin:0;padding-left:18px;font-size:13px;color:#374151;line-height:1.9;">
-<li>thank him</li>
-<li>show interest</li>
-<li>refuse politely</li>
-<li>give a reason</li>
-<li>suggest another way to help</li>
-</ul>
-<p style="font-size:12px;color:#6b7280;margin:8px 0 0;">Approximately 80 words.</p>
-</div>
-
-<div class="card" style="border-left:4px solid #059669;margin-bottom:14px;">
-<div style="font-weight:800;font-size:14px;color:#059669;margin-bottom:8px;">Task 2 — Refusing to share notes</div>
+<div style="font-weight:800;font-size:14px;color:#059669;margin-bottom:8px;">Task 1 — Refusing to share notes</div>
 <div style="background:#f0fdf4;border-radius:8px;padding:10px 14px;font-size:13px;color:#374151;margin-bottom:10px;font-style:italic;">
 Tu reçois cet e-mail de ton ami(e) Sarah :<br><br>
 Salut !<br>
-J’ai manqué le cours hier. Tu peux m’envoyer tes notes ?
+J'ai manqué le cours hier. Tu peux m'envoyer tes notes ?
 </div>
 <p style="font-size:13px;color:#374151;margin:0 0 6px;">Write an email to Sarah to:</p>
 <ul style="margin:0;padding-left:18px;font-size:13px;color:#374151;line-height:1.9;">
@@ -2681,16 +2743,16 @@ J’ai manqué le cours hier. Tu peux m’envoyer tes notes ?
 </div>
 
 <div class="card" style="border-left:4px solid #059669;margin-bottom:14px;">
-<div style="font-weight:800;font-size:14px;color:#059669;margin-bottom:8px;">Task 3 — Refusing a schedule change</div>
+<div style="font-weight:800;font-size:14px;color:#059669;margin-bottom:8px;">Task 2 — Refusing a schedule change</div>
 <div style="background:#f0fdf4;border-radius:8px;padding:10px 14px;font-size:13px;color:#374151;margin-bottom:10px;font-style:italic;">
 Tu reçois cet e-mail de ton ami Marc :<br><br>
 Salut !<br>
-On peut changer l’heure de notre rendez-vous demain ? Je préfère plus tard.
+On peut changer l'heure de notre rendez-vous demain ? Je préfère plus tard.
 </div>
 <p style="font-size:13px;color:#374151;margin:0 0 6px;">Write an email to Marc to:</p>
 <ul style="margin:0;padding-left:18px;font-size:13px;color:#374151;line-height:1.9;">
 <li>thank him for his message</li>
-<li>say it’s a good idea</li>
+<li>say it's a good idea</li>
 <li>refuse politely</li>
 <li>give a reason</li>
 <li>suggest an alternative</li>
@@ -2698,6 +2760,45 @@ On peut changer l’heure de notre rendez-vous demain ? Je préfère plus tard.
 <p style="font-size:12px;color:#6b7280;margin:8px 0 0;">Approximately 80 words.</p>
 </div>
 
+<!-- Textarea + Simulated screen side by side -->
+<div class="card" style="margin-bottom:14px;">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+<div>
+<div style="font-weight:700;font-size:14px;margin-bottom:8px;">Your email</div>
+<textarea id="wrtStudentInput" rows="10" placeholder="Write your email here..." style="width:100%;font-size:13px;line-height:1.6;padding:10px 12px;border:1px solid #d1d5db;border-radius:8px;resize:vertical;font-family:Georgia,serif;"></textarea>
+<div style="margin-top:8px;display:flex;align-items:center;gap:8px;">
+<span style="font-size:12px;color:#6b7280;">Word count:</span>
+<span id="wrtWordCount" style="font-size:13px;font-weight:700;color:#059669;">0</span>
+</div>
+</div>
+<div>
+<div style="font-weight:700;font-size:14px;margin-bottom:8px;">Simulated screen</div>
+<div style="border-radius:12px;border:1px solid #d1d5db;overflow:hidden;background:#1e293b;">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#0f172a;border-bottom:1px solid #334155;">
+<div style="display:flex;gap:6px;">
+<span style="width:10px;height:10px;border-radius:50%;background:#ef4444;display:inline-block;"></span>
+<span style="width:10px;height:10px;border-radius:50%;background:#f59e0b;display:inline-block;"></span>
+<span style="width:10px;height:10px;border-radius:50%;background:#22c55e;display:inline-block;"></span>
+</div>
+<span style="font-size:11px;color:#94a3b8;">Simulated screen</span>
+<span id="wrtModePill" style="font-size:11px;padding:3px 8px;border-radius:10px;background:#334155;color:#e2e8f0;">Mode: Live</span>
+</div>
+<div id="wrtScreenBody" style="padding:12px;font-family:monospace;font-size:12.5px;line-height:1.55;min-height:200px;white-space:pre-wrap;color:#e2e8f0;"></div>
+</div>
+<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">
+<button onclick="wrtToggleMode()" id="wrtToggleModeBtn" style="background:#059669;color:#fff;padding:6px 14px;font-size:12px;border:none;border-radius:6px;cursor:pointer;">Switch to Playback</button>
+<button onclick="wrtChangeSpeed()" style="background:#6b7280;color:#fff;padding:6px 14px;font-size:12px;border:none;border-radius:6px;cursor:pointer;">Speed: <span id="wrtSpeedLabel">1×</span></button>
+<button onclick="wrtReplay()" style="background:#6b7280;color:#fff;padding:6px 14px;font-size:12px;border:none;border-radius:6px;cursor:pointer;">▶ Replay</button>
+<button onclick="wrtClear()" style="background:#dc2626;color:#fff;padding:6px 14px;font-size:12px;border:none;border-radius:6px;cursor:pointer;">✕ Clear</button>
+</div>
+<div style="margin-top:6px;font-size:11px;color:#6b7280;line-height:1.4;">
+<strong>Playback mode</strong> re-types your text at a controlled speed. <strong>Live mode</strong> mirrors your typing instantly.
+</div>
+</div>
+</div>
+</div>
+
+<!-- ===== STEP 6 — Self-assessment checklist ===== -->
 <h2>✅ Step 6 — Self-assessment checklist</h2>
 <div class="card">
 <ul style="margin:0;padding-left:18px;font-size:14px;color:#374151;line-height:2;">
@@ -2705,16 +2806,6 @@ On peut changer l’heure de notre rendez-vous demain ? Je préfère plus tard.
 <li>Did I use <em>mais</em> and <em>parce que</em> correctly?</li>
 <li>Is my tone friendly and informal?</li>
 <li>Did I suggest an alternative?</li>
-</ul>
-</div>
-
-<h2>🤝 Step 7 — Peer feedback</h2>
-<div class="card">
-<p style="font-size:14px;color:#374151;margin:0 0 10px;">Exchange emails with a partner and check:</p>
-<ul style="margin:0;padding-left:18px;font-size:14px;color:#374151;line-height:2;">
-<li>Structure complete (all 8 parts present)</li>
-<li>Reason clearly stated</li>
-<li>Polite, friendly tone throughout</li>
 </ul>
 </div>
 
@@ -3056,9 +3147,9 @@ const impAnswerKey = {
   imp2: ['Ayez'],
   imp3: ['Sache'],
   imp4: ['Vas-y'],
-  imp5: ['Parles-en'],
-  imp6: ['Faisons'],
-  imp7: ['Finissez'],
+  imp5: ['Ne te couche pas tard'],
+  imp6: ['Demandez-vous'],
+  imp7: ['Rendez-moi'],
   imp8: ['Soyons'],
   imp9: ['Ne sois pas'],
   imp10: ["N'ayez pas"],
@@ -3069,9 +3160,9 @@ const impHints = {
   imp2: '<em>avoir</em> is irregular in the imperative. (vous) → <strong>Ayez</strong>, not *Avez.',
   imp3: '<em>savoir</em> is irregular in the imperative. (tu) → <strong>Sache</strong>, not *Sais.',
   imp4: '<em>aller</em> drops the -s in the imperative (Va!), but the -s returns before <strong>y</strong> for liaison: <strong>Vas-y</strong> [va.zi].',
-  imp5: '<em>parler</em> is -ER → drops the -s (Parle!), but the -s returns before <strong>en</strong> for liaison: <strong>Parles-en</strong> [paʁ.lã̃].',
-  imp6: '<em>faire</em>: (nous) → <strong>Faisons</strong>. Regular present indicative form without subject.',
-  imp7: '<em>finir</em> is a regular -IR verb → (vous) → <strong>Finissez</strong> (= present indicative vous form, without subject).',
+  imp5: 'Negative imperative of <em>se coucher</em> (tu): <strong>Ne te couche pas tard</strong>. In the negative, the reflexive pronoun stays before the verb.',
+  imp6: '<em>se demander</em> (vous): In the affirmative imperative, the reflexive pronoun goes after the verb with a hyphen: <strong>Demandez-vous</strong>.',
+  imp7: '<em>rendre</em> (vous) with COI <em>me</em>: In the affirmative imperative, the pronoun goes after the verb: <strong>Rendez-moi</strong> (me → moi in stressed position).',
   imp8: '<em>être</em> is irregular. (nous) → <strong>Soyons</strong>, not *Sommes.',
   imp9: 'Negative imperative of <em>être</em> (tu): <strong>Ne sois pas</strong>. Structure: ne + imperative form + pas.',
   imp10: 'Negative imperative of <em>avoir</em> (vous): <strong>N\'ayez pas</strong>. Note the apostrophe before <em>ayez</em> (vowel).',
@@ -3110,7 +3201,7 @@ const qqHints = {
   qq2: 'La femme is the <strong>subject</strong> of the verb <em>regarde</em>. Use <strong>qui</strong> for the subject — word order remains intact.',
   qq3: '<em>que</em> elides to <strong>qu\'</strong> before a vowel. Le livre is the displaced COD → <strong>qu\'</strong>.',
   qq4: 'Les professeurs is the <strong>subject</strong> of the verb <em>enseignent</em>. Use <strong>qui</strong>. Note: <em>nous</em> is the COD here (ils nous enseignent), not the subject of the relative clause.',
-  qq5: 'Le film is the displaced <strong>COD</strong> → <strong>que</strong>. After <em>que</em>, the subject (<em>vous</em>) precedes the verb.',
+  qq5: 'Le livre is the displaced <strong>COD</strong> of <em>lire</em> (les enfants lisent le livre) → <strong>que</strong>. After <em>que</em>, the subject (<em>les enfants</em>) precedes the verb.',
   qq6: 'La chanson is the displaced <strong>COD</strong> of <em>chanter</em> → <strong>que</strong>.',
   qq7: 'L\'étudiant is the <strong>subject</strong> of <em>travaille</em> → <strong>qui</strong>.',
   qq8: '<em>que</em> elides to <strong>qu\'</strong> before a vowel. Le roman is the displaced COD → <strong>qu\'</strong>.'
@@ -3760,19 +3851,12 @@ function checkImpD(){runMicro([
   {id:'impD1',ans:'mange',hint:'-ER verb: tu → drop -s from manges → mange (not manges).'},
   {id:'impD2',ans:'mangeons',hint:'nous → mangeons (same form as the present indicative).'},
   {id:'impD3',ans:'mangez',hint:'vous → mangez.'},
-  {id:'impD4',ans:'finis',hint:'-IR verb: tu → finis (the -s is kept for -IR verbs).'},
-  {id:'impD5',ans:'finissons',hint:'nous → finissons.'},
-  {id:'impD6',ans:'finissez',hint:'vous → finissez.'},
+  {id:'impD4',ans:'ne mange pas',hint:'Negative imperative of -ER verb (tu): ne + mange (no -s) + pas → ne mange pas.'},
+  {id:'impD5',ans:'levez-vous',hint:'Se lever (vous): affirmative imperative → reflexive pronoun after verb with hyphen: levez-vous.'},
+  {id:'impD6',ans:'ne lui répondons pas',hint:'Negative imperative of répondre (nous) with COI lui: ne + lui + répondons + pas → ne lui répondons pas.'},
 ],'impDResult');}
 function resetImpD(){resetMicro(['impD1','impD2','impD3','impD4','impD5','impD6'],'impDResult');}
-// E — liaison -s
-function checkImpE(){runMicro([
-  {id:'impE1',ans:"vas-y",hint:'Aller: tu → va (no -s). But before y, the -s returns for liaison: Vas-y!'},
-  {id:'impE2',ans:"parles-en",hint:'Parler: tu → parle (no -s). But before en, the -s returns: Parles-en!'},
-  {id:'impE3',ans:'va',hint:'Aller: tu → va (no -s). No y/en pronoun here, so no -s.'},
-  {id:'impE4',ans:"parle",hint:'Parler: tu → parle (no -s). No en pronoun here.'},
-],'impEResult');}
-function resetImpE(){resetMicro(['impE1','impE2','impE3','impE4'],'impEResult');}
+// E — (removed)
 // F — irregular forms
 function checkImpF(){runMicro([
   {id:'impF1',ans:'sois',hint:'Être (irregular): tu → sois (from the present subjunctive, not sers).'},
@@ -3794,7 +3878,7 @@ function checkQqG(){runMicro([
   {id:'qqG1',ans:'displaced COD',hint:'La chanson is being listened to → it is the displaced COD → use que.'},
   {id:'qqG2',ans:'subject',hint:'Le professeur performs the action (enseigne) → he is the subject → use qui.'},
   {id:'qqG3',ans:'displaced COD',hint:'Le livre is the object being read → displaced COD → use que.'},
-  {id:'qqG4',ans:'subject',hint:'Les étudiants perform the action (travaillent) → they are the subject → use qui.'},
+  {id:'qqG4',ans:'displaced COD',hint:'Le travail is the object of font (les étudiants font le travail) → it is the displaced COD → use que.'},
   {id:'qqG5',ans:'subject',hint:'Les étudiants perform the action (étudient) → they are the subject → use qui.'},
 ],'qqGResult');}
 function resetQqG(){resetMicro(['qqG1','qqG2','qqG3','qqG4','qqG5'],'qqGResult');}
@@ -3863,16 +3947,63 @@ function checkDurO(){runMicro([
   {id:'durO4',ans:'ont regardé',hint:'Pendant + completed action (last night) → passé composé.'},
 ],'durOResult');}
 function resetDurO(){resetMicro(['durO1','durO2','durO3','durO4'],'durOResult');}
-// P — BANGS avant/après
-function checkAdjP(){runMicro([
-  {id:'adjP1',ans:'avant le nom',hint:'Beau belongs to B(eauty) in BANGS → before the noun.'},
-  {id:'adjP2',ans:'après le nom',hint:'Français is a nationality adjective → not in BANGS → after the noun.'},
-  {id:'adjP3',ans:'avant le nom',hint:'Bon belongs to G(oodness) in BANGS → before the noun.'},
-  {id:'adjP4',ans:'après le nom',hint:'Rouge is a colour adjective → not in BANGS → after the noun.'},
-  {id:'adjP5',ans:'avant le nom',hint:'Premier is an ordinal → N(umber) in BANGS → before the noun.'},
-  {id:'adjP6',ans:'avant le nom',hint:'Petit belongs to S(ize) in BANGS → before the noun.'},
-],'adjPResult');}
-function resetAdjP(){resetMicro(['adjP1','adjP2','adjP3','adjP4','adjP5','adjP6'],'adjPResult');}
+// P — BANGS drag-and-drop word ordering
+(function(){
+  document.querySelectorAll('.adjP-word').forEach(function(word){
+    word.addEventListener('click', function(){
+      var bank = word.closest('.ex-item').querySelector('.adjP-bank');
+      var drop = word.closest('.ex-item').querySelector('.adjP-drop');
+      if(word.parentNode === bank){
+        drop.appendChild(word);
+      } else {
+        bank.appendChild(word);
+      }
+    });
+    word.addEventListener('dragstart', function(e){
+      e.dataTransfer.setData('text/plain', '');
+      word._dragging = true;
+      word.style.opacity = '0.5';
+    });
+    word.addEventListener('dragend', function(){
+      word._dragging = false;
+      word.style.opacity = '1';
+    });
+  });
+  document.querySelectorAll('.adjP-drop, .adjP-bank').forEach(function(zone){
+    zone.addEventListener('dragover', function(e){ e.preventDefault(); });
+    zone.addEventListener('drop', function(e){
+      e.preventDefault();
+      var dragged = document.querySelector('.adjP-word[style*="opacity"]');
+      if(!dragged) document.querySelectorAll('.adjP-word').forEach(function(w){ if(w._dragging) dragged = w; });
+      if(dragged) zone.appendChild(dragged);
+    });
+  });
+})();
+function checkAdjP(){
+  var score = 0, total = 6;
+  for(var i = 1; i <= 6; i++){
+    var drop = document.getElementById('adjPDrop' + i);
+    var expected = drop.getAttribute('data-answer').split(',');
+    var words = [];
+    drop.querySelectorAll('.adjP-word').forEach(function(w){ words.push(w.getAttribute('data-word')); });
+    var ok = words.length === expected.length && words.every(function(w, idx){ return w === expected[idx]; });
+    drop.style.borderColor = ok ? '#22c55e' : '#ef4444';
+    if(ok) score++;
+  }
+  var res = document.getElementById('adjPResult');
+  res.textContent = score + '/' + total + (score === total ? ' — Perfect!' : ' — Try again');
+  res.style.color = score === total ? '#16a34a' : '#b45309';
+}
+function resetAdjP(){
+  for(var i = 1; i <= 6; i++){
+    var bank = document.getElementById('adjPBank' + i);
+    var drop = document.getElementById('adjPDrop' + i);
+    var words = drop.querySelectorAll('.adjP-word');
+    words.forEach(function(w){ bank.appendChild(w); });
+    drop.style.borderColor = '#c7d2fe';
+  }
+  document.getElementById('adjPResult').textContent = '';
+}
 // Q — meaning in context
 function checkAdjQ(){runMicro([
   {id:'adjQ1',ans:'my former teacher',hint:'Ancien before the noun = ex- / former (figurative temporal sense).'},
@@ -3962,6 +4093,167 @@ function resetMixed(){
   });
   document.getElementById('mixedScore').textContent='';
 }
+
+/* ======================================================
+   WRITING TAB — Ordering exercise + Typing simulation
+   ====================================================== */
+// --- Step 2: Drag-to-reorder tags ---
+(function(){
+  const container = document.getElementById('writingOrderTags');
+  if(!container) return;
+  const correctOrder = ["Greeting","Thanking","Positive reaction","Refusal","Reason","Apology","Alternative suggestion","Closing"];
+  let wrtDragEl = null;
+
+  function wireDnD(){
+    container.querySelectorAll('.wrt-tag').forEach(function(tag){
+      tag.addEventListener('dragstart', function(e){
+        wrtDragEl = tag;
+        tag.style.opacity = '0.5';
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      tag.addEventListener('dragend', function(){
+        tag.style.opacity = '1';
+        wrtDragEl = null;
+      });
+    });
+    container.addEventListener('dragover', function(e){
+      e.preventDefault();
+      if(!wrtDragEl) return;
+      const els = [...container.querySelectorAll('.wrt-tag:not([style*="opacity: 0.5"])')];
+      const after = els.reduce(function(closest, child){
+        const box = child.getBoundingClientRect();
+        const offset = e.clientY - box.top - box.height / 2;
+        if(offset < 0 && offset > closest.offset) return { offset: offset, element: child };
+        return closest;
+      }, { offset: Number.NEGATIVE_INFINITY }).element;
+      if(!after) container.appendChild(wrtDragEl);
+      else container.insertBefore(wrtDragEl, after);
+    });
+  }
+  wireDnD();
+
+  window.checkWritingOrder = function(){
+    const tags = [...container.querySelectorAll('.wrt-tag')].map(function(t){ return t.textContent.trim(); });
+    const ok = tags.length === correctOrder.length && tags.every(function(v, i){ return v === correctOrder[i]; });
+    const res = document.getElementById('writingOrderResult');
+    res.textContent = ok ? '✅ Correct!' : '❌ Not quite — try again';
+    res.style.color = ok ? '#16a34a' : '#dc2626';
+  };
+
+  window.resetWritingOrder = function(){
+    const shuffled = ["Reason","Greeting","Alternative suggestion","Positive reaction","Closing","Thanking","Refusal","Apology"];
+    container.innerHTML = '';
+    shuffled.forEach(function(text){
+      const span = document.createElement('span');
+      span.className = 'wrt-tag';
+      span.draggable = true;
+      span.style.cssText = 'padding:8px 14px;border-radius:20px;background:#dbeafe;color:#1e40af;font-weight:600;cursor:grab;user-select:none;font-size:13px;';
+      span.textContent = text;
+      container.appendChild(span);
+    });
+    wireDnD();
+    document.getElementById('writingOrderResult').textContent = '';
+  };
+})();
+
+// --- Step 5: Typing simulation ---
+(function(){
+  const input = document.getElementById('wrtStudentInput');
+  const screen = document.getElementById('wrtScreenBody');
+  const modePill = document.getElementById('wrtModePill');
+  const modeBtn = document.getElementById('wrtToggleModeBtn');
+  const speedLabel = document.getElementById('wrtSpeedLabel');
+  const wordCountEl = document.getElementById('wrtWordCount');
+  if(!input || !screen) return;
+
+  let wrtMode = 'live';
+  let wrtSpeedIdx = 0;
+  const wrtSpeeds = [1, 1.6, 2.4, 0.6];
+  let wrtPlaying = false;
+  let wrtAbort = { aborted: false };
+
+  function renderWrt(text){
+    const safe = text.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    screen.innerHTML = safe + '<span style="display:inline-block;width:2px;height:1em;background:#e2e8f0;animation:blink 1s step-end infinite;vertical-align:text-bottom;margin-left:1px;" aria-hidden="true"></span>';
+  }
+
+  function updateWordCount(){
+    const text = input.value.trim();
+    const count = text.length === 0 ? 0 : text.split(/\s+/).length;
+    wordCountEl.textContent = count;
+    if(count >= 70 && count <= 90) wordCountEl.style.color = '#16a34a';
+    else if(count >= 50 && count <= 100) wordCountEl.style.color = '#d97706';
+    else wordCountEl.style.color = '#dc2626';
+  }
+
+  input.addEventListener('input', function(){
+    updateWordCount();
+    if(wrtMode === 'live') renderWrt(input.value);
+  });
+
+  window.wrtToggleMode = function(){
+    if(wrtPlaying) return;
+    wrtMode = wrtMode === 'live' ? 'playback' : 'live';
+    if(wrtMode === 'live'){
+      modePill.textContent = 'Mode: Live';
+      modeBtn.textContent = 'Switch to Playback';
+      renderWrt(input.value);
+    } else {
+      modePill.textContent = 'Mode: Playback';
+      modeBtn.textContent = 'Switch to Live';
+      renderWrt('');
+    }
+  };
+
+  window.wrtChangeSpeed = function(){
+    wrtSpeedIdx = (wrtSpeedIdx + 1) % wrtSpeeds.length;
+    speedLabel.textContent = wrtSpeeds[wrtSpeedIdx] + '\u00d7';
+  };
+
+  async function wrtPlayback(text){
+    wrtPlaying = true;
+    wrtAbort.aborted = false;
+    const localAbort = wrtAbort;
+    renderWrt('');
+    const s = wrtSpeeds[wrtSpeedIdx];
+    const baseDelay = 18 / s;
+    let out = '';
+    for(let i = 0; i < text.length; i++){
+      if(localAbort.aborted) break;
+      out += text[i];
+      renderWrt(out);
+      const ch = text[i];
+      let extra = 0;
+      if(ch === '\n') extra = 130 / s;
+      else if([',','.',';','!','?'].includes(ch)) extra = 70 / s;
+      await new Promise(function(r){ setTimeout(r, baseDelay + extra); });
+    }
+    wrtPlaying = false;
+  }
+
+  window.wrtReplay = function(){
+    if(wrtMode !== 'playback') window.wrtToggleMode();
+    if(wrtPlaying) return;
+    wrtPlayback(input.value);
+  };
+
+  window.wrtClear = function(){
+    wrtAbort.aborted = true;
+    input.value = '';
+    renderWrt('');
+    updateWordCount();
+  };
+
+  // Add cursor blink keyframes if not already present
+  if(!document.getElementById('wrtBlinkStyle')){
+    const style = document.createElement('style');
+    style.id = 'wrtBlinkStyle';
+    style.textContent = '@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}';
+    document.head.appendChild(style);
+  }
+
+  renderWrt('');
+})();
 
 /* Restore Learn/Revise mode from localStorage */
 (function(){
