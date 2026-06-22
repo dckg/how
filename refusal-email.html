@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>French Refusal Email Writing Lesson</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --accent: #f59e0b;
+    --success: #10b981;
+    --error: #ef4444;
+    --bg: #f0f4f8;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-light: #64748b;
+    --border: #e2e8f0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .app-header {
+    background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+    color: white;
+    padding: 1.2rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .app-header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; }
+  .app-header .step-indicator {
+    background: rgba(255,255,255,0.2);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  /* PROGRESS BAR */
+  .progress-bar-container {
+    height: 6px;
+    background: var(--border);
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #f97316);
+    transition: width 0.5s ease;
+    border-radius: 0 3px 3px 0;
+  }
+
+  /* MAIN CONTAINER */
+  .main-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+  }
+
+  /* PAGES */
+  .page { display: none; }
+  .page.active { display: block; animation: fadeIn 0.4s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* CARD */
+  .card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    margin-bottom: 1.5rem;
+  }
+
+  .card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+  }
+  .card h3 {
+    font-size: 1.1rem;
+    margin: 1.2rem 0 0.5rem;
+    color: var(--text);
+  }
+  .card p, .card li {
+    line-height: 1.7;
+    color: var(--text-light);
+  }
+
+  /* FORMS */
+  label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.35rem;
+    color: var(--text);
+  }
+  input[type="text"], textarea, select {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.2s;
+    margin-bottom: 1rem;
+  }
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.8rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+  }
+  .btn-secondary:hover { background: rgba(37,99,235,0.05); }
+  .btn-success { background: var(--success); color: white; }
+  .btn-success:hover { background: #059669; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .btn-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* EXERCISE AREA */
+  .exercise-box {
+    background: #f8fafc;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.2rem 0;
+  }
+  .exercise-box.correct {
+    border-color: var(--success);
+    background: #f0fdf4;
+  }
+  .exercise-box.incorrect {
+    border-color: var(--error);
+    background: #fef2f2;
+  }
+
+  .english-prompt {
+    background: linear-gradient(135deg, #eff6ff, #e0e7ff);
+    border-left: 4px solid var(--primary);
+    padding: 1rem 1.2rem;
+    border-radius: 0 10px 10px 0;
+    margin: 1rem 0;
+    font-style: italic;
+    color: var(--primary-dark);
+  }
+
+  .hint-box {
+    background: #fffbeb;
+    border-left: 4px solid var(--accent);
+    padding: 0.8rem 1rem;
+    border-radius: 0 10px 10px 0;
+    margin: 0.8rem 0;
+    font-size: 0.9rem;
+    color: #92400e;
+    display: none;
+  }
+  .hint-box.show { display: block; }
+
+  .feedback {
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct { background: #d1fae5; color: #065f46; }
+  .feedback.incorrect { background: #fee2e2; color: #991b1b; }
+
+  /* GRAMMAR TABLE */
+  .grammar-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .grammar-table th {
+    background: var(--primary);
+    color: white;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    font-weight: 600;
+  }
+  .grammar-table td {
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .grammar-table tr:nth-child(even) td { background: #f8fafc; }
+  .grammar-table tr:hover td { background: #eff6ff; }
+
+  /* TAG SELECTOR */
+  .tag-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.8rem 0;
+  }
+  .tag {
+    padding: 0.5rem 1.2rem;
+    border: 2px solid var(--border);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    background: white;
+    user-select: none;
+  }
+  .tag:hover { border-color: var(--primary); color: var(--primary); }
+  .tag.selected { background: var(--primary); color: white; border-color: var(--primary); }
+  .tag.correct-tag { background: var(--success); color: white; border-color: var(--success); }
+  .tag.wrong-tag { background: var(--error); color: white; border-color: var(--error); }
+  .tag.placed {
+    opacity: 0.4;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  /* ORDER DROP ZONE */
+  .order-zone {
+    min-height: 60px;
+    background: #f8fafc;
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    padding: 0.8rem;
+    margin: 0.8rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .order-zone .order-item {
+    padding: 0.4rem 1rem;
+    background: var(--primary);
+    color: white;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .order-zone .order-item:hover {
+    background: var(--error);
+    transform: scale(0.95);
+  }
+  .order-zone .placeholder-text {
+    color: var(--text-light);
+    font-style: italic;
+    font-size: 0.9rem;
+  }
+
+  /* STEP BADGE */
+  .step-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 32px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  /* ===== EMAIL COMPOSER ===== */
+  .composer-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  @media (max-width: 800px) {
+    .composer-layout { grid-template-columns: 1fr; }
+  }
+  .composer-fields { padding: 0; }
+  .composer-fields label { font-size: 0.85rem; margin-bottom: 0.25rem; }
+  .composer-fields input, .composer-fields textarea {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+    margin-bottom: 0.7rem;
+  }
+
+  /* SIMULATED EMAIL SCREEN */
+  .email-screen {
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 1rem;
+  }
+
+  /* Title bar */
+  .email-titlebar {
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+    padding: 0.5rem 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .email-titlebar .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .email-titlebar .dot.red { background: #ef4444; }
+  .email-titlebar .dot.yellow { background: #f59e0b; }
+  .email-titlebar .dot.green { background: #10b981; }
+  .email-titlebar .title {
+    flex: 1;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  /* Toolbar */
+  .email-toolbar {
+    background: #f3f4f6;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.5rem 1rem;
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+  }
+  .email-toolbar .toolbar-btn {
+    background: #e5e7eb;
+    border: none;
+    border-radius: 6px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.75rem;
+    color: #4b5563;
+    font-weight: 500;
+    cursor: default;
+  }
+  .email-toolbar .toolbar-btn.send-btn {
+    background: var(--primary);
+    color: white;
+  }
+
+  /* Email header fields */
+  .email-header-fields {
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.8rem;
+    color: var(--text-light);
+  }
+  .email-header-fields .field-row {
+    display: flex;
+    align-items: center;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .email-header-fields .field-row:last-child { border-bottom: none; }
+  .email-header-fields .field-label {
+    color: #9ca3af;
+    font-weight: 500;
+    width: 55px;
+    flex-shrink: 0;
+  }
+  .email-header-fields .field-value {
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  /* Email body */
+  .email-body {
+    padding: 1rem 1.2rem;
+    flex: 1;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .email-body .email-greeting {
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+  .email-body .email-line {
+    margin-bottom: 0.4rem;
+  }
+  .email-body .email-closing {
+    margin-top: 0.8rem;
+  }
+  .email-body .email-signature {
+    margin-top: 0.3rem;
+    font-weight: 600;
+  }
+  .email-body .placeholder {
+    color: #c0c8d4;
+    font-style: italic;
+  }
+
+  .hidden { display: none !important; }
+
+  /* Checklist */
+  .checklist {
+    list-style: none;
+    padding: 0;
+  }
+  .checklist li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist .check-icon {
+    color: var(--success);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Confetti */
+  .confetti-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+  }
+  .confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    animation: confetti-fall 3s ease-out forwards;
+  }
+  @keyframes confetti-fall {
+    to { top: 110vh; transform: rotate(720deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="app-header" id="appHeader">
+  <h1>Refuser Poliment par Email</h1>
+  <span class="step-indicator" id="stepIndicator">Step 1/5</span>
+</header>
+<div class="progress-bar-container">
+  <div class="progress-bar" id="progressBar" style="width:20%"></div>
+</div>
+
+<div class="main-container">
+
+<!-- ==================== PAGE 1: INTRO & STRUCTURE ==================== -->
+<div class="page active" id="page-1">
+  <div class="card">
+
+    <div class="section-title">
+      <span class="step-badge">1</span>
+      <h2>Writing an Email &mdash; Refusing Politely</h2>
+    </div>
+
+    <p>
+      In this task, you will learn how to <strong>refuse politely</strong> in French
+      while keeping a friendly tone.
+    </p>
+
+    <h3>Structure</h3>
+    <p>All good responses follow this structure:</p>
+
+    <ol style="margin:0.8rem 0 1.2rem 1.5rem;">
+      <li>Greeting</li>
+      <li>Thanking</li>
+      <li>Positive reaction</li>
+      <li>Refusal</li>
+      <li>Reason</li>
+      <li>Apology</li>
+      <li>Alternative suggestion</li>
+      <li>Closing</li>
+    </ol>
+
+    <div class="btn-nav">
+      <span></span>
+      <button class="btn btn-primary" onclick="goToPage(2)">Next: Build the Structure &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 2: ORDERING EXERCISE ==================== -->
+<div class="page" id="page-2">
+  <div class="card">
+
+    <div class="section-title">
+      <span class="step-badge">2</span>
+      <h2>Build the Structure</h2>
+    </div>
+
+    <p>Put the parts of a polite refusal email in the correct order. Click each tag to place it, or click a placed tag to remove it.</p>
+
+    <div class="exercise-box" id="orderExBox">
+      <div class="tag-group" id="orderTags">
+        <span class="tag" onclick="addOrderTag(this)">Refusal</span>
+        <span class="tag" onclick="addOrderTag(this)">Greeting</span>
+        <span class="tag" onclick="addOrderTag(this)">Alternative</span>
+        <span class="tag" onclick="addOrderTag(this)">Reason</span>
+        <span class="tag" onclick="addOrderTag(this)">Thanking</span>
+        <span class="tag" onclick="addOrderTag(this)">Closing</span>
+        <span class="tag" onclick="addOrderTag(this)">Apology</span>
+        <span class="tag" onclick="addOrderTag(this)">Positive reaction</span>
+      </div>
+
+      <div class="order-zone" id="orderZone">
+        <span class="placeholder-text">Click tags above to build the order&hellip;</span>
+      </div>
+
+      <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+        <button class="btn btn-primary" onclick="checkOrder()">Check</button>
+        <button class="btn btn-secondary" onclick="resetOrder()">Reset</button>
+      </div>
+      <div id="order-feedback" class="feedback"></div>
+      <div id="order-hint" class="hint-box">
+        Think about it: first you say hello, then you thank them, show you like the idea, then explain why you can't, apologise, suggest something else, and say goodbye.
+      </div>
+    </div>
+
+    <p style="margin-top:0.5rem;font-size:0.9rem;color:var(--text-light);">(Discuss with a partner before checking.)</p>
+
+    <div class="btn-nav">
+      <button class="btn btn-secondary" onclick="goToPage(1)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="goToPage(3)">Next: Language Bank &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 3: LANGUAGE BANK ==================== -->
+<div class="page" id="page-3">
+  <div class="card">
+
+    <div class="section-title">
+      <span class="step-badge">3</span>
+      <h2>Language Bank</h2>
+    </div>
+
+    <p>Here are useful phrases for each part of your email. Study them before you start writing!</p>
+
+    <table class="grammar-table">
+      <tr><th>Function</th><th>French</th></tr>
+      <tr><td>Thanking</td><td>Merci pour ton message</td></tr>
+      <tr><td>Positive reaction</td><td>&Ccedil;a m'int&eacute;resse / Bonne id&eacute;e</td></tr>
+      <tr><td>Refusal</td><td>Je ne peux pas</td></tr>
+      <tr><td>Reason</td><td>parce que&hellip;</td></tr>
+      <tr><td>Apology</td><td>D&eacute;sol&eacute;(e)&hellip;</td></tr>
+      <tr><td>Alternative</td><td>On peut&hellip; / Une autre fois</td></tr>
+    </table>
+
+    <div class="exercise-box">
+      <h3 style="margin-top:0;">Quick check &mdash; Match the function</h3>
+      <p>What function does <strong>&laquo; Je ne peux pas &raquo;</strong> serve?</p>
+      <div class="tag-group" id="q3Tags">
+        <span class="tag" onclick="checkTag(this,'q3','wrong')">Thanking</span>
+        <span class="tag" onclick="checkTag(this,'q3','wrong')">Positive reaction</span>
+        <span class="tag" onclick="checkTag(this,'q3','correct')">Refusal</span>
+        <span class="tag" onclick="checkTag(this,'q3','wrong')">Apology</span>
+      </div>
+      <div id="q3-feedback" class="feedback"></div>
+    </div>
+
+    <div class="exercise-box">
+      <p>What function does <strong>&laquo; &Ccedil;a m'int&eacute;resse &raquo;</strong> serve?</p>
+      <div class="tag-group" id="q3bTags">
+        <span class="tag" onclick="checkTag(this,'q3b','wrong')">Refusal</span>
+        <span class="tag" onclick="checkTag(this,'q3b','correct')">Positive reaction</span>
+        <span class="tag" onclick="checkTag(this,'q3b','wrong')">Alternative</span>
+        <span class="tag" onclick="checkTag(this,'q3b','wrong')">Closing</span>
+      </div>
+      <div id="q3b-feedback" class="feedback"></div>
+    </div>
+
+    <div class="btn-nav">
+      <button class="btn btn-secondary" onclick="goToPage(2)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="goToPage(4)">Next: Guided Writing &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 4: GUIDED WRITING WITH LIVE EMAIL PREVIEW ==================== -->
+<div class="page" id="page-4">
+  <div class="card" style="max-width:100%;">
+
+    <div class="section-title">
+      <span class="step-badge">4</span>
+      <h2>Guided Writing</h2>
+    </div>
+
+    <p style="margin-bottom:1rem;">Complete the email below by filling in each blank. As you type, the simulated email screen updates live!</p>
+
+    <div class="composer-layout">
+      <!-- LEFT: FIELDS -->
+      <div class="composer-fields">
+        <label>Merci pour __________</label>
+        <input type="text" id="gf1" placeholder="e.g. ton message / ton invitation" oninput="updateGuidedPreview()">
+
+        <label>&Ccedil;a m' __________</label>
+        <input type="text" id="gf2" placeholder="e.g. int&eacute;resse / fait plaisir" oninput="updateGuidedPreview()">
+
+        <label>Mais je ne peux pas __________</label>
+        <input type="text" id="gf3" placeholder="e.g. venir ce week-end" oninput="updateGuidedPreview()">
+
+        <label>Parce que __________</label>
+        <input type="text" id="gf4" placeholder="e.g. j'ai un examen lundi" oninput="updateGuidedPreview()">
+
+        <label style="margin-top:0.5rem;">(D&eacute;sol&eacute;(e) is already included)</label>
+
+        <label>On peut __________</label>
+        <input type="text" id="gf5" placeholder="e.g. se voir la semaine prochaine" oninput="updateGuidedPreview()">
+      </div>
+
+      <!-- RIGHT: SIMULATED EMAIL SCREEN -->
+      <div>
+        <h3 style="margin-bottom:0.5rem;">Live Email Preview</h3>
+        <div class="email-screen">
+          <div class="email-titlebar">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span class="title">Nouveau message</span>
+          </div>
+          <div class="email-toolbar">
+            <span class="toolbar-btn send-btn">Envoyer</span>
+            <span class="toolbar-btn">Joindre</span>
+          </div>
+          <div class="email-header-fields">
+            <div class="field-row">
+              <span class="field-label">&Agrave;:</span>
+              <span class="field-value">alex@email.fr</span>
+            </div>
+            <div class="field-row">
+              <span class="field-label">Objet:</span>
+              <span class="field-value">Re: Ce week-end</span>
+            </div>
+          </div>
+          <div class="email-body" id="guidedEmailBody">
+            <div class="email-greeting">Salut Alex,</div>
+            <div class="email-line" id="gp1"><span class="placeholder">Merci pour __________.</span></div>
+            <div class="email-line" id="gp2"><span class="placeholder">&Ccedil;a m'__________.</span></div>
+            <div class="email-line" id="gp3"><span class="placeholder">Mais je ne peux pas __________.</span></div>
+            <div class="email-line" id="gp4"><span class="placeholder">Parce que __________.</span></div>
+            <div class="email-line">D&eacute;sol&eacute;(e).</div>
+            <div class="email-line" id="gp5"><span class="placeholder">On peut __________.</span></div>
+            <div class="email-closing">&Agrave; bient&ocirc;t</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-nav">
+      <button class="btn btn-secondary" onclick="goToPage(3)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="goToPage(5)">Next: Independent Task &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 5: INDEPENDENT TASK WITH LIVE EMAIL PREVIEW ==================== -->
+<div class="page" id="page-5">
+  <div class="card" style="max-width:100%;">
+
+    <div class="section-title">
+      <span class="step-badge" style="background:var(--success);">5</span>
+      <h2>Independent Task</h2>
+    </div>
+
+    <div class="english-prompt">
+      Your friend asks you to help with homework this weekend.
+    </div>
+
+    <p>Write an email (&asymp;80 words) to:</p>
+    <ul style="margin:0.5rem 0 1rem 1.5rem;">
+      <li>thank them</li>
+      <li>show interest</li>
+      <li>refuse politely</li>
+      <li>give a reason</li>
+      <li>apologise</li>
+      <li>suggest an alternative</li>
+    </ul>
+
+    <div class="composer-layout">
+      <!-- LEFT: FREE WRITING -->
+      <div class="composer-fields">
+        <label>Recipient name</label>
+        <input type="text" id="freeRecipient" placeholder="e.g. Marie, Lucas" oninput="updateFreePreview()">
+
+        <label>Subject line</label>
+        <input type="text" id="freeSubject" placeholder="e.g. Re: Les devoirs" oninput="updateFreePreview()">
+
+        <label>Your email body</label>
+        <textarea id="freeBody" rows="8" placeholder="Write your full email here...&#10;&#10;e.g.&#10;Salut Marie,&#10;&#10;Merci pour ton message...&#10;..." oninput="updateFreePreview()"></textarea>
+
+        <label>Your name (sign-off)</label>
+        <input type="text" id="freeName" placeholder="e.g. Fanny" oninput="updateFreePreview()">
+
+        <p style="font-size:0.85rem;color:var(--text-light);margin-top:0.3rem;" id="wordCount">Word count: 0</p>
+      </div>
+
+      <!-- RIGHT: SIMULATED EMAIL SCREEN -->
+      <div>
+        <h3 style="margin-bottom:0.5rem;">Live Email Preview</h3>
+        <div class="email-screen">
+          <div class="email-titlebar">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span class="title">Nouveau message</span>
+          </div>
+          <div class="email-toolbar">
+            <span class="toolbar-btn send-btn">Envoyer</span>
+            <span class="toolbar-btn">Joindre</span>
+          </div>
+          <div class="email-header-fields">
+            <div class="field-row">
+              <span class="field-label">&Agrave;:</span>
+              <span class="field-value" id="freePreviewTo"><span class="placeholder">recipient@email.fr</span></span>
+            </div>
+            <div class="field-row">
+              <span class="field-label">Objet:</span>
+              <span class="field-value" id="freePreviewSubject"><span class="placeholder">Subject...</span></span>
+            </div>
+          </div>
+          <div class="email-body" id="freeEmailBody">
+            <span class="placeholder">Your email will appear here as you type&hellip;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Checklist</h3>
+    <ul class="checklist">
+      <li><span class="check-icon">&#10004;</span> Did you include all 8 parts?</li>
+      <li><span class="check-icon">&#10004;</span> Did you use &laquo; mais &raquo; and &laquo; parce que &raquo;?</li>
+      <li><span class="check-icon">&#10004;</span> Is your tone friendly?</li>
+      <li><span class="check-icon">&#10004;</span> Did you suggest an alternative?</li>
+    </ul>
+
+    <div class="btn-nav">
+      <button class="btn btn-secondary" onclick="goToPage(4)">&larr; Back</button>
+      <button class="btn btn-success" onclick="finishLesson()">Finish &check;</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 6: COMPLETE ==================== -->
+<div class="page" id="page-6">
+  <div class="card" style="text-align:center;padding:3rem;">
+    <h2 style="font-size:2rem;margin-bottom:1rem;">Bravo ! Bien fait !</h2>
+    <p style="font-size:1.2rem;margin-bottom:1.5rem;">You have completed the Refusal Email activity.</p>
+    <p style="color:var(--text-light);margin-bottom:2rem;">You now know how to politely refuse an invitation in French while keeping a friendly tone.</p>
+    <button class="btn btn-primary" onclick="goToPage(4)">Review Guided Writing</button>
+    <button class="btn btn-secondary" style="margin-left:0.5rem;" onclick="goToPage(1)">Restart Lesson</button>
+  </div>
+</div>
+
+</div><!-- end main-container -->
+
+<script>
+// ===========================
+// STATE
+// ===========================
+const TOTAL_STEPS = 5;
+const orderState = [];
+const correctOrder = [
+  'Greeting', 'Thanking', 'Positive reaction', 'Refusal',
+  'Reason', 'Apology', 'Alternative', 'Closing'
+];
+
+// ===========================
+// NAVIGATION
+// ===========================
+function goToPage(num) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById('page-' + num);
+  if (el) el.classList.add('active');
+
+  // Update header
+  const labels = {
+    1: 'Step 1/5 \u2014 Structure',
+    2: 'Step 2/5 \u2014 Ordering',
+    3: 'Step 3/5 \u2014 Language Bank',
+    4: 'Step 4/5 \u2014 Guided Writing',
+    5: 'Step 5/5 \u2014 Independent Task',
+    6: 'Complete!',
+  };
+  document.getElementById('stepIndicator').textContent = labels[num] || '';
+
+  // Progress bar
+  const pct = Math.min(Math.round((num / TOTAL_STEPS) * 100), 100);
+  document.getElementById('progressBar').style.width = pct + '%';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===========================
+// TAG EXERCISES (MCQ)
+// ===========================
+function checkTag(el, qId, result) {
+  const fb = document.getElementById(qId + '-feedback');
+
+  el.parentElement.querySelectorAll('.tag').forEach(t => {
+    t.classList.remove('correct-tag', 'wrong-tag');
+  });
+
+  if (result === 'correct') {
+    el.classList.add('correct-tag');
+    fb.textContent = 'Correct! Bravo !';
+    fb.className = 'feedback show correct';
+  } else {
+    el.classList.add('wrong-tag');
+    fb.textContent = 'Not quite \u2014 try again!';
+    fb.className = 'feedback show incorrect';
+  }
+}
+
+// ===========================
+// ORDERING EXERCISE
+// ===========================
+function addOrderTag(el) {
+  if (el.classList.contains('placed')) return;
+  const text = el.textContent.trim();
+  orderState.push(text);
+  el.classList.add('placed');
+  renderOrderZone();
+}
+
+function removeOrderItem(index) {
+  const removed = orderState.splice(index, 1)[0];
+  // Un-place the corresponding tag
+  const tags = document.querySelectorAll('#orderTags .tag');
+  tags.forEach(t => {
+    if (t.textContent.trim() === removed && t.classList.contains('placed')) {
+      t.classList.remove('placed');
+    }
+  });
+  renderOrderZone();
+}
+
+function renderOrderZone() {
+  const zone = document.getElementById('orderZone');
+  if (orderState.length === 0) {
+    zone.innerHTML = '<span class="placeholder-text">Click tags above to build the order&hellip;</span>';
+    return;
+  }
+  zone.innerHTML = orderState.map((item, i) =>
+    `<span class="order-item" onclick="removeOrderItem(${i})" title="Click to remove">${i + 1}. ${item}</span>`
+  ).join('');
+}
+
+function resetOrder() {
+  orderState.length = 0;
+  document.querySelectorAll('#orderTags .tag').forEach(t => {
+    t.classList.remove('placed', 'correct-tag', 'wrong-tag');
+  });
+  renderOrderZone();
+  const fb = document.getElementById('order-feedback');
+  fb.classList.remove('show');
+  document.getElementById('order-hint').classList.remove('show');
+  document.getElementById('orderExBox').classList.remove('correct', 'incorrect');
+}
+
+function checkOrder() {
+  const fb = document.getElementById('order-feedback');
+  const hint = document.getElementById('order-hint');
+
+  if (orderState.length < correctOrder.length) {
+    fb.textContent = `You've placed ${orderState.length} of ${correctOrder.length} items. Place them all first!`;
+    fb.className = 'feedback show incorrect';
+    return;
+  }
+
+  const isCorrect = orderState.every((item, i) => item === correctOrder[i]);
+
+  if (isCorrect) {
+    fb.textContent = 'Parfait ! The order is correct!';
+    fb.className = 'feedback show correct';
+    document.getElementById('orderExBox').classList.add('correct');
+    hint.classList.remove('show');
+  } else {
+    fb.textContent = 'Not quite the right order. Try again!';
+    fb.className = 'feedback show incorrect';
+    document.getElementById('orderExBox').classList.add('incorrect');
+    hint.classList.add('show');
+  }
+}
+
+// ===========================
+// GUIDED WRITING PREVIEW
+// ===========================
+function updateGuidedPreview() {
+  const f1 = document.getElementById('gf1').value.trim();
+  const f2 = document.getElementById('gf2').value.trim();
+  const f3 = document.getElementById('gf3').value.trim();
+  const f4 = document.getElementById('gf4').value.trim();
+  const f5 = document.getElementById('gf5').value.trim();
+
+  const ph = (text, placeholder) => text || `<span class="placeholder">${placeholder}</span>`;
+
+  document.getElementById('gp1').innerHTML = f1
+    ? `Merci pour ${f1}.`
+    : '<span class="placeholder">Merci pour __________.</span>';
+
+  document.getElementById('gp2').innerHTML = f2
+    ? `\u00C7a m'${f2}.`
+    : '<span class="placeholder">\u00C7a m\'__________.</span>';
+
+  document.getElementById('gp3').innerHTML = f3
+    ? `Mais je ne peux pas ${f3}.`
+    : '<span class="placeholder">Mais je ne peux pas __________.</span>';
+
+  document.getElementById('gp4').innerHTML = f4
+    ? `Parce que ${f4}.`
+    : '<span class="placeholder">Parce que __________.</span>';
+
+  document.getElementById('gp5').innerHTML = f5
+    ? `On peut ${f5}.`
+    : '<span class="placeholder">On peut __________.</span>';
+}
+
+// ===========================
+// FREE WRITING PREVIEW
+// ===========================
+function updateFreePreview() {
+  const recipient = document.getElementById('freeRecipient').value.trim();
+  const subject = document.getElementById('freeSubject').value.trim();
+  const body = document.getElementById('freeBody').value;
+  const name = document.getElementById('freeName').value.trim();
+
+  // Update header fields
+  const toEl = document.getElementById('freePreviewTo');
+  toEl.innerHTML = recipient
+    ? recipient.toLowerCase().replace(/\s+/g, '.') + '@email.fr'
+    : '<span class="placeholder">recipient@email.fr</span>';
+
+  const subjEl = document.getElementById('freePreviewSubject');
+  subjEl.innerHTML = subject || '<span class="placeholder">Subject...</span>';
+
+  // Update body
+  const bodyEl = document.getElementById('freeEmailBody');
+  if (!body.trim() && !name) {
+    bodyEl.innerHTML = '<span class="placeholder">Your email will appear here as you type&hellip;</span>';
+  } else {
+    // Convert line breaks to HTML, preserving paragraph structure
+    const lines = body.split('\n');
+    let html = '';
+    for (const line of lines) {
+      if (line.trim() === '') {
+        html += '<div style="height:0.6rem;"></div>';
+      } else {
+        html += `<div class="email-line">${escapeHtml(line)}</div>`;
+      }
+    }
+    if (name) {
+      html += `<div class="email-signature" style="margin-top:0.5rem;">${escapeHtml(name)}</div>`;
+    }
+    bodyEl.innerHTML = html;
+  }
+
+  // Word count
+  const words = body.trim().split(/\s+/).filter(w => w.length > 0);
+  const count = words.length;
+  const wcEl = document.getElementById('wordCount');
+  wcEl.textContent = `Word count: ${count}`;
+  if (count >= 70 && count <= 90) {
+    wcEl.style.color = '#10b981';
+    wcEl.style.fontWeight = '600';
+  } else if (count > 0) {
+    wcEl.style.color = '#f59e0b';
+    wcEl.style.fontWeight = '500';
+  } else {
+    wcEl.style.color = 'var(--text-light)';
+    wcEl.style.fontWeight = '400';
+  }
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// ===========================
+// FINISH
+// ===========================
+function finishLesson() {
+  goToPage(6);
+  launchConfetti();
+}
+
+// ===========================
+// CONFETTI
+// ===========================
+function launchConfetti() {
+  const container = document.createElement('div');
+  container.className = 'confetti-container';
+  document.body.appendChild(container);
+  const colors = ['#2563eb','#f59e0b','#10b981','#ef4444','#7c3aed','#ec4899'];
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 1.5 + 's';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    piece.style.width = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    container.appendChild(piece);
+  }
+  setTimeout(() => container.remove(), 4000);
+}
+</script>
+</body>
+</html>
