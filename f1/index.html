@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FluoLingo+ · F1 — LAF1201 (Français 1)</title>
+  <meta name="description" content="LAF1201 — French 1. Unit 0: learn, pre-test and produce, with exercises designed up the ICAP ladder." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="app/f1.css" />
+</head>
+<body>
+  <header id="f1head"></header>
+
+  <main class="wrap page">
+    <span class="eyebrow">LAF1201 · Français 1 · Niveau A1</span>
+    <h1 class="page-title">Unité&nbsp;0 — Premiers contacts</h1>
+    <p class="lede">Ten things you'll be able to do. For each one: <b>learn</b> it (see &amp; match),
+      <b>pre-test</b> it (recognise), then <b>produce</b> it (recall, no help). Each step climbs the
+      ICAP ladder — the more you generate, the more it sticks.</p>
+
+    <nav class="act-nav">
+      <a class="btn ghost" href="learn/?sio=0.1">📖 Apprendre</a>
+      <a class="btn ghost" href="pretest/?sio=0.1">✓ Pré-test</a>
+      <a class="btn ghost" href="gapfill/?sio=0.1">✎ Produire</a>
+      <a class="btn ghost" href="dialogue/">💬 Dialogue <span class="icap interactive" style="margin-left:.4em">bientôt</span></a>
+    </nav>
+
+    <div class="sio-grid" id="grid"></div>
+
+    <p class="f1foot">FluoLingo+ · LAF1201 — le cahier fluo · 2026 — Surligne, lis — et produis.</p>
+  </main>
+
+  <script src="app/config.js"></script>
+  <script src="data/sios.js"></script>
+  <script src="app/core.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    F1.mountHeader({ home: "./" });
+    var prog = F1.loadProgress();
+    var grid = document.getElementById("grid");
+    F1.SIOS.forEach(function (s) {
+      var p = prog[s.code] || {};
+      var bits = [];
+      bits.push('<span class="icap passive">learn</span>');
+      bits.push('<span class="icap active">pretest</span>');
+      if (s.gapfill) bits.push('<span class="icap constructive">produce</span>');
+      var done = [];
+      if (p.pretest) done.push("pré-test " + p.pretest.score + "/" + p.pretest.total);
+      if (p.gapfill) done.push("produire " + p.gapfill.score + "/" + p.gapfill.total);
+      var a = document.createElement("a");
+      a.className = "sio-card panel";
+      a.href = "learn/?sio=" + s.code;
+      a.innerHTML =
+        '<span class="code">SIO ' + s.code + '</span>' +
+        "<h3>" + F1.escape(s.title) + "</h3>" +
+        '<span class="en">' + F1.escape(s.en) + "</span>" +
+        '<span class="acts">' + bits.join("") + "</span>" +
+        (done.length ? '<span class="done">✓ ' + done.join(" · ") + "</span>" : "");
+      grid.appendChild(a);
+    });
+  </script>
+</body>
+</html>

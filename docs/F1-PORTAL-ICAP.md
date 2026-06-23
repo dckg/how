@@ -93,6 +93,23 @@ Suggested per-SIO coverage across the ladder (recognition first, then production
 
 ---
 
+## Build status (Unit 0)
+
+Built and live in the repo under `/f1/`:
+
+- **Root `/`** — course launcher; primary CTA + nav link → `/f1/` (French 2 shown as "bientôt").
+- **`/f1/`** — Unit 0 dashboard: 10 SIO cards, activity nav, per-SIO progress chips.
+- **`/f1/learn/`** — reference list (with French TTS) + a **match** game → Passive→Active.
+- **`/f1/pretest/`** — MCQ with biting distractors + explanations → Active.
+- **`/f1/gapfill/`** — no word bank, type-the-form, accent-tolerant checking → Constructive.
+- **`/f1/dialogue/`** — "bientôt" placeholder (Interactive; needs the agentic backend).
+- **Google login** — wired (real Google button + per-account progress) but **dormant until a
+  Client ID is set in `f1/app/config.js`**; runs in guest mode with localStorage progress meanwhile.
+- Content lives in `f1/data/sios.js` (one record per SIO), shared logic in `f1/app/`.
+
+Decisions locked: root keeps a French 1 link (not a hard redirect); login = Google;
+`/f1/dialogue/` = coming soon.
+
 ## Open scoping questions
 
 1. **First slice for today:** ship `/f1/learn/` + `/f1/pretest/` across all 10 SIOs

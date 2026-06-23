@@ -3,46 +3,42 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FluoLingo+ · LAF1201 — Le cahier fluo</title>
-  <meta name="description" content="FluoLingo+ is the LAF1201 (French 1) companion that makes French grammar visible: a diagnostic pre-test and a glossed reader, with practice that climbs the ICAP ladder." />
-
+  <title>FluoLingo+ — le cahier fluo</title>
+  <meta name="description" content="FluoLingo+ — a student-built French learning portal. Enter French 1 (LAF1201): learn, pre-test and produce, up the ICAP ladder." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <!-- ───────────────── Top bar ───────────────── -->
   <header class="topbar">
     <div class="wrap">
-      <a class="brand" href="#top">FluoLingo<span class="plus">+</span><span class="code">LAF1201</span></a>
+      <a class="brand" href="#top">FluoLingo<span class="plus">+</span></a>
       <nav class="nav" aria-label="Sections">
-        <a href="#pretest">Pré-test</a>
-        <a href="#lecture">Lecture</a>
+        <a href="#cours">Cours</a>
+        <a href="f1/">French 1 →</a>
       </nav>
     </div>
   </header>
 
-  <!-- ───────────────── Hero ───────────────── -->
   <main id="top">
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <span class="eyebrow">Cahier de français · niveau A1</span>
+        <span class="eyebrow">Cahier de français</span>
         <h1>
           Je <span class="hl" data-hl>surligne</span>,<br />
           donc <span class="ital">j'apprends.</span>
         </h1>
         <p class="lede">
-          FluoLingo+ is the <b>LAF1201</b> companion that makes French grammar
-          visible. Take a quick <b>pre-test</b>, read with words you can tap to
-          translate, and practise with tasks that make you produce, not just pick.
+          FluoLingo+ makes French <b>visible</b>. Learn it, pre-test it, then
+          produce it — exercises built to climb the <b>ICAP</b> ladder, where the
+          more you generate from memory, the more it sticks.
         </p>
         <div class="cta-row">
-          <a class="btn btn-primary" href="#pretest">Commence le pré-test →</a>
-          <a class="btn btn-ghost" href="#lecture">Lis un texte glosé</a>
+          <a class="btn btn-primary" href="f1/">Entrer dans French&nbsp;1 →</a>
+          <a class="btn btn-ghost" href="#cours">Voir les cours</a>
         </div>
       </div>
 
@@ -62,99 +58,61 @@
     </div>
   </section>
 
-  <!-- ───────────────── 1 · Pré-test MCQ ───────────────── -->
-  <section class="tool tool-lime" id="pretest">
+  <section class="tool tool-lime" id="cours">
     <div class="wrap">
       <div class="tool-head">
-        <span class="tool-tag">Outil 01 — Pré-test</span>
-        <h2>Find your gaps before <span class="hl" data-hl>the lesson</span>, not after.</h2>
-        <p>
-          A short diagnostic of common A1 traps — verb endings, articles,
-          accord. Answer, see why, move on. No grade, just a map of what to study.
-        </p>
-      </div>
-
-      <div class="panel mcq" id="mcq">
-        <div class="mcq-top">
-          <span id="mcq-counter">Question 1 / 3</span>
-          <span id="mcq-topic">Verbes en -ER</span>
-        </div>
-        <div class="mcq-progress"><i id="mcq-bar"></i></div>
-        <p class="mcq-q" id="mcq-question"></p>
-        <div class="mcq-opts" id="mcq-options"></div>
-        <p class="mcq-feedback" id="mcq-feedback"></p>
-        <div class="mcq-actions">
-          <button class="btn btn-primary" id="mcq-next" hidden>Suivant →</button>
-          <span class="mcq-score" id="mcq-score">Score : 0 / 0</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ───────────────── 2 · Lecture / Reader ───────────────── -->
-  <section class="tool tool-cyan" id="lecture">
-    <div class="wrap">
-      <div class="tool-head">
-        <span class="tool-tag">Outil 02 — Lecture</span>
-        <h2>Read real French, with help <span class="hl cyan" data-hl>on the word</span>.</h2>
-        <p>
-          Tap (or hover) the dotted words for a translation and pronunciation —
-          stay in the text instead of jumping to a dictionary.
-        </p>
+        <span class="tool-tag">Les cours</span>
+        <h2>Choisis ton <span class="hl" data-hl>niveau</span>.</h2>
+        <p>Each course is a notebook of "things you can do" (SIOs), each with learn,
+          pre-test and produce activities.</p>
       </div>
 
       <div class="reader-grid">
-        <article class="panel reader">
-          <p class="meta">Texte A1 · « La journée de Léa »</p>
-          <h3>La journée de Léa</h3>
-          <p>
-            Le matin, Léa <span class="gloss" tabindex="0" data-en="takes" data-ipa="/pʁɑ̃/">prend</span>
-            un café et <span class="gloss" tabindex="0" data-en="reviews" data-ipa="/ʁe.viz/">révise</span>
-            ses verbes. Elle <span class="gloss" tabindex="0" data-en="listens to" data-ipa="/e.kut/">écoute</span>
-            une chanson pour <span class="gloss" tabindex="0" data-en="to memorise" data-ipa="/me.mɔ.ʁi.ze/">mémoriser</span>
-            le passé composé.
-          </p>
-          <p>
-            À midi, elle <span class="gloss" tabindex="0" data-en="meets up with" data-ipa="/ʁə.tʁuv/">retrouve</span>
-            ses amis à la <span class="gloss" tabindex="0" data-en="library" data-ipa="/bi.bli.ɔ.tɛk/">bibliothèque</span>.
-            Le soir, fatiguée mais contente, elle se dit : « <span class="gloss" tabindex="0" data-en="I understood everything!" data-ipa="/ʒe tu kɔ̃.pʁi/">J'ai tout compris !</span> »
-          </p>
-        </article>
-
+        <a class="panel reader" href="f1/" style="text-decoration:none;color:inherit;display:block;">
+          <p class="meta">LAF1201 · Niveau A1</p>
+          <h3>French 1 — Français 1</h3>
+          <p style="font-size:1.02rem;line-height:1.6;">Unit 0: s'appeler, l'alphabet, saluer, tu/vous,
+            les consignes, les mots interrogatifs, les sons, les jours, les couleurs.
+            <b>Disponible →</b></p>
+        </a>
         <div class="reader-aside">
           <div class="panel glosskey">
-            <h4>Mots à retenir</h4>
+            <h4>Bientôt</h4>
             <ul>
-              <li><span class="fr">réviser</span> — <span class="en">to revise</span> <span class="ipa">/ʁe.vi.ze/</span></li>
-              <li><span class="fr">retrouver</span> — <span class="en">to meet up</span> <span class="ipa">/ʁə.tʁu.ve/</span></li>
-              <li><span class="fr">la bibliothèque</span> — <span class="en">the library</span> <span class="ipa">/bi.bli.ɔ.tɛk/</span></li>
+              <li><span class="fr">French 2</span> — <span class="en">units 5–8, niveau A1+</span></li>
+              <li><span class="fr">Dialogue IA</span> — <span class="en">partenaire de conversation</span></li>
             </ul>
-          </div>
-          <div class="panel reader-stat">
-            <span class="n">6</span>
-            <span class="l">mots glosés<br />à survoler</span>
           </div>
         </div>
       </div>
     </div>
   </section>
-
   </main>
 
-  <!-- ───────────────── Footer ───────────────── -->
   <footer class="foot">
     <div class="wrap foot-grid">
       <div>
         <span class="brand">FluoLingo<span class="plus">+</span></span>
-        <p>A student-built study portal for LAF1201. Surligne, lis — et apprends.</p>
+        <p>A student-built study portal. Surligne, lis — et produis.</p>
       </div>
-      <p class="mono">
-        LAF1201 · Français A1<br />
-        Le cahier fluo — 2026
-      </p>
+      <p class="mono">Le cahier fluo — 2026</p>
     </div>
   </footer>
 
-  <script src="app.js"></script>
+  <script>
+    // highlighter swipe — light each mark as it scrolls into view
+    (function () {
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var marks = document.querySelectorAll(".hl[data-hl]");
+      if ("IntersectionObserver" in window && !reduce) {
+        var io = new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            if (e.isIntersecting) { var el = e.target; setTimeout(function () { el.classList.add("is-on"); }, 120); io.unobserve(el); }
+          });
+        }, { threshold: 0.7 });
+        marks.forEach(function (m) { io.observe(m); });
+      } else { marks.forEach(function (m) { m.classList.add("is-on"); }); }
+    })();
+  </script>
 </body>
 </html>

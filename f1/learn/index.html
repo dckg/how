@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apprendre · FluoLingo+ F1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../app/f1.css" />
+</head>
+<body>
+  <header id="f1head"></header>
+  <main class="wrap page">
+    <div class="activity">
+      <div class="act-top" id="acttop"></div>
+      <nav class="act-links" id="actlinks"></nav>
+
+      <div class="panel ref">
+        <p class="note" id="intro"></p>
+        <ul id="reflist"></ul>
+      </div>
+
+      <h2 style="font-family:var(--display);margin:2rem 0 .3rem;">Associe <span class="icap active">Active</span></h2>
+      <p class="lede" style="margin-top:0">Pair each French expression with its meaning — no peeking back.</p>
+      <div class="panel" style="padding:1.2rem;margin-top:1rem;">
+        <div class="match-grid"><div class="match-col" id="colA"></div><div class="match-col" id="colB"></div></div>
+        <p class="feedback" id="matchmsg" style="margin-top:1rem;"></p>
+      </div>
+    </div>
+  </main>
+
+  <script src="../app/config.js"></script>
+  <script src="../data/sios.js"></script>
+  <script src="../app/core.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="../app/chrome.js"></script>
+  <script>
+    var sio = F1.current() || F1.SIOS[0];
+    F1.mountHeader({ home: "../", crumb: "Apprendre" });
+    F1.chrome(sio, "learn");
+
+    document.getElementById("intro").innerHTML = F1.escape(sio.learn.intro);
+
+    // reference list with speak buttons
+    var ul = document.getElementById("reflist");
+    sio.learn.ref.forEach(function (r) {
+      var li = document.createElement("li");
+      li.innerHTML =
+        '<span class="fr">' + F1.escape(r.fr) +
+          ' <button class="speak" title="Écouter" aria-label="Écouter">🔊</button></span>' +
+        '<span class="en">' + F1.escape(r.en) + "</span>" +
+        (r.ipa ? '<span class="ipa">' + F1.escape(r.ipa) + "</span>" : "");
+      li.querySelector(".speak").onclick = function () { F1.speak(r.fr); };
+      ul.appendChild(li);
+    });
+
+    // match game
+    var items = sio.learn.ref.slice(0, 6).map(function (r, i) { return { id: i, fr: r.fr, en: r.en }; });
+    var colA = document.getElementById("colA"), colB = document.getElementById("colB"), msg = document.getElementById("matchmsg");
+    var selA = null, selB = null, matched = 0;
+    function btn(text, id, side) {
+      var b = document.createElement("button");
+      b.className = "match-item"; b.textContent = text; b.dataset.id = id; b.dataset.side = side;
+      b.onclick = function () { pick(b, side); };
+      return b;
+    }
+    F1.shuffle(items).forEach(function (it) { colA.appendChild(btn(it.fr, it.id, "A")); });
+    F1.shuffle(items).forEach(function (it) { colB.appendChild(btn(it.en, it.id, "B")); });
+    function clearSel() {
+      if (selA) selA.classList.remove("sel");
+      if (selB) selB.classList.remove("sel");
+      selA = selB = null;
+    }
+    function pick(b, side) {
+      if (b.classList.contains("ok")) return;
+      b.classList.add("sel");
+      if (side === "A") { if (selA) selA.classList.remove("sel"); selA = b; }
+      else { if (selB) selB.classList.remove("sel"); selB = b; }
+      if (selA && selB) {
+        if (selA.dataset.id === selB.dataset.id) {
+          selA.classList.add("ok"); selB.classList.add("ok");
+          selA.disabled = selB.disabled = true;
+          clearSel(); matched++;
+          if (matched === items.length) {
+            msg.innerHTML = "✓ Bravo ! Tu connais les " + items.length + " expressions. " +
+              '<a href="../pretest/?sio=' + sio.code + '">Passe au pré-test →</a>';
+            F1.recordScore("learn", sio.code, matched, items.length);
+          }
+        } else {
+          var a = selA, c = selB;
+          a.classList.add("bad"); c.classList.add("bad"); clearSel();
+          setTimeout(function () { a.classList.remove("bad"); c.classList.remove("bad"); }, 550);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

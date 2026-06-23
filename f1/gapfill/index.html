@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Produire · FluoLingo+ F1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../app/f1.css" />
+</head>
+<body>
+  <header id="f1head"></header>
+  <main class="wrap page">
+    <div class="activity">
+      <div class="act-top" id="acttop"></div>
+      <nav class="act-links" id="actlinks"></nav>
+
+      <p class="lede" style="margin-top:0">No word bank — recall the form from memory and type it. That's the
+        Constructive tier, where the learning sticks.</p>
+
+      <div class="panel gap" id="gap"></div>
+      <div class="act-actions">
+        <button class="btn" id="check">Vérifier</button>
+        <button class="btn ghost" id="reset" hidden>Effacer ↺</button>
+        <span class="score" id="score"></span>
+      </div>
+    </div>
+  </main>
+
+  <script src="../app/config.js"></script>
+  <script src="../data/sios.js"></script>
+  <script src="../app/core.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="../app/chrome.js"></script>
+  <script>
+    var sio = F1.current() || F1.SIOS[0];
+    F1.mountHeader({ home: "../", crumb: "Produire" });
+    F1.chrome(sio, "gapfill");
+
+    var wrap = document.getElementById("gap");
+    var checkBtn = document.getElementById("check");
+    var resetBtn = document.getElementById("reset");
+    var scoreEl = document.getElementById("score");
+
+    if (!sio.gapfill) {
+      wrap.innerHTML = '<p class="note">SIO ' + sio.code + " — pas d'exercice de production écrite ici : " +
+        "cette compétence est orale. Entraîne-toi à l'oral (répète à voix haute), puis reviens à " +
+        '<a href="../learn/?sio=' + sio.code + '">Apprendre</a> ou choisis un autre SIO ci-dessus.</p>';
+      checkBtn.hidden = true;
+    } else {
+      var items = sio.gapfill;
+      items.forEach(function (it, idx) {
+        var div = document.createElement("div");
+        div.className = "gap-item";
+        div.innerHTML =
+          '<span class="gap-sentence">' + F1.escape(it.before) +
+            '<input class="gap-input" id="g' + idx + '" autocomplete="off" autocapitalize="off" spellcheck="false" />' +
+            F1.escape(it.after) + "</span>" +
+          (it.hint ? '<span class="gap-hint">(' + F1.escape(it.hint) + ")</span>" : "") +
+          '<div class="gap-sol" id="s' + idx + '"></div>';
+        wrap.appendChild(div);
+      });
+      // Enter checks
+      wrap.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); check(); } });
+
+      function check() {
+        var correct = 0;
+        items.forEach(function (it, idx) {
+          var inp = document.getElementById("g" + idx);
+          var sol = document.getElementById("s" + idx);
+          var ok = F1.matches(inp.value, it.answer, it.accept);
+          inp.classList.remove("ok", "bad");
+          inp.classList.add(ok ? "ok" : "bad");
+          if (ok) {
+            correct++;
+            // gentle accent nudge if spelling differs from the accented answer
+            sol.classList.toggle("show", inp.value.trim() !== it.answer);
+            sol.innerHTML = inp.value.trim() !== it.answer ? "✓ Attention à l'orthographe : <b>" + F1.escape(it.answer) + "</b>" : "";
+          } else {
+            sol.classList.add("show");
+            sol.innerHTML = "Réponse : <b>" + F1.escape(it.answer) + "</b>";
+          }
+        });
+        scoreEl.textContent = "Score : " + correct + " / " + items.length;
+        resetBtn.hidden = false;
+        F1.recordScore("gapfill", sio.code, correct, items.length);
+        if (correct === items.length) {
+          scoreEl.textContent += " — parfait ✓";
+        }
+      }
+      checkBtn.onclick = check;
+      resetBtn.onclick = function () {
+        items.forEach(function (it, idx) {
+          var inp = document.getElementById("g" + idx);
+          inp.value = ""; inp.classList.remove("ok", "bad");
+          document.getElementById("s" + idx).classList.remove("show");
+        });
+        scoreEl.textContent = ""; resetBtn.hidden = true;
+        document.getElementById("g0").focus();
+      };
+    }
+  </script>
+</body>
+</html>

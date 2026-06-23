@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pré-test · FluoLingo+ F1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../app/f1.css" />
+</head>
+<body>
+  <header id="f1head"></header>
+  <main class="wrap page">
+    <div class="activity">
+      <div class="act-top" id="acttop"></div>
+      <nav class="act-links" id="actlinks"></nav>
+
+      <div class="panel mcq">
+        <div class="mcq-top"><span id="counter"></span><span id="topic">Pré-test</span></div>
+        <div class="mcq-progress"><i id="bar"></i></div>
+        <p class="mcq-q" id="q"></p>
+        <div class="mcq-opts" id="opts"></div>
+        <p class="feedback" id="fb"></p>
+        <div class="act-actions">
+          <button class="btn" id="next" hidden>Suivant →</button>
+          <span class="score" id="score">Score : 0 / 0</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../app/config.js"></script>
+  <script src="../data/sios.js"></script>
+  <script src="../app/core.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="../app/chrome.js"></script>
+  <script>
+    var sio = F1.current() || F1.SIOS[0];
+    F1.mountHeader({ home: "../", crumb: "Pré-test" });
+    F1.chrome(sio, "pretest");
+
+    var QS = sio.pretest, KEYS = ["A", "B", "C", "D"];
+    var i = 0, score = 0, answered = 0, done = false;
+    var el = {
+      counter: document.getElementById("counter"), bar: document.getElementById("bar"),
+      q: document.getElementById("q"), opts: document.getElementById("opts"),
+      fb: document.getElementById("fb"), next: document.getElementById("next"),
+      score: document.getElementById("score")
+    };
+
+    function render() {
+      var Q = QS[i];
+      el.counter.textContent = "Question " + (i + 1) + " / " + QS.length;
+      el.bar.style.width = (i / QS.length) * 100 + "%";
+      el.q.innerHTML = Q.q;
+      el.fb.innerHTML = ""; el.next.hidden = true; el.opts.innerHTML = "";
+      Q.options.forEach(function (text, idx) {
+        var b = document.createElement("button");
+        b.className = "opt"; b.type = "button";
+        b.innerHTML = '<span class="key">' + KEYS[idx] + "</span><span>" + F1.escape(text) + "</span>";
+        b.onclick = function () { choose(idx, b); };
+        el.opts.appendChild(b);
+      });
+    }
+    function choose(idx, btn) {
+      var Q = QS[i];
+      var bs = el.opts.querySelectorAll(".opt");
+      bs.forEach(function (b) { b.disabled = true; });
+      bs[Q.answer].classList.add("correct");
+      if (idx === Q.answer) score++; else btn.classList.add("wrong");
+      answered++;
+      el.fb.innerHTML = (idx === Q.answer ? "✓ Exact. " : "✗ Pas tout à fait. ") + Q.why;
+      el.score.textContent = "Score : " + score + " / " + answered;
+      el.bar.style.width = ((i + 1) / QS.length) * 100 + "%";
+      el.next.hidden = false;
+      el.next.textContent = i < QS.length - 1 ? "Suivant →" : "Terminer ✓";
+      el.next.focus();
+    }
+    el.next.onclick = function () {
+      if (i < QS.length - 1) { i++; render(); return; }
+      // finished
+      F1.recordScore("pretest", sio.code, score, QS.length);
+      el.q.innerHTML = "Pré-test terminé — score : <b>" + score + " / " + QS.length + "</b>";
+      el.opts.innerHTML = ""; el.fb.innerHTML = score === QS.length
+        ? "Sans faute ! Passe à la production pour vérifier que ça tient sans options."
+        : "Bien — maintenant produis les formes toi-même, sans choix.";
+      el.next.hidden = true;
+      var go = document.createElement("a");
+      go.className = "btn"; go.style.marginRight = ".6rem";
+      go.href = (sio.gapfill ? "../gapfill/?sio=" : "../learn/?sio=") + sio.code;
+      go.textContent = sio.gapfill ? "Produire →" : "Revoir →";
+      var again = document.createElement("button");
+      again.className = "btn ghost"; again.textContent = "Recommencer ↺";
+      again.onclick = function () { i = 0; score = 0; answered = 0; el.score.textContent = "Score : 0 / 0"; render(); };
+      el.fb.appendChild(document.createElement("br"));
+      el.fb.appendChild(document.createElement("br"));
+      el.fb.appendChild(go); el.fb.appendChild(again);
+    };
+    render();
+  </script>
+</body>
+</html>
