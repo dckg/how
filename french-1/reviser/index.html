@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Fluolingo — LAF1201</title>
+<title>Fluolingo Reviser — Units 0 and 1 (Quiz 1)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -39,8 +39,10 @@
   header{padding:28px 0 6px}
   /* slim top bar */
   .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0 4px}
-  .brand{font-family:var(--display);font-weight:600;font-size:1.18rem;color:var(--ink);letter-spacing:-.01em;
-    background:linear-gradient(transparent 58%,var(--fluo) 58%);padding:0 .14em;border-radius:.12em}
+  .brand{font-family:var(--display);font-weight:600;font-size:clamp(1.02rem,3.3vw,1.3rem);color:var(--ink);
+    letter-spacing:-.01em;line-height:1.15}
+  .brand .hl{background:linear-gradient(transparent 58%,var(--fluo) 58%);padding:0 .1em;border-radius:.1em}
+  .brand .sub{color:var(--ink-soft);font-weight:500}
   .help-btn{flex:none;width:34px;height:34px;padding:0;font-weight:700;font-size:1rem;border-radius:50%}
 
   button{font-family:Inter,sans-serif;cursor:pointer;border:1px solid var(--line);
@@ -418,7 +420,7 @@
 <!-- SETUP / MENU -->
 <div class="wrap" id="setup">
   <header class="topbar">
-    <span class="brand">Fluolingo</span>
+    <span class="brand"><span class="hl">Fluolingo</span> Reviser <span class="sub">for Units 0 and 1 (Quiz 1)</span></span>
     <button id="help" class="help-btn" aria-label="How it works">?</button>
   </header>
 
