@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FluoLingo+ · LAF1201 — Le cahier fluo</title>
+  <meta name="description" content="FluoLingo+ is the LAF1201 companion that makes French grammar visible: a pre-test, a glossed reader, and a grammar song generator." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ───────────────── Top bar ───────────────── -->
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="#top">FluoLingo<span class="plus">+</span><span class="code">LAF1201</span></a>
+      <nav class="nav" aria-label="Sections">
+        <a href="#pretest">Pré-test</a>
+        <a href="#lecture">Lecture</a>
+        <a href="#chansons">Chansons</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ───────────────── Hero ───────────────── -->
+  <main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">Cahier de français · niveau A1</span>
+        <h1>
+          Je <span class="hl" data-hl>surligne</span>,<br />
+          donc <span class="ital">j'apprends.</span>
+        </h1>
+        <p class="lede">
+          FluoLingo+ is the <b>LAF1201</b> companion that makes French grammar
+          visible. Take a quick <b>pre-test</b>, read with words you can tap to
+          translate, then turn a rule into a song you'll actually remember.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#pretest">Commence le pré-test →</a>
+          <a class="btn btn-ghost" href="#chansons">Génère une chanson</a>
+        </div>
+      </div>
+
+      <aside class="flashcard" aria-label="Sample flashcard">
+        <p class="fr">apprendre</p>
+        <p class="ipa">/a.pʁɑ̃dʁ/ · verbe</p>
+        <p class="en">to learn — irregular, like <i>prendre</i>.</p>
+        <div class="conj">
+          <span>j'apprends</span><b>I learn</b>
+          <span>tu apprends</span><b>you learn</b>
+          <span>il apprend</span><b>he learns</b>
+          <span>nous apprenons</span><b>we learn</b>
+          <span>vous apprenez</span><b>you learn</b>
+          <span>ils apprennent</span><b>they learn</b>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ───────────────── 1 · Pré-test MCQ ───────────────── -->
+  <section class="tool tool-lime" id="pretest">
+    <div class="wrap">
+      <div class="tool-head">
+        <span class="tool-tag">Outil 01 — Pré-test</span>
+        <h2>Find your gaps before <span class="hl" data-hl>the lesson</span>, not after.</h2>
+        <p>
+          A short diagnostic of common A1 traps — verb endings, articles,
+          accord. Answer, see why, move on. No grade, just a map of what to study.
+        </p>
+      </div>
+
+      <div class="panel mcq" id="mcq">
+        <div class="mcq-top">
+          <span id="mcq-counter">Question 1 / 3</span>
+          <span id="mcq-topic">Verbes en -ER</span>
+        </div>
+        <div class="mcq-progress"><i id="mcq-bar"></i></div>
+        <p class="mcq-q" id="mcq-question"></p>
+        <div class="mcq-opts" id="mcq-options"></div>
+        <p class="mcq-feedback" id="mcq-feedback"></p>
+        <div class="mcq-actions">
+          <button class="btn btn-primary" id="mcq-next" hidden>Suivant →</button>
+          <span class="mcq-score" id="mcq-score">Score : 0 / 0</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── 2 · Lecture / Reader ───────────────── -->
+  <section class="tool tool-cyan" id="lecture">
+    <div class="wrap">
+      <div class="tool-head">
+        <span class="tool-tag">Outil 02 — Lecture</span>
+        <h2>Read real French, with help <span class="hl cyan" data-hl>on the word</span>.</h2>
+        <p>
+          Tap (or hover) the dotted words for a translation and pronunciation —
+          stay in the text instead of jumping to a dictionary.
+        </p>
+      </div>
+
+      <div class="reader-grid">
+        <article class="panel reader">
+          <p class="meta">Texte A1 · « La journée de Léa »</p>
+          <h3>La journée de Léa</h3>
+          <p>
+            Le matin, Léa <span class="gloss" tabindex="0" data-en="takes" data-ipa="/pʁɑ̃/">prend</span>
+            un café et <span class="gloss" tabindex="0" data-en="reviews" data-ipa="/ʁe.viz/">révise</span>
+            ses verbes. Elle <span class="gloss" tabindex="0" data-en="listens to" data-ipa="/e.kut/">écoute</span>
+            une chanson pour <span class="gloss" tabindex="0" data-en="to memorise" data-ipa="/me.mɔ.ʁi.ze/">mémoriser</span>
+            le passé composé.
+          </p>
+          <p>
+            À midi, elle <span class="gloss" tabindex="0" data-en="meets up with" data-ipa="/ʁə.tʁuv/">retrouve</span>
+            ses amis à la <span class="gloss" tabindex="0" data-en="library" data-ipa="/bi.bli.ɔ.tɛk/">bibliothèque</span>.
+            Le soir, fatiguée mais contente, elle se dit : « <span class="gloss" tabindex="0" data-en="I understood everything!" data-ipa="/ʒe tu kɔ̃.pʁi/">J'ai tout compris !</span> »
+          </p>
+        </article>
+
+        <div class="reader-aside">
+          <div class="panel glosskey">
+            <h4>Mots à retenir</h4>
+            <ul>
+              <li><span class="fr">réviser</span> — <span class="en">to revise</span> <span class="ipa">/ʁe.vi.ze/</span></li>
+              <li><span class="fr">retrouver</span> — <span class="en">to meet up</span> <span class="ipa">/ʁə.tʁu.ve/</span></li>
+              <li><span class="fr">la bibliothèque</span> — <span class="en">the library</span> <span class="ipa">/bi.bli.ɔ.tɛk/</span></li>
+            </ul>
+          </div>
+          <div class="panel reader-stat">
+            <span class="n">6</span>
+            <span class="l">mots glosés<br />à survoler</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── 3 · Générateur de chansons ───────────────── -->
+  <section class="tool tool-rose" id="chansons">
+    <div class="wrap">
+      <div class="tool-head">
+        <span class="tool-tag">Outil 03 — Générateur de chansons</span>
+        <h2>Turn a grammar rule into a <span class="hl rose" data-hl>song</span> you can't forget.</h2>
+        <p>
+          Pick a rule and a vibe; FluoLingo+ writes a short, singable mnemonic in
+          French. The melody lives in your head — these are the words for it.
+        </p>
+      </div>
+
+      <div class="song-grid">
+        <div class="panel song-controls">
+          <span class="ctrl-label">La règle</span>
+          <div class="chip-row" id="song-topics" role="group" aria-label="Règle de grammaire"></div>
+
+          <span class="ctrl-label">L'ambiance</span>
+          <div class="chip-row" id="song-genres" role="group" aria-label="Ambiance"></div>
+
+          <button class="btn btn-primary" id="song-generate">♪ Génère la chanson</button>
+        </div>
+
+        <div class="panel song-stage">
+          <p class="meta">Chanson de grammaire · <b id="song-genre-label">Comptine</b></p>
+          <h3 class="song-title" id="song-title">Appuie sur « Génère »…</h3>
+          <div class="lyrics" id="song-lyrics"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <!-- ───────────────── Footer ───────────────── -->
+  <footer class="foot">
+    <div class="wrap foot-grid">
+      <div>
+        <span class="brand">FluoLingo<span class="plus">+</span></span>
+        <p>A student-built study portal for LAF1201. Surligne, lis, chante — et apprends.</p>
+      </div>
+      <p class="mono">
+        LAF1201 · Français A1<br />
+        Le cahier fluo — 2026
+      </p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

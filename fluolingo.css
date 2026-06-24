@@ -1,0 +1,72 @@
+/* =========================================================================
+   Fluolingo — shared notebook styling for the home & level hubs
+   ========================================================================= */
+:root{
+  --paper:#F7F8FC; --card:#FFFFFF; --ink:#141B3C; --ink-soft:#515A86; --ink-faint:#8A92B8;
+  --line:#D7DEF0; --accent:#26407A; --accent-deep:#1A2E5C;
+  --fluo:#DDFB4C; --marge:#E8536B;
+  --display:"Fraunces",Georgia,serif; --ui:"Space Mono",ui-monospace,monospace;
+  --body:"Inter",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  background-color:var(--paper);
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 29px,var(--line) 29px,var(--line) 30px);
+  background-attachment:fixed;-webkit-font-smoothing:antialiased;padding-bottom:64px;min-height:100vh}
+@media(min-width:1040px){body::before{content:"";position:fixed;top:0;bottom:0;left:calc(50% - 502px);
+  width:2px;background:var(--marge);opacity:.5;z-index:0;pointer-events:none}}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+
+/* top bar */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:22px 0 6px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:600;font-size:1.3rem;color:var(--ink);letter-spacing:-.01em;
+  text-decoration:none;background:linear-gradient(transparent 58%,var(--fluo) 58%);padding:0 .14em;border-radius:.12em}
+.crumbs{font-family:var(--ui);font-size:.76rem;letter-spacing:.03em;color:var(--ink-soft)}
+.crumbs a{color:var(--accent);text-decoration:none;font-weight:700}
+.crumbs a:hover{text-decoration:underline}
+
+/* hero */
+.hero{padding:clamp(34px,6vw,72px) 0 clamp(26px,4vw,44px)}
+.eyebrow{font-family:var(--ui);font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);
+  display:inline-flex;align-items:center;gap:.6em}
+.eyebrow::before{content:"";width:1.6em;height:2px;background:var(--ink)}
+.hero h1{font-family:var(--display);font-weight:600;font-size:clamp(2.4rem,7vw,4.4rem);line-height:1;
+  letter-spacing:-.025em;margin:.45em 0 0}
+.hero h1 .hl{background:linear-gradient(transparent 56%,var(--fluo) 56%);padding:0 .05em}
+.hero h1 .ital{font-style:italic;font-weight:500}
+.hero .sub{color:var(--ink-soft);font-size:clamp(1.02rem,1.6vw,1.18rem);max-width:48ch;margin:1.1em 0 0}
+.hero .sub b{color:var(--ink)}
+
+/* grid of tiles */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:16px;margin-top:8px}
+.tile{display:flex;flex-direction:column;gap:6px;background:var(--card);border:1.5px solid var(--ink);
+  border-radius:16px;padding:20px 20px 18px;text-decoration:none;color:var(--ink);
+  box-shadow:6px 8px 0 -2px var(--ink);transition:transform .14s ease,box-shadow .14s ease}
+.tile:hover{transform:translate(-2px,-2px);box-shadow:9px 12px 0 -2px var(--ink)}
+.tile .num{font-family:var(--ui);font-size:.72rem;font-weight:700;letter-spacing:.12em;color:var(--ink-soft)}
+.tile .name{font-family:var(--display);font-weight:600;font-size:1.42rem;line-height:1.05;letter-spacing:-.01em}
+.tile .desc{color:var(--ink-soft);font-size:.92rem;line-height:1.4}
+.tile .go{margin-top:6px;font-family:var(--ui);font-size:.74rem;font-weight:700;color:var(--accent);letter-spacing:.02em}
+
+/* coming-soon tiles: flat, muted, not interactive */
+.tile.soon{cursor:default;background:color-mix(in srgb,var(--card) 60%,var(--paper));
+  border-color:var(--line);box-shadow:none;color:var(--ink-faint)}
+.tile.soon:hover{transform:none;box-shadow:none}
+.tile.soon .name{color:var(--ink-soft)}
+.soon-tag{align-self:flex-start;margin-top:6px;font-family:var(--ui);font-size:.64rem;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);background:var(--paper);
+  border:1.5px solid var(--line);border-radius:99px;padding:.3em .7em}
+.tile .live-tag{align-self:flex-start;font-family:var(--ui);font-size:.64rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink);background:var(--fluo);border-radius:99px;padding:.3em .7em;margin-top:6px}
+
+/* section heading between hero and grid */
+.section-label{font-family:var(--ui);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-soft);margin:0 2px 14px}
+
+footer.site{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);
+  font-family:var(--ui);font-size:.74rem;color:var(--ink-faint);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+footer.site a{color:var(--accent);text-decoration:none}
+
+a:focus-visible,.tile:focus-visible{outline:3px solid var(--ink);outline-offset:3px;border-radius:8px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}

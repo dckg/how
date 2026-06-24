@@ -232,7 +232,14 @@
     padding:16px;font-size:1.1rem;font-weight:800;font-family:var(--display);border-radius:14px}
   .start-btn:hover{background:var(--accent-deep);color:#fff}
   .menu-note{color:var(--review);font-size:.85rem;text-align:center;margin:4px 0 0;min-height:1em}
+  .menu-cite{text-align:center;color:var(--ink-soft);font-size:.78rem;margin:10px 0 0;line-height:1.45}
+  .print-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+  .print-link{flex:1 1 200px;text-align:center;text-decoration:none;font-family:var(--ui);font-size:.78rem;
+    font-weight:700;letter-spacing:.02em;color:var(--ink);background:var(--card);border:1.5px solid var(--line);
+    border-radius:11px;padding:11px 10px;transition:border-color .15s,background .15s}
+  .print-link:hover{border-color:var(--ink);background:linear-gradient(0deg,color-mix(in srgb,var(--fluo) 22%,#fff),#fff)}
   .menu-foot{text-align:center;color:var(--ink-soft);font-size:.78rem;margin-top:22px;padding-top:14px;border-top:1px solid var(--line)}
+  .menu-foot a{color:var(--accent);text-decoration:none;font-weight:600}
 
   /* ===== play zone (same shape portrait & landscape) ===== */
   body.playing{overflow:hidden}
@@ -437,7 +444,7 @@
         </div>
       </div>
       <div class="prow stack">
-        <span class="plabel">Cards <button class="qhelp" type="button" data-info="Filter by progress. ‘To review’ = cards you’ve missed; ‘Reviewed’ = cards you’ve answered correctly; ‘All’ = everything.">?</button></span>
+        <span class="plabel">Card selection <button class="qhelp" type="button" data-info="Filter by progress. ‘To review’ = cards you’ve missed; ‘Reviewed’ = cards you’ve answered correctly; ‘All’ = everything.">?</button></span>
         <div class="seg" id="filtseg" role="group" aria-label="Filter">
           <button class="chip" data-filter="all" aria-pressed="true">All</button>
           <button class="chip" data-filter="review" aria-pressed="false">To review</button>
@@ -465,9 +472,14 @@
     <div class="status big"><div class="bar"><span id="barFill"></span></div><span class="count"><b id="cGot">0</b>/<span id="cTotal">0</span> mastered</span></div>
     <button id="startBtn" class="start-btn">Start ▶</button>
     <p id="menuNote" class="menu-note"></p>
+    <p class="menu-cite">Built on principles of pedagogical translanguaging (Cenoz &amp; Gorter, 2021) · <button id="reset" class="linkbtn">Reset progress</button></p>
+    <div class="print-row">
+      <a class="print-link" href="cards.html">📋 View &amp; print · all 250 cards</a>
+      <a class="print-link" href="sios.html">📄 View &amp; print · all 20 SIOs</a>
+    </div>
   </div>
 
-  <footer class="menu-foot">Built on principles of pedagogical translanguaging (Cenoz &amp; Gorter, 2021) · <button id="reset" class="linkbtn">Reset progress</button></footer>
+  <footer class="menu-foot"><a href="../">← French 1</a> · Fluolingo Reviser</footer>
 </div>
 
 <!-- INFO POPUP -->
