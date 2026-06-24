@@ -325,6 +325,22 @@
   .done-emoji{font-size:2.6rem}
   .done-big{font-family:var(--display);font-weight:800;font-size:1.6rem}
   .done-sub{color:var(--ink-soft)}
+  .done-stats{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+  .done-stats span{font-family:var(--ui);font-size:.78rem;color:var(--ink);background:var(--card);
+    border:1.5px solid var(--ink);border-radius:99px;padding:.4em .8em}
+  .done-stats b{font-family:var(--display);font-weight:700}
+  .done-level{font-family:var(--ui);font-size:.78rem;font-weight:700;color:var(--ink);
+    background:var(--fluo);border-radius:99px;padding:.35em .8em;margin-top:2px}
+  /* live score + XP */
+  .pscore{font-family:var(--ui);font-weight:700;font-size:.8rem;color:var(--ink);background:var(--fluo);
+    border-radius:99px;padding:.25em .7em;white-space:nowrap}
+  .xp-pop{position:absolute;top:48px;left:50%;transform:translateX(-50%);font-family:var(--display);
+    font-weight:700;font-size:1.5rem;color:var(--accent);opacity:0;pointer-events:none;z-index:60}
+  .xp-pop.go{animation:xprise .9s ease-out}
+  @keyframes xprise{0%{opacity:0;transform:translate(-50%,8px)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-28px)}}
+  @media(prefers-reduced-motion:reduce){.xp-pop.go{animation:none}}
+  .user-xp{font-family:var(--ui);font-size:.7rem;font-weight:700;color:var(--ink);background:var(--fluo);
+    border-radius:99px;padding:.2em .6em;white-space:nowrap}
 
   .fhint{font-size:.8rem;color:var(--ink-soft);margin:3px 2px 0;line-height:1.35}
   .audio-row{display:flex;gap:10px;align-items:stretch}
@@ -464,6 +480,7 @@
       <div id="userChip" class="user-chip" hidden>
         <img id="userPic" alt="" referrerpolicy="no-referrer" />
         <span id="userName"></span>
+        <span id="userXP" class="user-xp"></span>
         <button id="signoutBtn" class="signout" type="button">Sign out</button>
       </div>
       <button id="help" class="help-btn" aria-label="How it works">?</button>
@@ -565,8 +582,10 @@
   <div class="play-top">
     <button id="pExit" aria-label="Exit to menu">✕</button>
     <div class="pbar"><span id="pbarFill"></span></div>
+    <span id="pScore" class="pscore"></span>
     <span id="pPos" class="ppos">1/1</span>
   </div>
+  <div id="xpPop" class="xp-pop" aria-hidden="true"></div>
   <div class="play-body" id="playBody"></div>
   <div class="play-foot" id="playFoot"></div>
 </div>
@@ -861,6 +880,36 @@ const total=FLAT.length;
 document.getElementById('cTotal').textContent=total*2;
 
 let mode='reveal', filter='all', page=0, dir='enfr', autoplay=true, resurface=true;
+
+/* ============ scoring + XP (gamification) ============ */
+const MKEY=KEY+'-meta';
+let meta={xp:0,answered:0,correct:0,best:0};
+try{meta=Object.assign(meta,JSON.parse(localStorage.getItem(MKEY)||'{}'));}catch(e){}
+let streak=0, sXP=0, sCorrect=0, sTotal=0, sBest=0;   // per play session
+const POINTS={exact:10,accent:7,flip:6};
+const levelOf=xp=>Math.floor((xp||0)/100)+1;
+function persistMeta(){ try{localStorage.setItem(MKEY,JSON.stringify(meta));}catch(e){} if(window.__cloudSaveMeta)window.__cloudSaveMeta(meta); }
+window.__mergeMeta=(m)=>{ if(m&&typeof m==='object'){
+    meta.xp=Math.max(meta.xp,m.xp||0); meta.answered=Math.max(meta.answered,m.answered||0);
+    meta.correct=Math.max(meta.correct,m.correct||0); meta.best=Math.max(meta.best,m.best||0);
+  } persistMeta(); updateXP(); };
+function award(kind){
+  sTotal++; meta.answered++;
+  if(kind==='wrong'){ streak=0; }
+  else{
+    streak++; sBest=Math.max(sBest,streak); meta.best=Math.max(meta.best,streak);
+    const pts=(POINTS[kind]||0)+Math.min(streak-1,5);   // up to +5 streak bonus
+    meta.xp+=pts; sXP+=pts; sCorrect++; meta.correct++;
+    popXP(pts);
+  }
+  persistMeta(); updateScore(); updateXP();
+}
+function updateScore(){ const s=document.getElementById('pScore');
+  if(s) s.innerHTML = streak>1 ? ('⚡ '+sXP+' &nbsp; 🔥 '+streak) : ('⚡ '+sXP); }
+function popXP(pts){ const h=document.getElementById('xpPop'); if(!h)return;
+  h.textContent='+'+pts+(streak>=3?' 🔥':''); h.classList.remove('go'); void h.offsetWidth; h.classList.add('go'); }
+function updateXP(){ const ux=document.getElementById('userXP');
+  if(ux) ux.textContent='Lv '+levelOf(meta.xp)+' · '+meta.xp+' XP'; }
 function curTarget(){ return (mode==='gaps'||mode==='order'||mode==='error') ? 'fr' : (dir==='enfr' ? 'fr' : 'en'); }
 function mkey(id){ return id+'|'+curTarget(); }
 function setState(id,st){ store[mkey(id)]=st; save(); updateProgress(); }
@@ -938,7 +987,8 @@ function qInfo(it){
 function startPlay(){
   session=DATA[page].items.map((it,ii)=>({it,id:`s${page}-i${ii}`})).filter(r=>passFilter(r.id));
   if(!session.length){const f=document.querySelector('#filtseg button[aria-pressed="true"]').textContent;document.getElementById('menuNote').textContent='Nothing in “'+f+'”. Try All.';return;}
-  qIdx=0;document.body.classList.add('playing');playEl.hidden=false;renderPlay();
+  qIdx=0;streak=0;sXP=0;sCorrect=0;sTotal=0;sBest=0;updateScore();
+  document.body.classList.add('playing');playEl.hidden=false;renderPlay();
 }
 function exitPlay(){document.body.classList.remove('playing');playEl.hidden=true;if(TTS)speechSynthesis.cancel();updateProgress();syncSeg();}
 function nextQ(){ qIdx++; if(qIdx>=session.length) renderComplete(); else renderPlay(); }
@@ -946,8 +996,8 @@ function primaryBtn(label,fn,cls){const b=document.createElement('button');b.cla
 function hintBtn(fn){const b=document.createElement('button');b.className='hint-btn';b.type='button';b.textContent='💡 Hint';b.addEventListener('click',fn);return b;}
 function pair(a,b){const w=document.createElement('div');w.className='foot-pair';w.appendChild(a);w.appendChild(b);return w;}
 function twoRate(id){const w=document.createElement('div');w.className='play-two';
-  w.appendChild(primaryBtn('✓ Got it',()=>{setState(id,'got');nextQ();},'got'));
-  w.appendChild(primaryBtn('KIV it',()=>{setState(id,'review');nextQ();},'rev'));return w;}
+  w.appendChild(primaryBtn('✓ Got it',()=>{setState(id,'got');award('flip');nextQ();},'got'));
+  w.appendChild(primaryBtn('KIV it',()=>{setState(id,'review');award('wrong');nextQ();},'rev'));return w;}
 function buildModel(text,lang,alts){
   const m=document.createElement('div');m.className='q-model';m.style.display='none';
   const mt=document.createElement('div');mt.style.flex='1';const s=document.createElement('span');s.className='fr';s.textContent=text;mt.appendChild(s);
@@ -957,6 +1007,7 @@ function buildModel(text,lang,alts){
 }
 function finishProduce(res,fb,model,id,frText){
   const correct=(res==='exact'||res==='accent');
+  award(res==='exact'?'exact':res==='accent'?'accent':'wrong');
   model.show(false);playFoot.innerHTML='';
   if(correct && frText) maybeSpeak(frText,'fr');   // auto-play French only AFTER a correct answer
   if(res==='exact'){fb.className='q-feedback ok';fb.textContent='Parfait.';setState(id,'got');playFoot.appendChild(primaryBtn('Continue →',nextQ));}
@@ -974,6 +1025,7 @@ function renderPlay(){
   const {it,id}=session[qIdx]; const info=qInfo(it);
   document.getElementById('pbarFill').style.width=(qIdx/session.length*100)+'%';
   document.getElementById('pPos').textContent=`${qIdx+1}/${session.length}`;
+  updateScore();
   playBody.innerHTML='';playBody.scrollTop=0;playFoot.innerHTML='';
   if(mode==='reveal') return playFlip(info,id);
   const prompt=document.createElement('div');prompt.className='q-prompt';
@@ -1065,11 +1117,12 @@ function playSpeak(info,id){
       const w=document.createElement('div');w.className='play-two';
       if(res==='wrong'){
         fb.className='q-feedback no';fb.textContent = resurface ? 'Not a match — marked “to review”, it’ll come back.' : 'Not a match — marked “to review”.';
-        recordMiss(id);
+        recordMiss(id);award('wrong');
         w.appendChild(primaryBtn('🎤 Again',()=>renderPlay(),'rev'));
         w.appendChild(primaryBtn('Continue →',nextQ));
       } else {
         fb.className='q-feedback ok';fb.textContent='Match!';setState(id,'got');
+        award(res==='accent'?'accent':'exact');
         maybeSpeak(info.ansLang==='fr'?info.answerPrimary:info.promptText,'fr');
         w.appendChild(primaryBtn('🎤 Again',()=>renderPlay(),'rev'));
         w.appendChild(primaryBtn('Continue →',nextQ));
@@ -1180,7 +1233,7 @@ function playError(it,info,id){
   let answered=false;
   const revealTrue=()=>{ c.idxs.forEach(k=>{const tb=sent.querySelector('[data-j="'+k+'"]'); if(tb)tb.classList.add('reveal');}); };
   const settle=ok=>{answered=true;model.show(false);playFoot.innerHTML='';
-    if(ok){setState(id,'got');maybeSpeak(it.fr,'fr');} else recordMiss(id);
+    if(ok){setState(id,'got');award('exact');maybeSpeak(it.fr,'fr');} else {recordMiss(id);award('wrong');}
     playFoot.appendChild(primaryBtn('Continue →',nextQ));};
   c.tokens.forEach((tk,j)=>{
     if(tk.word){
@@ -1212,7 +1265,11 @@ function renderComplete(){
   document.getElementById('pPos').textContent=`${session.length}/${session.length}`;
   const uniq=[...new Set(session.map(s=>s.id))];
   const got=uniq.filter(id=>store[mkey(id)]==='got').length;
-  playBody.innerHTML=`<div class="done"><div class="done-emoji">🎉</div><div class="done-big">Topic complete</div><div class="done-sub">${got} / ${uniq.length} mastered this round</div></div>`;
+  const acc=sTotal?Math.round(sCorrect/sTotal*100):0;
+  playBody.innerHTML=`<div class="done"><div class="done-emoji">🎉</div><div class="done-big">Topic complete</div>`+
+    `<div class="done-sub">${got} / ${uniq.length} mastered this round</div>`+
+    `<div class="done-stats"><span><b>+${sXP}</b> XP</span><span><b>${acc}%</b> accuracy</span><span><b>🔥 ${sBest}</b> best streak</span></div>`+
+    `<div class="done-level">Lv ${levelOf(meta.xp)} · ${meta.xp} XP total</div></div>`;
   playFoot.innerHTML='';
   if(page<DATA.length-1) playFoot.appendChild(primaryBtn('Next topic →',()=>{page++;syncSeg();startPlay();}));
   playFoot.appendChild(primaryBtn('Back to menu',exitPlay,'ghost'));
@@ -1278,7 +1335,7 @@ function initInfo(){
 }
 
 /* ============ init ============ */
-wireSetup();syncSeg();updateProgress();initTutorial();initReset();initInfo();
+wireSetup();syncSeg();updateProgress();updateXP();initTutorial();initReset();initInfo();
 </script>
 
 <!-- ============ Firebase: Google sign-in (gates the app) + cloud progress sync ============ -->
@@ -1288,16 +1345,17 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signO
   from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc }
   from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { getAnalytics, isSupported }
+  from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
 
-/* 🔧 STEP 1 — paste your Firebase web-app config here.
-   Firebase console → Project settings → General → Your apps → SDK setup and configuration → Config. */
 const firebaseConfig = {
-  apiKey:            "PASTE_API_KEY",
-  authDomain:        "PASTE_PROJECT.firebaseapp.com",
-  projectId:         "PASTE_PROJECT_ID",
-  storageBucket:     "PASTE_PROJECT.appspot.com",
-  messagingSenderId: "PASTE_SENDER_ID",
-  appId:             "PASTE_APP_ID"
+  apiKey:            "AIzaSyBQcKYqbYgSFPh03eG2qnpqPlk0JUpsaVw",
+  authDomain:        "f1fluolingo.firebaseapp.com",
+  projectId:         "f1fluolingo",
+  storageBucket:     "f1fluolingo.firebasestorage.app",
+  messagingSenderId: "844752527987",
+  appId:             "1:844752527987:web:0069167f823825e8a58006",
+  measurementId:     "G-45KESJ5JQR"
 };
 
 const gate   = document.getElementById('authgate');
@@ -1318,6 +1376,7 @@ if(!configured){
   const db = getFirestore(app);
   const provider = new GoogleAuthProvider();
   let uid = null, timer = null;
+  isSupported().then(ok => { if (ok) { try { getAnalytics(app); } catch (e) {} } }).catch(()=>{});
 
   gateBtn.addEventListener('click', async () => {
     gateNote.textContent = '';
@@ -1341,6 +1400,18 @@ if(!configured){
     }, 700);
   };
 
+  /* the classic script calls this whenever XP / stats change */
+  let mtimer = null;
+  window.__cloudSaveMeta = (meta) => {
+    if (!uid) return;
+    clearTimeout(mtimer);
+    mtimer = setTimeout(() => {
+      setDoc(doc(db, 'users', uid),
+        { xp:meta.xp||0, answered:meta.answered||0, correct:meta.correct||0, best:meta.best||0, updated:Date.now() },
+        { merge:true }).catch(()=>{});
+    }, 800);
+  };
+
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       uid = user.uid;
@@ -1351,8 +1422,12 @@ if(!configured){
       document.body.classList.remove('locked');
       try {
         const snap = await getDoc(doc(db, 'users', uid));
-        const remote = snap.exists() ? (snap.data().progress || {}) : {};
-        window.__mergeRemote(remote);   // union-merge cloud ⇄ local, then push the merged set back up
+        const data = snap.exists() ? snap.data() : {};
+        window.__mergeRemote(data.progress || {});      // union-merge cloud ⇄ local progress
+        if (window.__mergeMeta) window.__mergeMeta(data); // merge XP / stats
+        setDoc(doc(db, 'users', uid),                    // store profile for leaderboards
+          { name:user.displayName||'', email:user.email||'', photo:user.photoURL||'' },
+          { merge:true }).catch(()=>{});
       } catch (e) { /* offline: keep local progress */ }
     } else {
       uid = null;
