@@ -44,6 +44,31 @@
   .brand .hl{background:linear-gradient(transparent 58%,var(--fluo) 58%);padding:0 .1em;border-radius:.1em}
   .brand .sub{color:var(--ink-soft);font-weight:500}
   .help-btn{flex:none;width:34px;height:34px;padding:0;font-weight:700;font-size:1rem;border-radius:50%}
+  /* ---- auth: sign-in gate + signed-in chip ---- */
+  body.locked{overflow:hidden}
+  .topbar-right{display:flex;align-items:center;gap:10px}
+  .user-chip{display:flex;align-items:center;gap:8px}
+  .user-chip[hidden]{display:none}
+  .user-chip img{width:26px;height:26px;border-radius:50%;object-fit:cover;border:1.5px solid var(--line)}
+  #userName{font-family:var(--ui);font-size:.74rem;color:var(--ink);max-width:13ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .signout{font-family:var(--ui);font-size:.68rem;font-weight:700;color:var(--ink-soft);border:1.5px solid var(--line);
+    background:var(--card);border-radius:99px;padding:.4em .7em;cursor:pointer}
+  .signout:hover{border-color:var(--ink);color:var(--ink)}
+  .authgate{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px;
+    background:repeating-linear-gradient(0deg,transparent,transparent 29px,var(--rule) 29px,var(--rule) 30px),
+      linear-gradient(168deg,#FFF3E6 0%,#FFE7CE 52%,#FFD9B2 100%)}
+  .authgate.show{display:flex}
+  .gate-card{background:var(--card);border:1.5px solid var(--ink);border-radius:20px;box-shadow:10px 12px 0 -2px var(--ink);
+    padding:32px 28px;max-width:380px;width:100%;text-align:center}
+  .gate-brand{font-family:var(--display);font-weight:600;font-size:1.6rem;letter-spacing:-.01em;margin-bottom:.45em}
+  .gate-brand .hl{background:linear-gradient(transparent 58%,var(--fluo) 58%);padding:0 .1em;border-radius:.1em}
+  .gate-sub{color:var(--ink-soft);font-size:.95rem;line-height:1.5;margin:0 0 1.5em}
+  .gate-google{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:.7em;
+    background:#fff;color:var(--ink);border:1.5px solid var(--ink);border-radius:12px;padding:13px;
+    font-family:var(--display);font-weight:600;font-size:1.02rem;cursor:pointer;transition:background .15s,transform .1s}
+  .gate-google:hover{background:linear-gradient(0deg,color-mix(in srgb,var(--fluo) 22%,#fff),#fff);transform:translateY(-1px)}
+  .gate-google:disabled{opacity:.5;cursor:default;transform:none}
+  .gate-note{color:var(--wrong);font-size:.85rem;line-height:1.4;margin:1em 0 0;min-height:1em}
 
   button{font-family:Inter,sans-serif;cursor:pointer;border:1px solid var(--line);
     background:var(--card);color:var(--ink);border-radius:99px;padding:8px 13px;
@@ -416,12 +441,33 @@
   }
 </style>
 </head>
-<body>
+<body class="locked">
+
+<!-- SIGN-IN GATE -->
+<div id="authgate" class="authgate show">
+  <div class="gate-card">
+    <div class="gate-brand"><span class="hl">Fluolingo</span> Reviser</div>
+    <p class="gate-sub">Sign in to save your progress and pick up where you left off on any device.</p>
+    <button id="gateBtn" class="gate-google">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.616z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.997 8.997 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+      Continue with Google
+    </button>
+    <p id="gateNote" class="gate-note"></p>
+  </div>
+</div>
+
 <!-- SETUP / MENU -->
 <div class="wrap" id="setup">
   <header class="topbar">
     <span class="brand"><span class="hl">Fluolingo</span> Reviser <span class="sub">for Units 0 and 1 (Quiz 1)</span></span>
-    <button id="help" class="help-btn" aria-label="How it works">?</button>
+    <div class="topbar-right">
+      <div id="userChip" class="user-chip" hidden>
+        <img id="userPic" alt="" referrerpolicy="no-referrer" />
+        <span id="userName"></span>
+        <button id="signoutBtn" class="signout" type="button">Sign out</button>
+      </div>
+      <button id="help" class="help-btn" aria-label="How it works">?</button>
+    </div>
   </header>
 
   <div class="menu">
@@ -737,7 +783,16 @@ function judgeAny(input, answers, lang){
 /* ============ persistence (keyed per direction) ============ */
 const KEY="laf1201-translang-v1";
 let store={}; try{store=JSON.parse(localStorage.getItem(KEY)||"{}");}catch(e){store={};}
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){}};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){} if(window.__cloudSave)window.__cloudSave(store);};
+/* bridge for Firebase auth + cloud progress sync (used by the module at the end of <body>) */
+window.__mergeRemote=(remote)=>{
+  if(remote&&typeof remote==='object'){
+    const rank={unseen:0,review:1,got:2};
+    for(const k in remote){ const cur=store[k], inc=remote[k];
+      if(!cur||(rank[inc]||0)>(rank[cur]||0)) store[k]=inc; }
+  }
+  save();updateProgress();syncSeg();
+};
 
 /* ============ TTS (best available voice per language) ============ */
 const TTS='speechSynthesis' in window;
@@ -1224,6 +1279,89 @@ function initInfo(){
 
 /* ============ init ============ */
 wireSetup();syncSeg();updateProgress();initTutorial();initReset();initInfo();
+</script>
+
+<!-- ============ Firebase: Google sign-in (gates the app) + cloud progress sync ============ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
+  from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc }
+  from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+/* 🔧 STEP 1 — paste your Firebase web-app config here.
+   Firebase console → Project settings → General → Your apps → SDK setup and configuration → Config. */
+const firebaseConfig = {
+  apiKey:            "PASTE_API_KEY",
+  authDomain:        "PASTE_PROJECT.firebaseapp.com",
+  projectId:         "PASTE_PROJECT_ID",
+  storageBucket:     "PASTE_PROJECT.appspot.com",
+  messagingSenderId: "PASTE_SENDER_ID",
+  appId:             "PASTE_APP_ID"
+};
+
+const gate   = document.getElementById('authgate');
+const gateBtn= document.getElementById('gateBtn');
+const gateNote=document.getElementById('gateNote');
+const chip   = document.getElementById('userChip');
+const uName  = document.getElementById('userName');
+const uPic   = document.getElementById('userPic');
+const signout= document.getElementById('signoutBtn');
+
+const configured = firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('PASTE');
+if(!configured){
+  gateBtn.disabled = true;
+  gateNote.textContent = 'Sign-in isn’t configured yet — paste your Firebase config into this page.';
+} else {
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
+  let uid = null, timer = null;
+
+  gateBtn.addEventListener('click', async () => {
+    gateNote.textContent = '';
+    try { await signInWithPopup(auth, provider); }
+    catch (e) {
+      gateNote.textContent =
+        e.code === 'auth/popup-closed-by-user' ? 'Sign-in was cancelled.' :
+        e.code === 'auth/popup-blocked' ? 'Your browser blocked the popup — allow popups and try again.' :
+        e.code === 'auth/unauthorized-domain' ? 'This domain isn’t authorised in Firebase yet.' :
+        ('Sign-in failed: ' + (e.message || e.code));
+    }
+  });
+  signout.addEventListener('click', () => signOut(auth));
+
+  /* the classic script calls this on every save() */
+  window.__cloudSave = (store) => {
+    if (!uid) return;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      setDoc(doc(db, 'users', uid), { progress: store, updated: Date.now() }, { merge: true }).catch(()=>{});
+    }, 700);
+  };
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      uid = user.uid;
+      uName.textContent = user.displayName || user.email || 'Signed in';
+      if (user.photoURL) { uPic.src = user.photoURL; uPic.style.display = 'block'; } else { uPic.style.display = 'none'; }
+      chip.hidden = false;
+      gate.classList.remove('show');
+      document.body.classList.remove('locked');
+      try {
+        const snap = await getDoc(doc(db, 'users', uid));
+        const remote = snap.exists() ? (snap.data().progress || {}) : {};
+        window.__mergeRemote(remote);   // union-merge cloud ⇄ local, then push the merged set back up
+      } catch (e) { /* offline: keep local progress */ }
+    } else {
+      uid = null;
+      chip.hidden = true;
+      gate.classList.add('show');
+      document.body.classList.add('locked');
+    }
+  });
+}
 </script>
 </body>
 </html>
