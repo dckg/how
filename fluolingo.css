@@ -2,18 +2,19 @@
    Fluolingo — shared notebook styling for the home & level hubs
    ========================================================================= */
 :root{
-  --paper:#F7F8FC; --card:#FFFFFF; --ink:#141B3C; --ink-soft:#515A86; --ink-faint:#8A92B8;
-  --line:#D7DEF0; --accent:#26407A; --accent-deep:#1A2E5C;
-  --fluo:#DDFB4C; --marge:#E8536B;
+  --paper:#FCEEDD; --card:#FFFFFF; --ink:#141B3C; --ink-soft:#515A86; --ink-faint:#8A92B8;
+  --line:#ECD9C2; --accent:#26407A; --accent-deep:#1A2E5C;
+  --rule:rgba(196,121,52,.16); --fluo:#DDFB4C; --marge:#E8536B;
   --display:"Fraunces",Georgia,serif; --ui:"Space Mono",ui-monospace,monospace;
   --body:"Inter",system-ui,sans-serif;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
-  background-color:var(--paper);
-  background-image:repeating-linear-gradient(0deg,transparent,transparent 29px,var(--line) 29px,var(--line) 30px);
-  background-attachment:fixed;-webkit-font-smoothing:antialiased;padding-bottom:64px;min-height:100vh}
+  background-color:#FFE7CE;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 29px,var(--rule) 29px,var(--rule) 30px),
+    linear-gradient(168deg,#FFF3E6 0%,#FFE7CE 52%,#FFD9B2 100%);
+  background-attachment:fixed,fixed;-webkit-font-smoothing:antialiased;padding-bottom:64px;min-height:100vh}
 @media(min-width:1040px){body::before{content:"";position:fixed;top:0;bottom:0;left:calc(50% - 502px);
   width:2px;background:var(--marge);opacity:.5;z-index:0;pointer-events:none}}
 .wrap{max-width:980px;margin:0 auto;padding:0 20px;position:relative;z-index:1}

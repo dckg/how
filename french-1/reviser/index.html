@@ -9,9 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F7F8FC; --card:#FFFFFF; --ink:#141B3C; --ink-soft:#515A86;
-    --line:#D7DEF0; --accent:#26407A; --accent-deep:#1A2E5C; --accent-tint:#EAEFFB;
-    --mask:#E7EBF7; --mask-dot:#CBD5F0;
+    --paper:#FCEEDD; --card:#FFFFFF; --ink:#141B3C; --ink-soft:#515A86;
+    --line:#ECD9C2; --accent:#26407A; --accent-deep:#1A2E5C; --accent-tint:#EAEFFB;
+    --rule:rgba(196,121,52,.16);
+    --mask:#F3E4D2; --mask-dot:#E2C9AC;
     --got:#2E9E6B; --got-bg:#E7F6EE;
     --review:#D98326; --review-bg:#FAEFDE;
     --wrong:#D24A3D; --wrong-bg:#FBE9E6;
@@ -22,9 +23,11 @@
   }
   *{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
-  body{margin:0;background-color:var(--paper);
-    background-image:repeating-linear-gradient(0deg,transparent,transparent 29px,var(--line) 29px,var(--line) 30px);
-    background-attachment:fixed;color:var(--ink);
+  body{margin:0;color:var(--ink);
+    background-color:#FFE7CE;
+    background-image:repeating-linear-gradient(0deg,transparent,transparent 29px,var(--rule) 29px,var(--rule) 30px),
+      linear-gradient(168deg,#FFF3E6 0%,#FFE7CE 52%,#FFD9B2 100%);
+    background-attachment:fixed,fixed;
     min-height:100vh;
     font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
     font-size:16px;line-height:1.5;padding-bottom:80px}
@@ -59,6 +62,11 @@
   .seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
   .seg button[aria-pressed="true"]:hover{color:#fff}
   .seg.dir button[aria-pressed="true"]{background:var(--accent)}
+  /* semantic colour-coding for the On/Off and Card-selection toggles */
+  #autoseg button[data-auto="1"][aria-pressed="true"],#resurfseg button[data-resurf="1"][aria-pressed="true"]{background:var(--got)}
+  #autoseg button[data-auto="0"][aria-pressed="true"],#resurfseg button[data-resurf="0"][aria-pressed="true"]{background:var(--wrong)}
+  #filtseg button[data-filter="review"][aria-pressed="true"]{background:var(--review)}
+  #filtseg button[data-filter="got"][aria-pressed="true"]{background:var(--got)}
   .modes button{font-family:var(--display);font-weight:700;font-size:.86rem;padding:10px 6px}
 
   .navrow{display:flex;align-items:center;gap:8px}
@@ -74,7 +82,7 @@
   .audio-toggle[aria-pressed="true"]:hover{color:#fff}
 
   .status{display:flex;align-items:center;gap:9px}
-  .bar{flex:1;height:6px;border-radius:99px;background:#E5EAF6;overflow:hidden}
+  .bar{flex:1;height:6px;border-radius:99px;background:#F0DFC8;overflow:hidden}
   .bar>span{display:block;height:100%;width:0;border-radius:99px;
     background:linear-gradient(90deg,var(--got),#5ba074);transition:width .35s ease}
   .count{font-size:.76rem;color:var(--ink-soft);font-weight:700;white-space:nowrap}
@@ -98,7 +106,7 @@
   .rows .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);border-top:1px solid var(--line)}
   .rows .row:first-child{border-top:none}
 
-  .prompt{padding:11px 12px;display:flex;align-items:center;gap:8px;border-right:1px solid var(--line);background:#FAFBFF;min-width:0}
+  .prompt{padding:11px 12px;display:flex;align-items:center;gap:8px;border-right:1px solid var(--line);background:#FFFAF2;min-width:0}
   .prompt .txt{font-size:.95rem;line-height:1.35;flex:1;min-width:0}
   .resp{padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
   .resp-top{display:flex;gap:8px;align-items:stretch;min-width:0}
@@ -243,13 +251,15 @@
 
   /* ===== play zone (same shape portrait & landscape) ===== */
   body.playing{overflow:hidden}
-  .play{position:fixed;inset:0;background-color:var(--paper);
-    background-image:repeating-linear-gradient(0deg,transparent,transparent 29px,var(--line) 29px,var(--line) 30px);
+  .play{position:fixed;inset:0;
+    background-color:#FFE7CE;
+    background-image:repeating-linear-gradient(0deg,transparent,transparent 29px,var(--rule) 29px,var(--rule) 30px),
+      linear-gradient(168deg,#FFF3E6 0%,#FFE7CE 52%,#FFD9B2 100%);
     z-index:50;display:flex;flex-direction:column}
   .play[hidden]{display:none}
   .play-top{flex:none;display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
   #pExit{flex:none;width:38px;height:38px;padding:0;border-radius:50%;font-size:.95rem;font-weight:700}
-  .pbar{flex:1;height:8px;border-radius:99px;background:#E5EAF6;overflow:hidden}
+  .pbar{flex:1;height:8px;border-radius:99px;background:#F0DFC8;overflow:hidden}
   .pbar>span{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--accent),#5a86b5);transition:width .3s ease}
   .ppos{flex:none;font-family:var(--ui);font-weight:700;font-size:.8rem;color:var(--ink-soft)}
 
@@ -460,7 +470,7 @@
           </div>
         </div>
         <div class="subset">
-          <span class="plabel">Auto-play audio <button class="qhelp" type="button" data-info="When on, French is spoken automatically as soon as it appears. When off, audio plays only when you tap 🔊 (normal) or 🐢 (slow).">?</button></span>
+          <span class="plabel">Auto-play audio <button class="qhelp" type="button" data-info="In Flip it, the French plays automatically when you reveal the card. In every other mode it plays only once you’ve answered correctly. Tap 🔊 (normal) or 🐢 (slow) to replay anytime; turn off to keep all audio manual.">?</button></span>
           <div class="seg" id="autoseg" role="group" aria-label="Audio playback">
             <button data-auto="1" aria-pressed="true">On</button>
             <button data-auto="0" aria-pressed="false">Off</button>
@@ -886,10 +896,12 @@ function buildModel(text,lang,alts){
   const mt=document.createElement('div');mt.style.flex='1';const s=document.createElement('span');s.className='fr';s.textContent=text;mt.appendChild(s);
   if(alts&&alts.length){const al=document.createElement('div');al.className='alts';al.textContent='also: '+alts.join(' · ');mt.appendChild(al);}
   m.appendChild(mt);const sp=speaker(text,lang);if(sp)m.appendChild(sp);
-  return {el:m, show:()=>{m.style.display='flex';maybeSpeak(text,lang);}};
+  return {el:m, show:(doSpeak)=>{m.style.display='flex';if(doSpeak)maybeSpeak(text,lang);}};
 }
-function finishProduce(res,fb,model,id){
-  model.show();playFoot.innerHTML='';
+function finishProduce(res,fb,model,id,frText){
+  const correct=(res==='exact'||res==='accent');
+  model.show(false);playFoot.innerHTML='';
+  if(correct && frText) maybeSpeak(frText,'fr');   // auto-play French only AFTER a correct answer
   if(res==='exact'){fb.className='q-feedback ok';fb.textContent='Parfait.';setState(id,'got');playFoot.appendChild(primaryBtn('Continue →',nextQ));}
   else if(res==='accent'){fb.className='q-feedback acc';fb.textContent='Right — watch the accents.';setState(id,'got');playFoot.appendChild(primaryBtn('Continue →',nextQ));}
   else{
@@ -911,7 +923,6 @@ function renderPlay(){
   const pt=document.createElement('div');pt.className='q-text';pt.textContent=info.promptText;
   prompt.appendChild(pt);const sp=speaker(info.promptText,info.promptLang);if(sp)prompt.appendChild(sp);
   playBody.appendChild(prompt);
-  maybeSpeak(info.promptText,info.promptLang);
   if(mode==='gaps') playGaps(it,info,id);
   else if(mode==='speak') playSpeak(info,id);
   else if(mode==='order') playOrder(it,info,id);
@@ -956,7 +967,7 @@ function playGaps(it,info,id){
       const loose=deAccent(v.toLowerCase())===deAccent(c.dataset.ch.toLowerCase());
       if(exact)c.classList.add('ok');else if(loose){c.classList.add('acc');if(worst==='exact')worst='accent';}else{c.classList.add('no');worst='wrong';}});
     if(empty){fb.className='q-feedback no';fb.textContent='Fill in every letter.';return;}
-    finishProduce(worst,fb,model,id);
+    finishProduce(worst,fb,model,id,it.fr);
   });
   playFoot.appendChild(pair(hint,check));
   if(cl.allCells[0])setTimeout(()=>cl.allCells[0].focus(),60);
@@ -976,7 +987,7 @@ function playType(info,id){
     const r=judgeAny(ta.value,info.answers,info.ansLang);
     if(r==='empty'){fb.className='q-feedback no';fb.textContent='Type your answer.';return;}
     ta.classList.remove('ok','acc','no');ta.classList.add(r==='wrong'?'no':r==='accent'?'acc':'ok');
-    finishProduce(r,fb,model,id);
+    finishProduce(r,fb,model,id,(info.ansLang==='fr'?info.answerPrimary:info.promptText));
   });
   ta.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();check.click();}});
   playFoot.appendChild(pair(hint,check));
@@ -993,7 +1004,7 @@ function playSpeak(info,id){
     const fb=document.createElement('div');fb.className='q-feedback';playBody.appendChild(fb);
     const finishSpoken=(res,shownTxt)=>{
       heard.innerHTML='Heard: <b>'+(shownTxt||'—')+'</b>';
-      model.show();playFoot.innerHTML='';
+      model.show(false);playFoot.innerHTML='';
       const w=document.createElement('div');w.className='play-two';
       if(res==='wrong'){
         fb.className='q-feedback no';fb.textContent = resurface ? 'Not a match — marked “to review”, it’ll come back.' : 'Not a match — marked “to review”.';
@@ -1002,6 +1013,7 @@ function playSpeak(info,id){
         w.appendChild(primaryBtn('Continue →',nextQ));
       } else {
         fb.className='q-feedback ok';fb.textContent='Match!';setState(id,'got');
+        maybeSpeak(info.ansLang==='fr'?info.answerPrimary:info.promptText,'fr');
         w.appendChild(primaryBtn('🎤 Again',()=>renderPlay(),'rev'));
         w.appendChild(primaryBtn('Continue →',nextQ));
       }
@@ -1061,7 +1073,7 @@ function playOrder(it,info,id){
     if(placed.length<correct.length){fb.className='q-feedback no';fb.textContent='Use all the words.';return;}
     let ok=true;
     ans.querySelectorAll('.tok').forEach((el,idx)=>{ const good=tnorm(placed[idx].t)===tnorm(correct[idx]); el.classList.add(good?'ok':'no'); if(!good)ok=false; });
-    finishProduce(ok?'exact':'wrong',fb,model,id);
+    finishProduce(ok?'exact':'wrong',fb,model,id,it.fr);
   });
   playFoot.appendChild(pair(hint,check));
 }
@@ -1110,8 +1122,8 @@ function playError(it,info,id){
   playBody.appendChild(lab);playBody.appendChild(sent);playBody.appendChild(fb);playBody.appendChild(model.el);
   let answered=false;
   const revealTrue=()=>{ c.idxs.forEach(k=>{const tb=sent.querySelector('[data-j="'+k+'"]'); if(tb)tb.classList.add('reveal');}); };
-  const settle=ok=>{answered=true;model.show();playFoot.innerHTML='';
-    if(ok)setState(id,'got'); else recordMiss(id);
+  const settle=ok=>{answered=true;model.show(false);playFoot.innerHTML='';
+    if(ok){setState(id,'got');maybeSpeak(it.fr,'fr');} else recordMiss(id);
     playFoot.appendChild(primaryBtn('Continue →',nextQ));};
   c.tokens.forEach((tk,j)=>{
     if(tk.word){

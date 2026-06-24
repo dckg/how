@@ -8,13 +8,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root{--paper:#F7F8FC;--card:#FFFFFF;--ink:#141B3C;--ink-soft:#515A86;--line:#D7DEF0;
+  :root{--paper:#FCEEDD;--card:#FFFFFF;--ink:#141B3C;--ink-soft:#515A86;--line:#ECD9C2;--rule:rgba(196,121,52,.16);
     --accent:#26407A;--fluo:#DDFB4C;--marge:#E8536B;--display:"Fraunces",Georgia,serif;--ui:"Space Mono",ui-monospace,monospace}
   *{box-sizing:border-box}
   body{margin:0;color:var(--ink);font-family:Inter,-apple-system,sans-serif;font-size:16px;line-height:1.55;
-    background-color:var(--paper);
-    background-image:repeating-linear-gradient(0deg,transparent,transparent 29px,var(--line) 29px,var(--line) 30px);
-    background-attachment:fixed;padding-bottom:70px}
+    background-color:#FFE7CE;
+    background-image:repeating-linear-gradient(0deg,transparent,transparent 29px,var(--rule) 29px,var(--rule) 30px),
+      linear-gradient(168deg,#FFF3E6 0%,#FFE7CE 52%,#FFD9B2 100%);
+    background-attachment:fixed,fixed;padding-bottom:70px}
   .wrap{max-width:820px;margin:0 auto;padding:0 18px}
   .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:24px 0 6px;flex-wrap:wrap}
   .back{font-family:var(--ui);font-size:.78rem;font-weight:700;color:var(--accent);text-decoration:none}
