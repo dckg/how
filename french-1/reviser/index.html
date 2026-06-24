@@ -44,6 +44,31 @@
   .brand .hl{background:linear-gradient(transparent 58%,var(--fluo) 58%);padding:0 .1em;border-radius:.1em}
   .brand .sub{color:var(--ink-soft);font-weight:500}
   .help-btn{flex:none;width:34px;height:34px;padding:0;font-weight:700;font-size:1rem;border-radius:50%}
+  /* ---- auth: sign-in gate + signed-in chip ---- */
+  body.locked{overflow:hidden}
+  .topbar-right{display:flex;align-items:center;gap:10px}
+  .user-chip{display:flex;align-items:center;gap:8px}
+  .user-chip[hidden]{display:none}
+  .user-chip img{width:26px;height:26px;border-radius:50%;object-fit:cover;border:1.5px solid var(--line)}
+  #userName{font-family:var(--ui);font-size:.74rem;color:var(--ink);max-width:13ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .signout{font-family:var(--ui);font-size:.68rem;font-weight:700;color:var(--ink-soft);border:1.5px solid var(--line);
+    background:var(--card);border-radius:99px;padding:.4em .7em;cursor:pointer}
+  .signout:hover{border-color:var(--ink);color:var(--ink)}
+  .authgate{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px;
+    background:repeating-linear-gradient(0deg,transparent,transparent 29px,var(--rule) 29px,var(--rule) 30px),
+      linear-gradient(168deg,#FFF3E6 0%,#FFE7CE 52%,#FFD9B2 100%)}
+  .authgate.show{display:flex}
+  .gate-card{background:var(--card);border:1.5px solid var(--ink);border-radius:20px;box-shadow:10px 12px 0 -2px var(--ink);
+    padding:32px 28px;max-width:380px;width:100%;text-align:center}
+  .gate-brand{font-family:var(--display);font-weight:600;font-size:1.6rem;letter-spacing:-.01em;margin-bottom:.45em}
+  .gate-brand .hl{background:linear-gradient(transparent 58%,var(--fluo) 58%);padding:0 .1em;border-radius:.1em}
+  .gate-sub{color:var(--ink-soft);font-size:.95rem;line-height:1.5;margin:0 0 1.5em}
+  .gate-google{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:.7em;
+    background:#fff;color:var(--ink);border:1.5px solid var(--ink);border-radius:12px;padding:13px;
+    font-family:var(--display);font-weight:600;font-size:1.02rem;cursor:pointer;transition:background .15s,transform .1s}
+  .gate-google:hover{background:linear-gradient(0deg,color-mix(in srgb,var(--fluo) 22%,#fff),#fff);transform:translateY(-1px)}
+  .gate-google:disabled{opacity:.5;cursor:default;transform:none}
+  .gate-note{color:var(--wrong);font-size:.85rem;line-height:1.4;margin:1em 0 0;min-height:1em}
 
   button{font-family:Inter,sans-serif;cursor:pointer;border:1px solid var(--line);
     background:var(--card);color:var(--ink);border-radius:99px;padding:8px 13px;
@@ -300,6 +325,22 @@
   .done-emoji{font-size:2.6rem}
   .done-big{font-family:var(--display);font-weight:800;font-size:1.6rem}
   .done-sub{color:var(--ink-soft)}
+  .done-stats{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+  .done-stats span{font-family:var(--ui);font-size:.78rem;color:var(--ink);background:var(--card);
+    border:1.5px solid var(--ink);border-radius:99px;padding:.4em .8em}
+  .done-stats b{font-family:var(--display);font-weight:700}
+  .done-level{font-family:var(--ui);font-size:.78rem;font-weight:700;color:var(--ink);
+    background:var(--fluo);border-radius:99px;padding:.35em .8em;margin-top:2px}
+  /* live score + XP */
+  .pscore{font-family:var(--ui);font-weight:700;font-size:.8rem;color:var(--ink);background:var(--fluo);
+    border-radius:99px;padding:.25em .7em;white-space:nowrap}
+  .xp-pop{position:absolute;top:48px;left:50%;transform:translateX(-50%);font-family:var(--display);
+    font-weight:700;font-size:1.5rem;color:var(--accent);opacity:0;pointer-events:none;z-index:60}
+  .xp-pop.go{animation:xprise .9s ease-out}
+  @keyframes xprise{0%{opacity:0;transform:translate(-50%,8px)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-28px)}}
+  @media(prefers-reduced-motion:reduce){.xp-pop.go{animation:none}}
+  .user-xp{font-family:var(--ui);font-size:.7rem;font-weight:700;color:var(--ink);background:var(--fluo);
+    border-radius:99px;padding:.2em .6em;white-space:nowrap}
 
   .fhint{font-size:.8rem;color:var(--ink-soft);margin:3px 2px 0;line-height:1.35}
   .audio-row{display:flex;gap:10px;align-items:stretch}
@@ -416,12 +457,34 @@
   }
 </style>
 </head>
-<body>
+<body class="locked">
+
+<!-- SIGN-IN GATE -->
+<div id="authgate" class="authgate show">
+  <div class="gate-card">
+    <div class="gate-brand"><span class="hl">Fluolingo</span> Reviser</div>
+    <p class="gate-sub">Sign in to save your progress and pick up where you left off on any device.</p>
+    <button id="gateBtn" class="gate-google">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.616z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.997 8.997 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+      Continue with Google
+    </button>
+    <p id="gateNote" class="gate-note"></p>
+  </div>
+</div>
+
 <!-- SETUP / MENU -->
 <div class="wrap" id="setup">
   <header class="topbar">
     <span class="brand"><span class="hl">Fluolingo</span> Reviser <span class="sub">for Units 0 and 1 (Quiz 1)</span></span>
-    <button id="help" class="help-btn" aria-label="How it works">?</button>
+    <div class="topbar-right">
+      <div id="userChip" class="user-chip" hidden>
+        <img id="userPic" alt="" referrerpolicy="no-referrer" />
+        <span id="userName"></span>
+        <span id="userXP" class="user-xp"></span>
+        <button id="signoutBtn" class="signout" type="button">Sign out</button>
+      </div>
+      <button id="help" class="help-btn" aria-label="How it works">?</button>
+    </div>
   </header>
 
   <div class="menu">
@@ -519,8 +582,10 @@
   <div class="play-top">
     <button id="pExit" aria-label="Exit to menu">✕</button>
     <div class="pbar"><span id="pbarFill"></span></div>
+    <span id="pScore" class="pscore"></span>
     <span id="pPos" class="ppos">1/1</span>
   </div>
+  <div id="xpPop" class="xp-pop" aria-hidden="true"></div>
   <div class="play-body" id="playBody"></div>
   <div class="play-foot" id="playFoot"></div>
 </div>
@@ -737,7 +802,16 @@ function judgeAny(input, answers, lang){
 /* ============ persistence (keyed per direction) ============ */
 const KEY="laf1201-translang-v1";
 let store={}; try{store=JSON.parse(localStorage.getItem(KEY)||"{}");}catch(e){store={};}
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){}};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){} if(window.__cloudSave)window.__cloudSave(store);};
+/* bridge for Firebase auth + cloud progress sync (used by the module at the end of <body>) */
+window.__mergeRemote=(remote)=>{
+  if(remote&&typeof remote==='object'){
+    const rank={unseen:0,review:1,got:2};
+    for(const k in remote){ const cur=store[k], inc=remote[k];
+      if(!cur||(rank[inc]||0)>(rank[cur]||0)) store[k]=inc; }
+  }
+  save();updateProgress();syncSeg();
+};
 
 /* ============ TTS (best available voice per language) ============ */
 const TTS='speechSynthesis' in window;
@@ -806,6 +880,36 @@ const total=FLAT.length;
 document.getElementById('cTotal').textContent=total*2;
 
 let mode='reveal', filter='all', page=0, dir='enfr', autoplay=true, resurface=true;
+
+/* ============ scoring + XP (gamification) ============ */
+const MKEY=KEY+'-meta';
+let meta={xp:0,answered:0,correct:0,best:0};
+try{meta=Object.assign(meta,JSON.parse(localStorage.getItem(MKEY)||'{}'));}catch(e){}
+let streak=0, sXP=0, sCorrect=0, sTotal=0, sBest=0;   // per play session
+const POINTS={exact:10,accent:7,flip:6};
+const levelOf=xp=>Math.floor((xp||0)/100)+1;
+function persistMeta(){ try{localStorage.setItem(MKEY,JSON.stringify(meta));}catch(e){} if(window.__cloudSaveMeta)window.__cloudSaveMeta(meta); }
+window.__mergeMeta=(m)=>{ if(m&&typeof m==='object'){
+    meta.xp=Math.max(meta.xp,m.xp||0); meta.answered=Math.max(meta.answered,m.answered||0);
+    meta.correct=Math.max(meta.correct,m.correct||0); meta.best=Math.max(meta.best,m.best||0);
+  } persistMeta(); updateXP(); };
+function award(kind){
+  sTotal++; meta.answered++;
+  if(kind==='wrong'){ streak=0; }
+  else{
+    streak++; sBest=Math.max(sBest,streak); meta.best=Math.max(meta.best,streak);
+    const pts=(POINTS[kind]||0)+Math.min(streak-1,5);   // up to +5 streak bonus
+    meta.xp+=pts; sXP+=pts; sCorrect++; meta.correct++;
+    popXP(pts);
+  }
+  persistMeta(); updateScore(); updateXP();
+}
+function updateScore(){ const s=document.getElementById('pScore');
+  if(s) s.innerHTML = streak>1 ? ('⚡ '+sXP+' &nbsp; 🔥 '+streak) : ('⚡ '+sXP); }
+function popXP(pts){ const h=document.getElementById('xpPop'); if(!h)return;
+  h.textContent='+'+pts+(streak>=3?' 🔥':''); h.classList.remove('go'); void h.offsetWidth; h.classList.add('go'); }
+function updateXP(){ const ux=document.getElementById('userXP');
+  if(ux) ux.textContent='Lv '+levelOf(meta.xp)+' · '+meta.xp+' XP'; }
 function curTarget(){ return (mode==='gaps'||mode==='order'||mode==='error') ? 'fr' : (dir==='enfr' ? 'fr' : 'en'); }
 function mkey(id){ return id+'|'+curTarget(); }
 function setState(id,st){ store[mkey(id)]=st; save(); updateProgress(); }
@@ -883,7 +987,8 @@ function qInfo(it){
 function startPlay(){
   session=DATA[page].items.map((it,ii)=>({it,id:`s${page}-i${ii}`})).filter(r=>passFilter(r.id));
   if(!session.length){const f=document.querySelector('#filtseg button[aria-pressed="true"]').textContent;document.getElementById('menuNote').textContent='Nothing in “'+f+'”. Try All.';return;}
-  qIdx=0;document.body.classList.add('playing');playEl.hidden=false;renderPlay();
+  qIdx=0;streak=0;sXP=0;sCorrect=0;sTotal=0;sBest=0;updateScore();
+  document.body.classList.add('playing');playEl.hidden=false;renderPlay();
 }
 function exitPlay(){document.body.classList.remove('playing');playEl.hidden=true;if(TTS)speechSynthesis.cancel();updateProgress();syncSeg();}
 function nextQ(){ qIdx++; if(qIdx>=session.length) renderComplete(); else renderPlay(); }
@@ -891,8 +996,8 @@ function primaryBtn(label,fn,cls){const b=document.createElement('button');b.cla
 function hintBtn(fn){const b=document.createElement('button');b.className='hint-btn';b.type='button';b.textContent='💡 Hint';b.addEventListener('click',fn);return b;}
 function pair(a,b){const w=document.createElement('div');w.className='foot-pair';w.appendChild(a);w.appendChild(b);return w;}
 function twoRate(id){const w=document.createElement('div');w.className='play-two';
-  w.appendChild(primaryBtn('✓ Got it',()=>{setState(id,'got');nextQ();},'got'));
-  w.appendChild(primaryBtn('KIV it',()=>{setState(id,'review');nextQ();},'rev'));return w;}
+  w.appendChild(primaryBtn('✓ Got it',()=>{setState(id,'got');award('flip');nextQ();},'got'));
+  w.appendChild(primaryBtn('KIV it',()=>{setState(id,'review');award('wrong');nextQ();},'rev'));return w;}
 function buildModel(text,lang,alts){
   const m=document.createElement('div');m.className='q-model';m.style.display='none';
   const mt=document.createElement('div');mt.style.flex='1';const s=document.createElement('span');s.className='fr';s.textContent=text;mt.appendChild(s);
@@ -902,6 +1007,7 @@ function buildModel(text,lang,alts){
 }
 function finishProduce(res,fb,model,id,frText){
   const correct=(res==='exact'||res==='accent');
+  award(res==='exact'?'exact':res==='accent'?'accent':'wrong');
   model.show(false);playFoot.innerHTML='';
   if(correct && frText) maybeSpeak(frText,'fr');   // auto-play French only AFTER a correct answer
   if(res==='exact'){fb.className='q-feedback ok';fb.textContent='Parfait.';setState(id,'got');playFoot.appendChild(primaryBtn('Continue →',nextQ));}
@@ -919,6 +1025,7 @@ function renderPlay(){
   const {it,id}=session[qIdx]; const info=qInfo(it);
   document.getElementById('pbarFill').style.width=(qIdx/session.length*100)+'%';
   document.getElementById('pPos').textContent=`${qIdx+1}/${session.length}`;
+  updateScore();
   playBody.innerHTML='';playBody.scrollTop=0;playFoot.innerHTML='';
   if(mode==='reveal') return playFlip(info,id);
   const prompt=document.createElement('div');prompt.className='q-prompt';
@@ -1010,11 +1117,12 @@ function playSpeak(info,id){
       const w=document.createElement('div');w.className='play-two';
       if(res==='wrong'){
         fb.className='q-feedback no';fb.textContent = resurface ? 'Not a match — marked “to review”, it’ll come back.' : 'Not a match — marked “to review”.';
-        recordMiss(id);
+        recordMiss(id);award('wrong');
         w.appendChild(primaryBtn('🎤 Again',()=>renderPlay(),'rev'));
         w.appendChild(primaryBtn('Continue →',nextQ));
       } else {
         fb.className='q-feedback ok';fb.textContent='Match!';setState(id,'got');
+        award(res==='accent'?'accent':'exact');
         maybeSpeak(info.ansLang==='fr'?info.answerPrimary:info.promptText,'fr');
         w.appendChild(primaryBtn('🎤 Again',()=>renderPlay(),'rev'));
         w.appendChild(primaryBtn('Continue →',nextQ));
@@ -1125,7 +1233,7 @@ function playError(it,info,id){
   let answered=false;
   const revealTrue=()=>{ c.idxs.forEach(k=>{const tb=sent.querySelector('[data-j="'+k+'"]'); if(tb)tb.classList.add('reveal');}); };
   const settle=ok=>{answered=true;model.show(false);playFoot.innerHTML='';
-    if(ok){setState(id,'got');maybeSpeak(it.fr,'fr');} else recordMiss(id);
+    if(ok){setState(id,'got');award('exact');maybeSpeak(it.fr,'fr');} else {recordMiss(id);award('wrong');}
     playFoot.appendChild(primaryBtn('Continue →',nextQ));};
   c.tokens.forEach((tk,j)=>{
     if(tk.word){
@@ -1157,7 +1265,11 @@ function renderComplete(){
   document.getElementById('pPos').textContent=`${session.length}/${session.length}`;
   const uniq=[...new Set(session.map(s=>s.id))];
   const got=uniq.filter(id=>store[mkey(id)]==='got').length;
-  playBody.innerHTML=`<div class="done"><div class="done-emoji">🎉</div><div class="done-big">Topic complete</div><div class="done-sub">${got} / ${uniq.length} mastered this round</div></div>`;
+  const acc=sTotal?Math.round(sCorrect/sTotal*100):0;
+  playBody.innerHTML=`<div class="done"><div class="done-emoji">🎉</div><div class="done-big">Topic complete</div>`+
+    `<div class="done-sub">${got} / ${uniq.length} mastered this round</div>`+
+    `<div class="done-stats"><span><b>+${sXP}</b> XP</span><span><b>${acc}%</b> accuracy</span><span><b>🔥 ${sBest}</b> best streak</span></div>`+
+    `<div class="done-level">Lv ${levelOf(meta.xp)} · ${meta.xp} XP total</div></div>`;
   playFoot.innerHTML='';
   if(page<DATA.length-1) playFoot.appendChild(primaryBtn('Next topic →',()=>{page++;syncSeg();startPlay();}));
   playFoot.appendChild(primaryBtn('Back to menu',exitPlay,'ghost'));
@@ -1223,7 +1335,108 @@ function initInfo(){
 }
 
 /* ============ init ============ */
-wireSetup();syncSeg();updateProgress();initTutorial();initReset();initInfo();
+wireSetup();syncSeg();updateProgress();updateXP();initTutorial();initReset();initInfo();
+</script>
+
+<!-- ============ Firebase: Google sign-in (gates the app) + cloud progress sync ============ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
+  from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc }
+  from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { getAnalytics, isSupported }
+  from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyBQcKYqbYgSFPh03eG2qnpqPlk0JUpsaVw",
+  authDomain:        "f1fluolingo.firebaseapp.com",
+  projectId:         "f1fluolingo",
+  storageBucket:     "f1fluolingo.firebasestorage.app",
+  messagingSenderId: "844752527987",
+  appId:             "1:844752527987:web:0069167f823825e8a58006",
+  measurementId:     "G-45KESJ5JQR"
+};
+
+const gate   = document.getElementById('authgate');
+const gateBtn= document.getElementById('gateBtn');
+const gateNote=document.getElementById('gateNote');
+const chip   = document.getElementById('userChip');
+const uName  = document.getElementById('userName');
+const uPic   = document.getElementById('userPic');
+const signout= document.getElementById('signoutBtn');
+
+const configured = firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('PASTE');
+if(!configured){
+  gateBtn.disabled = true;
+  gateNote.textContent = 'Sign-in isn’t configured yet — paste your Firebase config into this page.';
+} else {
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
+  let uid = null, timer = null;
+  isSupported().then(ok => { if (ok) { try { getAnalytics(app); } catch (e) {} } }).catch(()=>{});
+
+  gateBtn.addEventListener('click', async () => {
+    gateNote.textContent = '';
+    try { await signInWithPopup(auth, provider); }
+    catch (e) {
+      gateNote.textContent =
+        e.code === 'auth/popup-closed-by-user' ? 'Sign-in was cancelled.' :
+        e.code === 'auth/popup-blocked' ? 'Your browser blocked the popup — allow popups and try again.' :
+        e.code === 'auth/unauthorized-domain' ? 'This domain isn’t authorised in Firebase yet.' :
+        ('Sign-in failed: ' + (e.message || e.code));
+    }
+  });
+  signout.addEventListener('click', () => signOut(auth));
+
+  /* the classic script calls this on every save() */
+  window.__cloudSave = (store) => {
+    if (!uid) return;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      setDoc(doc(db, 'users', uid), { progress: store, updated: Date.now() }, { merge: true }).catch(()=>{});
+    }, 700);
+  };
+
+  /* the classic script calls this whenever XP / stats change */
+  let mtimer = null;
+  window.__cloudSaveMeta = (meta) => {
+    if (!uid) return;
+    clearTimeout(mtimer);
+    mtimer = setTimeout(() => {
+      setDoc(doc(db, 'users', uid),
+        { xp:meta.xp||0, answered:meta.answered||0, correct:meta.correct||0, best:meta.best||0, updated:Date.now() },
+        { merge:true }).catch(()=>{});
+    }, 800);
+  };
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      uid = user.uid;
+      uName.textContent = user.displayName || user.email || 'Signed in';
+      if (user.photoURL) { uPic.src = user.photoURL; uPic.style.display = 'block'; } else { uPic.style.display = 'none'; }
+      chip.hidden = false;
+      gate.classList.remove('show');
+      document.body.classList.remove('locked');
+      try {
+        const snap = await getDoc(doc(db, 'users', uid));
+        const data = snap.exists() ? snap.data() : {};
+        window.__mergeRemote(data.progress || {});      // union-merge cloud ⇄ local progress
+        if (window.__mergeMeta) window.__mergeMeta(data); // merge XP / stats
+        setDoc(doc(db, 'users', uid),                    // store profile for leaderboards
+          { name:user.displayName||'', email:user.email||'', photo:user.photoURL||'' },
+          { merge:true }).catch(()=>{});
+      } catch (e) { /* offline: keep local progress */ }
+    } else {
+      uid = null;
+      chip.hidden = true;
+      gate.classList.add('show');
+      document.body.classList.add('locked');
+    }
+  });
+}
 </script>
 </body>
 </html>
