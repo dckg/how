@@ -295,6 +295,10 @@
     padding:20px;max-width:620px;width:100%;margin:0 auto}
   .q-prompt{display:flex;align-items:flex-start;gap:12px}
   .q-text{font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,5.5vw,2rem);line-height:1.25;flex:1}
+  /* Correct-it: English is only a gloss — French (the err-sentence) is the focus */
+  .q-prompt.mini{gap:8px}
+  .q-prompt.mini .q-text{font-family:var(--body);font-weight:500;font-size:.95rem;color:var(--ink-soft);line-height:1.4}
+  .q-prompt.mini .speak{height:32px;width:34px;font-size:.85rem}
   .q-prompt .speak,.q-answer .speak,.q-model .speak{height:40px;width:42px}
   .speakgrp{display:inline-flex;gap:6px;flex:none;align-self:flex-start}
   .speak.slow{color:var(--review)}
@@ -341,6 +345,29 @@
   @media(prefers-reduced-motion:reduce){.xp-pop.go{animation:none}}
   .user-xp{font-family:var(--ui);font-size:.7rem;font-weight:700;color:var(--ink);background:var(--fluo);
     border-radius:99px;padding:.2em .6em;white-space:nowrap}
+  /* leaderboard */
+  .lb-btn{width:100%;margin-top:8px;background:var(--card);color:var(--ink);border:1.5px solid var(--ink);
+    border-radius:13px;padding:12px;font-family:var(--ui);font-weight:700;font-size:.9rem}
+  .lb-btn:hover{background:linear-gradient(0deg,color-mix(in srgb,var(--fluo) 24%,#fff),#fff);color:var(--ink);border-color:var(--ink)}
+  .lb-card{max-width:460px}
+  .lb-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .lb-title{font-family:var(--display);font-weight:700;font-size:1.3rem}
+  .lb-nick{margin-bottom:12px}
+  .lb-nick label{font-family:var(--ui);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:5px}
+  .lb-nick-row{display:flex;gap:8px}
+  .lb-nick-row input{flex:1;font-family:var(--body);font-size:.95rem;border:1.5px solid var(--line);border-radius:10px;padding:9px 11px;color:var(--ink)}
+  .lb-nick-row input:focus{outline:none;border-color:var(--accent)}
+  .lb-nick-row button{flex:none;background:var(--accent);color:#fff;border-color:var(--accent);border-radius:10px;font-weight:600;padding:9px 16px}
+  .lb-nick-row button:hover{background:var(--accent-deep);color:#fff}
+  .lb-list{display:flex;flex-direction:column;gap:6px;max-height:44vh;overflow-y:auto}
+  .lb-row{display:grid;grid-template-columns:2em 1fr auto auto;gap:10px;align-items:center;padding:8px 11px;border:1px solid var(--line);border-radius:10px;font-size:.92rem}
+  .lb-row.me{border-color:var(--ink);background:linear-gradient(0deg,color-mix(in srgb,var(--fluo) 24%,#fff),#fff)}
+  .lb-rank{font-family:var(--ui);font-weight:700;color:var(--ink-soft);text-align:right}
+  .lb-name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lb-lv{font-family:var(--ui);font-size:.74rem;color:var(--ink-soft)}
+  .lb-xp{font-family:var(--ui);font-size:.78rem;font-weight:700;color:var(--ink)}
+  .lb-loading{color:var(--ink-soft);text-align:center;padding:18px 6px;line-height:1.4}
+  .lb-you{font-family:var(--ui);font-size:.78rem;font-weight:700;color:var(--ink);text-align:center;margin:12px 0 0}
 
   .fhint{font-size:.8rem;color:var(--ink-soft);margin:3px 2px 0;line-height:1.35}
   .audio-row{display:flex;gap:10px;align-items:stretch}
@@ -546,6 +573,7 @@
 
     <div class="status big"><div class="bar"><span id="barFill"></span></div><span class="count"><b id="cGot">0</b>/<span id="cTotal">0</span> mastered</span></div>
     <button id="startBtn" class="start-btn">Start ▶</button>
+    <button id="lbOpen" class="lb-btn" type="button">🏆 Leaderboard</button>
     <p id="menuNote" class="menu-note"></p>
     <p class="menu-cite">Built on principles of pedagogical translanguaging (Cenoz &amp; Gorter, 2021) · <button id="reset" class="linkbtn">Reset progress</button></p>
     <div class="print-row">
@@ -562,6 +590,19 @@
   <div class="modal-card">
     <p id="infoText" class="modal-text"></p>
     <button id="infoOk" class="play-action">Got it</button>
+  </div>
+</div>
+
+<!-- LEADERBOARD -->
+<div id="lb" class="modal" hidden>
+  <div class="modal-card lb-card">
+    <div class="lb-head"><span class="lb-title">🏆 Leaderboard</span><button id="lbClose" class="signout" type="button">Close</button></div>
+    <div class="lb-nick">
+      <label for="lbNick">You appear as</label>
+      <div class="lb-nick-row"><input id="lbNick" type="text" maxlength="24" autocomplete="off" placeholder="pick a nickname" /><button id="lbNickSave" type="button">Save</button></div>
+    </div>
+    <div id="lbList" class="lb-list"></div>
+    <p id="lbYou" class="lb-you"></p>
   </div>
 </div>
 
@@ -1028,7 +1069,7 @@ function renderPlay(){
   updateScore();
   playBody.innerHTML='';playBody.scrollTop=0;playFoot.innerHTML='';
   if(mode==='reveal') return playFlip(info,id);
-  const prompt=document.createElement('div');prompt.className='q-prompt';
+  const prompt=document.createElement('div');prompt.className='q-prompt'+(mode==='error'?' mini':'');
   const pt=document.createElement('div');pt.className='q-text';pt.textContent=info.promptText;
   prompt.appendChild(pt);const sp=speaker(info.promptText,info.promptLang);if(sp)prompt.appendChild(sp);
   playBody.appendChild(prompt);
@@ -1334,8 +1375,52 @@ function initInfo(){
   modal.addEventListener('click',e=>{if(e.target===modal)close();});
 }
 
+/* ============ leaderboard (pop-up panel) + nickname ============ */
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+let myNick=''; try{myNick=localStorage.getItem(KEY+'-nick')||'';}catch(e){}
+window.__setLocalNick=(n)=>{ if(n){ myNick=n; try{localStorage.setItem(KEY+'-nick',n);}catch(e){} }
+  const i=document.getElementById('lbNick'); if(i&&!document.getElementById('lb').hidden) i.value=myNick; };
+function initLeaderboard(){
+  const modal=document.getElementById('lb');
+  const listEl=document.getElementById('lbList');
+  const youEl=document.getElementById('lbYou');
+  const nickIn=document.getElementById('lbNick');
+  const close=()=>{modal.hidden=true;};
+  async function render(){
+    listEl.innerHTML='<div class="lb-loading">Loading…</div>'; youEl.textContent='';
+    const rows = window.__leaderboard ? await window.__leaderboard() : null;
+    const me = window.__uid;
+    if(rows===null){ listEl.innerHTML='<div class="lb-loading">Couldn’t load the leaderboard — check your connection.</div>'; }
+    else if(!rows.length){ listEl.innerHTML='<div class="lb-loading">No scores yet — play a round to put yourself on the board! 🎯</div>'; }
+    else{
+      listEl.innerHTML='';
+      rows.forEach((r,i)=>{
+        const lv=Math.floor((r.xp||0)/100)+1, mine=(r.uid===me);
+        const row=document.createElement('div'); row.className='lb-row'+(mine?' me':'');
+        row.innerHTML=`<span class="lb-rank">${i+1}</span>`+
+          `<span class="lb-name">${escapeHtml(r.nick||'Anonymous')}${mine?' <b>(you)</b>':''}</span>`+
+          `<span class="lb-lv">Lv ${lv}</span><span class="lb-xp">${r.xp||0} XP</span>`;
+        listEl.appendChild(row);
+      });
+    }
+    const rank = rows&&rows.length ? rows.findIndex(r=>r.uid===me) : -1;
+    youEl.textContent = (rank>=0?`Your rank: #${rank+1} · `:'You: ')+`Lv ${levelOf(meta.xp)} · ${meta.xp} XP`;
+  }
+  const open=async()=>{ nickIn.value=myNick; modal.hidden=false; await render(); if(!myNick)nickIn.focus(); };
+  document.getElementById('lbOpen').addEventListener('click',open);
+  document.getElementById('lbClose').addEventListener('click',close);
+  modal.addEventListener('click',e=>{if(e.target===modal)close();});
+  document.getElementById('lbNickSave').addEventListener('click',async()=>{
+    const n=nickIn.value.trim().slice(0,24); if(!n)return;
+    myNick=n; try{localStorage.setItem(KEY+'-nick',n);}catch(e){}
+    if(window.__saveNick) await window.__saveNick(n);
+    render();
+  });
+  nickIn.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('lbNickSave').click();});
+}
+
 /* ============ init ============ */
-wireSetup();syncSeg();updateProgress();updateXP();initTutorial();initReset();initInfo();
+wireSetup();syncSeg();updateProgress();updateXP();initTutorial();initReset();initInfo();initLeaderboard();
 </script>
 
 <!-- ============ Firebase: Google sign-in (gates the app) + cloud progress sync ============ -->
@@ -1343,7 +1428,7 @@ wireSetup();syncSeg();updateProgress();updateXP();initTutorial();initReset();ini
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
   from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc }
+import { getFirestore, doc, getDoc, setDoc, collection, query, orderBy, limit, getDocs }
   from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 import { getAnalytics, isSupported }
   from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
@@ -1412,9 +1497,32 @@ if(!configured){
     }, 800);
   };
 
+  /* leaderboard: save my nickname, and read the top players by XP */
+  window.__saveNick = (nick) => {
+    if (!uid) return Promise.resolve();
+    return setDoc(doc(db, 'users', uid), { nick:String(nick||'').slice(0,24) }, { merge:true }).catch(()=>{});
+  };
+  /* teacher / admin accounts — tracked, but never shown on the leaderboard */
+  const LB_EXCLUDE = new Set([
+    'drneilchan@gmail.com','monsieur.chan@gmail.com','dan@chank.wang',
+    'kaygeedan@gmail.com','daniel.chan@nus.edu.sg','kwangguan@gmail.com'
+  ]);
+  window.__leaderboard = async () => {
+    try {
+      const snap = await getDocs(query(collection(db, 'users'), orderBy('xp', 'desc'), limit(80)));
+      const out = [];
+      snap.forEach(d => {
+        const v = d.data() || {};
+        if (LB_EXCLUDE.has((v.email||'').toLowerCase())) return;   // skip admins/teachers
+        out.push({ uid:d.id, nick:v.nick||'', xp:v.xp||0 });
+      });
+      return out.slice(0, 50);
+    } catch (e) { return null; }   // null = offline / blocked
+  };
+
   onAuthStateChanged(auth, async (user) => {
     if (user) {
-      uid = user.uid;
+      uid = user.uid; window.__uid = uid;
       uName.textContent = user.displayName || user.email || 'Signed in';
       if (user.photoURL) { uPic.src = user.photoURL; uPic.style.display = 'block'; } else { uPic.style.display = 'none'; }
       chip.hidden = false;
@@ -1425,12 +1533,13 @@ if(!configured){
         const data = snap.exists() ? snap.data() : {};
         window.__mergeRemote(data.progress || {});      // union-merge cloud ⇄ local progress
         if (window.__mergeMeta) window.__mergeMeta(data); // merge XP / stats
+        if (window.__setLocalNick) window.__setLocalNick(data.nick || '');
         setDoc(doc(db, 'users', uid),                    // store profile for leaderboards
           { name:user.displayName||'', email:user.email||'', photo:user.photoURL||'' },
           { merge:true }).catch(()=>{});
       } catch (e) { /* offline: keep local progress */ }
     } else {
-      uid = null;
+      uid = null; window.__uid = null;
       chip.hidden = true;
       gate.classList.add('show');
       document.body.classList.add('locked');
