@@ -1242,6 +1242,7 @@ function playOrder(it,info,id){
 }
 
 const CORRUPT={
+  'bonjour':'bonsoir','bonsoir':'bonjour','salut':'bonjour',
   'le':'la','la':'le','les':'la','un':'une','une':'un','des':'un','du':'de','de':'du','au':'aux','aux':'au',
   'mon':'ma','ma':'mon','ton':'ta','ta':'ton','son':'sa','sa':'son','mes':'ma','tes':'ta','ses':'sa','notre':'nos','nos':'notre','votre':'vos','vos':'votre',
   'ce':'ces','cet':'cette','cette':'ce','ces':'ce',
@@ -1263,11 +1264,20 @@ function corruptSentence(toks){
   const words=[]; tokens.forEach((tk,j)=>{ if(tk.word) words.push({j,t:tk.t}); });
   const cap=w=>/^[A-ZÀ-Þ]/.test(w);
   const recase=(orig,rep)=>cap(orig)?rep.charAt(0).toUpperCase()+rep.slice(1):rep;
+  // build a wrong-but-real form for a token; reaches the verb inside an elision (m’appelle → m’appelles)
+  const pickRep=tok=>{
+    const low=tok.toLowerCase(); let key=null, prefix='';
+    if(CORRUPT[low]) key=low;
+    else { const m=low.match(/^(.*['’])([a-zà-ÿœ]+)$/); if(m && CORRUPT[m[2]]){ key=m[2]; prefix=tok.slice(0,tok.length-m[2].length); } }
+    if(!key) return null;
+    let r=CORRUPT[key]; if(Array.isArray(r)) r=r[Math.floor(Math.random()*r.length)];
+    if(r===key) return null;
+    return prefix + recase(tok.slice(prefix.length), r);
+  };
   // 1) swap a word for a real, correctly-spelled word that is the wrong form/choice
-  const elig=words.filter(w=>{const r=CORRUPT[w.t.toLowerCase()];return r && r!==w.t.toLowerCase();});
-  if(elig.length){ const w=elig[Math.floor(Math.random()*elig.length)];
-    let r=CORRUPT[w.t.toLowerCase()]; if(Array.isArray(r)) r=r[Math.floor(Math.random()*r.length)];
-    const rep=recase(w.t,r); tokens[w.j].t=rep;
+  const elig=words.map(w=>({w,rep:pickRep(w.t)})).filter(x=>x.rep && x.rep.toLowerCase()!==x.w.t.toLowerCase());
+  if(elig.length){ const {w,rep}=elig[Math.floor(Math.random()*elig.length)];
+    tokens[w.j].t=rep;
     return {tokens,idxs:[w.j],correct:w.t,wrong:rep,kind:'word'}; }
   // 2) fallback: swap two adjacent real words (wrong order) — tapping either counts
   const pairs=[]; for(let i=0;i<words.length-1;i++){ if(words[i].t.toLowerCase()!==words[i+1].t.toLowerCase()) pairs.push([words[i],words[i+1]]); }
