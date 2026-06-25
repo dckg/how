@@ -297,10 +297,10 @@
     padding:20px;max-width:620px;width:100%;margin:0 auto}
   .q-prompt{display:flex;align-items:flex-start;gap:12px}
   .q-text{font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,5.5vw,2rem);line-height:1.25;flex:1}
-  /* Correct-it: English is only a gloss — French (the err-sentence) is the focus */
-  .q-prompt.mini{gap:8px}
-  .q-prompt.mini .q-text{font-family:var(--body);font-weight:500;font-size:.95rem;color:var(--ink-soft);line-height:1.4}
-  .q-prompt.mini .speak{height:32px;width:34px;font-size:.85rem}
+  /* Correct-it: English shows the intended meaning (prominent); French (err-sentence) stays the tappable focus */
+  .q-prompt.mini{gap:10px}
+  .q-prompt.mini .q-text{font-family:var(--body);font-weight:600;font-size:clamp(1.15rem,3.6vw,1.45rem);color:var(--ink);line-height:1.35}
+  .q-prompt.mini .speak{height:34px;width:36px;font-size:.9rem}
   .q-prompt .speak,.q-answer .speak,.q-model .speak{height:40px;width:42px}
   .speakgrp{display:inline-flex;gap:6px;flex:none;align-self:flex-start}
   .speak.slow{color:var(--review)}
@@ -1259,7 +1259,9 @@ const CORRUPT={
   'étudie':'étudies','étudies':'étudie','étudions':'étudie','étudiez':'étudie',
   'parle':'parles','parles':'parle','habite':'habites','habites':'habite','aime':'aimes','aimes':'aime',
   'français':'française','française':'français','anglais':'anglaise','anglaise':'anglais','chinois':'chinoise','chinoise':'chinois',
-  'étudiant':'étudiante','étudiante':'étudiant','grand':'grande','grande':'grand','petit':'petite','petite':'petit','content':'contente','contente':'content','fatigué':'fatiguée',
+  'étudiants':'étudiant','grand':'grande','grande':'grand','petit':'petite','petite':'petit','content':'contente','contente':'content','fatigué':'fatiguée',
+  'professeur':'professeure','professeure':'professeur','acteur':'actrice','actrice':'acteur',
+  'moi':'je','toi':'tu','lui':'il','eux':'ils',
   'à':'de','avec':'sans','sans':'avec','pour':'par','par':'pour','dans':'sur','sur':'dans','et':['est','es'],'ou':'où',
   'comment':'combien','pourquoi':'comment','où':'quand','quand':'où','qui':'que','que':'qui','combien':'comment','quel':'quelle','quelle':'quel',
   'deux':'trois','trois':'quatre','quatre':'cinq','cinq':'six','six':'sept','sept':'huit','huit':'neuf','neuf':'dix','dix':'onze',
