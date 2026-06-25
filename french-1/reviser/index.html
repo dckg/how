@@ -926,7 +926,7 @@ let mode='reveal', filter='all', page=0, dir='enfr', autoplay=true, resurface=tr
 const MKEY=KEY+'-meta';
 let meta={xp:0,answered:0,correct:0,best:0};
 try{meta=Object.assign(meta,JSON.parse(localStorage.getItem(MKEY)||'{}'));}catch(e){}
-let streak=0, sXP=0, sCorrect=0, sTotal=0, sBest=0;   // per play session
+let streak=0, sXP=0, sCorrect=0, sTotal=0, sBest=0, sStart=0;   // per play session
 const POINTS={exact:10,accent:7,flip:6};
 const levelOf=xp=>Math.floor((xp||0)/100)+1;
 function persistMeta(){ try{localStorage.setItem(MKEY,JSON.stringify(meta));}catch(e){} if(window.__cloudSaveMeta)window.__cloudSaveMeta(meta); }
@@ -1028,7 +1028,7 @@ function qInfo(it){
 function startPlay(){
   session=DATA[page].items.map((it,ii)=>({it,id:`s${page}-i${ii}`})).filter(r=>passFilter(r.id));
   if(!session.length){const f=document.querySelector('#filtseg button[aria-pressed="true"]').textContent;document.getElementById('menuNote').textContent='Nothing in “'+f+'”. Try All.';return;}
-  qIdx=0;streak=0;sXP=0;sCorrect=0;sTotal=0;sBest=0;updateScore();
+  qIdx=0;streak=0;sXP=0;sCorrect=0;sTotal=0;sBest=0;sStart=Date.now();updateScore();
   document.body.classList.add('playing');playEl.hidden=false;renderPlay();
 }
 function exitPlay(){document.body.classList.remove('playing');playEl.hidden=true;if(TTS)speechSynthesis.cancel();updateProgress();syncSeg();}
@@ -1197,8 +1197,19 @@ function tokenizeFR(s){
 }
 const tnorm=s=>deAccent(String(s).toLowerCase());
 
+/* Arrange-it tokeniser: also split elisions so "m'appelle" → "m'" + "appelle", "c'est" → "c'" + "est" */
+function tokenizeOrder(s){
+  const out=[];
+  tokenizeFR(s).forEach(tk=>{
+    if(tk.word && /['’]/.test(tk.t)){
+      tk.t.split(/(?<=['’])/).filter(Boolean).forEach(p=>out.push({t:p,word:true}));
+    } else out.push(tk);
+  });
+  return out;
+}
+
 function playOrder(it,info,id){
-  const correct=tokenizeFR(it.fr).map(x=>x.t);
+  const correct=tokenizeOrder(it.fr).map(x=>x.t);
   const lab1=document.createElement('div');lab1.className='ord-label';lab1.textContent='Your sentence';
   const ans=document.createElement('div');ans.className='tok-ans';
   const lab2=document.createElement('div');lab2.className='ord-label';lab2.textContent='Tap the words & marks in order';
@@ -1307,6 +1318,12 @@ function renderComplete(){
   const uniq=[...new Set(session.map(s=>s.id))];
   const got=uniq.filter(id=>store[mkey(id)]==='got').length;
   const acc=sTotal?Math.round(sCorrect/sTotal*100):0;
+  if(window.__logSession) window.__logSession({
+    mode, dir, topic:page, topicName:(DATA[page]&&DATA[page].can)||'',
+    filter, resurface, autoplay,
+    durationMs: sStart?Date.now()-sStart:0,
+    total:sTotal, correct:sCorrect, accuracy:acc, xp:sXP, bestStreak:sBest
+  });
   playBody.innerHTML=`<div class="done"><div class="done-emoji">🎉</div><div class="done-big">Topic complete</div>`+
     `<div class="done-sub">${got} / ${uniq.length} mastered this round</div>`+
     `<div class="done-stats"><span><b>+${sXP}</b> XP</span><span><b>${acc}%</b> accuracy</span><span><b>🔥 ${sBest}</b> best streak</span></div>`+
@@ -1428,9 +1445,9 @@ wireSetup();syncSeg();updateProgress();updateXP();initTutorial();initReset();ini
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
   from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, collection, query, orderBy, limit, getDocs }
+import { getFirestore, doc, getDoc, setDoc, addDoc, collection, query, orderBy, limit, getDocs }
   from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-import { getAnalytics, isSupported }
+import { getAnalytics, isSupported, logEvent }
   from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
 
 const firebaseConfig = {
@@ -1461,7 +1478,8 @@ if(!configured){
   const db = getFirestore(app);
   const provider = new GoogleAuthProvider();
   let uid = null, timer = null;
-  isSupported().then(ok => { if (ok) { try { getAnalytics(app); } catch (e) {} } }).catch(()=>{});
+  let analytics = null;
+  isSupported().then(ok => { if (ok) { try { analytics = getAnalytics(app); } catch (e) {} } }).catch(()=>{});
 
   gateBtn.addEventListener('click', async () => {
     gateNote.textContent = '';
@@ -1518,6 +1536,12 @@ if(!configured){
       });
       return out.slice(0, 50);
     } catch (e) { return null; }   // null = offline / blocked
+  };
+
+  /* per-round telemetry: options chosen, duration, results */
+  window.__logSession = (s) => {
+    if (uid) addDoc(collection(db, 'users', uid, 'sessions'), { ...s, at: Date.now() }).catch(()=>{});
+    try { if (analytics) logEvent(analytics, 'round_complete', { mode:s.mode, topic:s.topic, accuracy:s.accuracy, xp:s.xp }); } catch (e) {}
   };
 
   onAuthStateChanged(auth, async (user) => {
