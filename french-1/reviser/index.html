@@ -1253,8 +1253,8 @@ const CORRUPT={
   'parle':'parles','parles':'parle','habite':'habites','habites':'habite','aime':'aimes','aimes':'aime',
   'français':'française','française':'français','anglais':'anglaise','anglaise':'anglais','chinois':'chinoise','chinoise':'chinois',
   'étudiant':'étudiante','étudiante':'étudiant','grand':'grande','grande':'grand','petit':'petite','petite':'petit','content':'contente','contente':'content','fatigué':'fatiguée',
-  'à':'de','avec':'sans','sans':'avec','pour':'par','par':'pour','dans':'sur','sur':'dans','et':'ou','ou':'et',
-  'comment':'pourquoi','pourquoi':'comment','où':'quand','quand':'où','qui':'que','que':'qui','combien':'comment','quel':'quelle','quelle':'quel',
+  'à':'de','avec':'sans','sans':'avec','pour':'par','par':'pour','dans':'sur','sur':'dans','et':['est','es'],'ou':'où',
+  'comment':'combien','pourquoi':'comment','où':'quand','quand':'où','qui':'que','que':'qui','combien':'comment','quel':'quelle','quelle':'quel',
   'deux':'trois','trois':'quatre','quatre':'cinq','cinq':'six','six':'sept','sept':'huit','huit':'neuf','neuf':'dix','dix':'onze',
   'oui':'non','non':'oui','bien':'mal','mal':'bien','très':'trop','trop':'très','beaucoup':'peu','peu':'beaucoup'
 };
@@ -1266,7 +1266,8 @@ function corruptSentence(toks){
   // 1) swap a word for a real, correctly-spelled word that is the wrong form/choice
   const elig=words.filter(w=>{const r=CORRUPT[w.t.toLowerCase()];return r && r!==w.t.toLowerCase();});
   if(elig.length){ const w=elig[Math.floor(Math.random()*elig.length)];
-    const rep=recase(w.t,CORRUPT[w.t.toLowerCase()]); tokens[w.j].t=rep;
+    let r=CORRUPT[w.t.toLowerCase()]; if(Array.isArray(r)) r=r[Math.floor(Math.random()*r.length)];
+    const rep=recase(w.t,r); tokens[w.j].t=rep;
     return {tokens,idxs:[w.j],correct:w.t,wrong:rep,kind:'word'}; }
   // 2) fallback: swap two adjacent real words (wrong order) — tapping either counts
   const pairs=[]; for(let i=0;i<words.length-1;i++){ if(words[i].t.toLowerCase()!==words[i+1].t.toLowerCase()) pairs.push([words[i],words[i+1]]); }
