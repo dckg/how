@@ -286,6 +286,8 @@
   .play[hidden]{display:none}
   .play-top{flex:none;display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
   #pExit{flex:none;width:38px;height:38px;padding:0;border-radius:50%;font-size:.95rem;font-weight:700}
+  #pBack{flex:none;width:38px;height:38px;padding:0 0 3px;border-radius:50%;font-size:1.5rem;font-weight:700;line-height:1}
+  #pBack[hidden]{display:none}
   .pbar{flex:1;height:8px;border-radius:99px;background:#F0DFC8;overflow:hidden}
   .pbar>span{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--accent),#5a86b5);transition:width .3s ease}
   .ppos{flex:none;font-family:var(--ui);font-weight:700;font-size:.8rem;color:var(--ink-soft)}
@@ -623,6 +625,7 @@
 <div id="play" class="play" hidden>
   <div class="play-top">
     <button id="pExit" aria-label="Exit to menu">✕</button>
+    <button id="pBack" aria-label="Previous question" hidden>‹</button>
     <div class="pbar"><span id="pbarFill"></span></div>
     <span id="pScore" class="pscore"></span>
     <span id="pPos" class="ppos">1/1</span>
@@ -1006,6 +1009,7 @@ function wireSetup(){
   sel.addEventListener('change',()=>{page=+sel.value;});
   document.getElementById('startBtn').addEventListener('click',startPlay);
   document.getElementById('pExit').addEventListener('click',exitPlay);
+  document.getElementById('pBack').addEventListener('click',prevQ);
 }
 
 /* ============ play zone ============ */
@@ -1034,6 +1038,7 @@ function startPlay(){
 }
 function exitPlay(){document.body.classList.remove('playing');playEl.hidden=true;if(TTS)speechSynthesis.cancel();updateProgress();syncSeg();}
 function nextQ(){ qIdx++; if(qIdx>=session.length) renderComplete(); else renderPlay(); }
+function prevQ(){ if(qIdx>0){ qIdx--; renderPlay(); } }
 function primaryBtn(label,fn,cls){const b=document.createElement('button');b.className='play-action'+(cls?' '+cls:'');b.type='button';b.textContent=label;b.addEventListener('click',fn);return b;}
 function hintBtn(fn){const b=document.createElement('button');b.className='hint-btn';b.type='button';b.textContent='💡 Hint';b.addEventListener('click',fn);return b;}
 function pair(a,b){const w=document.createElement('div');w.className='foot-pair';w.appendChild(a);w.appendChild(b);return w;}
@@ -1067,6 +1072,7 @@ function renderPlay(){
   const {it,id}=session[qIdx]; const info=qInfo(it);
   document.getElementById('pbarFill').style.width=(qIdx/session.length*100)+'%';
   document.getElementById('pPos').textContent=`${qIdx+1}/${session.length}`;
+  document.getElementById('pBack').hidden = qIdx<=0;
   updateScore();
   playBody.innerHTML='';playBody.scrollTop=0;playFoot.innerHTML='';
   if(mode==='reveal') return playFlip(info,id);
@@ -1242,11 +1248,11 @@ function playOrder(it,info,id){
 }
 
 const CORRUPT={
-  'bonjour':'bonsoir','bonsoir':'bonjour','salut':'bonjour',
+  'bonjour':'bonne journée','bonsoir':'bonne soirée',
   'le':'la','la':'le','les':'la','un':'une','une':'un','des':'un','du':'de','de':'du','au':'aux','aux':'au',
   'mon':'ma','ma':'mon','ton':'ta','ta':'ton','son':'sa','sa':'son','mes':'ma','tes':'ta','ses':'sa','notre':'nos','nos':'notre','votre':'vos','vos':'votre',
   'ce':'ces','cet':'cette','cette':'ce','ces':'ce',
-  'je':'tu','tu':'il','il':'elle','elle':'il','on':'ils','nous':'vous','vous':'nous','ils':'elles','elles':'ils',
+  'je':'tu','tu':'il','il':'elle','elle':'il','on':'ils','nous':'vous','vous':'toi','ils':'elles','elles':'ils',
   'suis':'es','es':'est','est':'es','sommes':'sont','êtes':'sont','sont':'est',
   'ai':'as','as':'a','a':'ont','avons':'ont','avez':'ont','ont':'a',
   'appelle':'appelles','appelles':'appelle','appelez':'appelle','appelons':'appelle',
@@ -1340,6 +1346,7 @@ function renderComplete(){
     `<div class="done-sub">${got} / ${uniq.length} mastered this round</div>`+
     `<div class="done-stats"><span><b>+${sXP}</b> XP</span><span><b>${acc}%</b> accuracy</span><span><b>🔥 ${sBest}</b> best streak</span></div>`+
     `<div class="done-level">Lv ${levelOf(meta.xp)} · ${meta.xp} XP total</div></div>`;
+  document.getElementById('pBack').hidden = qIdx<=0;   // allow stepping back to review
   playFoot.innerHTML='';
   if(page<DATA.length-1) playFoot.appendChild(primaryBtn('Next topic →',()=>{page++;syncSeg();startPlay();}));
   playFoot.appendChild(primaryBtn('Back to menu',exitPlay,'ghost'));
