@@ -531,13 +531,13 @@
       <button class="mode-card" data-mode="order" aria-pressed="false">
         <span class="mc-head"><span class="mc-ico">🧩</span><span class="mc-name">Arrange it</span></span><span class="mc-desc">Tap words into the right order</span></button>
       <button class="mode-card" data-mode="error" aria-pressed="false">
-        <span class="mc-head"><span class="mc-ico">🔍</span><span class="mc-name">Correct it</span></span><span class="mc-desc">Find the wrong word</span></button>
+        <span class="mc-head"><span class="mc-ico">🔍</span><span class="mc-name">Find the error</span></span><span class="mc-desc">Spot the mistake in each sentence</span></button>
     </div>
 
     <div class="panel">
       <div class="prow two">
         <div class="subset">
-          <span class="plabel">Direction <button class="qhelp" type="button" data-info="Which way you practise. EN → FR shows English and you produce the French. FR → EN shows French and you recall the English. (Complete it, Arrange it and Correct it are always French.)">?</button></span>
+          <span class="plabel">Direction <button class="qhelp" type="button" data-info="Which way you practise. EN → FR shows English and you produce the French. FR → EN shows French and you recall the English. (Complete it, Arrange it and Find the error are always French.)">?</button></span>
           <div class="seg dir" id="dirseg" role="group" aria-label="Direction">
             <button data-dir="enfr" aria-pressed="true">EN → FR</button>
             <button data-dir="fren" aria-pressed="false">FR → EN</button>
@@ -925,7 +925,7 @@ const total=FLAT.length;
 document.getElementById('cTotal').textContent=total*2;
 
 let mode='reveal', filter='all', page=0, dir='enfr', autoplay=true, resurface=true;
-const NO_ERROR_TOPICS=new Set([3,4,5,6,7,8,9,16]);   // topics with no "Correct it" exercise
+const NO_ERROR_TOPICS=new Set([3,4,5,6,7,8,9,16]);   // topics with no "Find the error" exercise
 
 /* ============ scoring + XP (gamification) ============ */
 const MKEY=KEY+'-meta';
@@ -1038,7 +1038,7 @@ function qInfo(it){
   return {promptText:v.fr,promptLang:'fr',ansLang:'en',answerPrimary:v.en,answers:[v.en,...(v.en===it.en?(it.enAlt||[]):[])]};
 }
 function startPlay(){
-  if(mode==='error' && NO_ERROR_TOPICS.has(page)){document.getElementById('menuNote').textContent='“Correct it” isn’t available for this topic — pick another topic or mode.';return;}
+  if(mode==='error' && NO_ERROR_TOPICS.has(page)){document.getElementById('menuNote').textContent=‘”Find the error” isn\’t available for this topic — pick another topic or mode.’;return;}
   session=DATA[page].items.map((it,ii)=>({it,id:`s${page}-i${ii}`})).filter(r=>passFilter(r.id));
   if(!session.length){const f=document.querySelector('#filtseg button[aria-pressed="true"]').textContent;document.getElementById('menuNote').textContent='Nothing in “'+f+'”. Try All.';return;}
   qIdx=0;streak=0;sXP=0;sCorrect=0;sTotal=0;sBest=0;sStart=Date.now();errUsedNotes=new Set();errMissedNotes=new Set();updateScore();
