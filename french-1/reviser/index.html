@@ -1052,21 +1052,22 @@ const playEl=document.getElementById('play');
 const playBody=document.getElementById('playBody');
 const playFoot=document.getElementById('playFoot');
 
-function pickVariant(it){
+function pickVariant(it,vi){
   if(mode==='gaps'||mode==='order'||mode==='error') return {en:it.en,fr:it.fr};
-  const p=it.pool, idx = mode==='reveal'?1 : mode==='full'?2 : 3;
-  return p[Math.min(idx,p.length-1)] || p[0];
+  const p=it.pool;
+  return p[Math.min(vi||0,p.length-1)] || p[0];
 }
-function qInfo(it){
-  const v=pickVariant(it), base=(v.fr===it.fr);
+function qInfo(it,vi){
+  const v=pickVariant(it,vi), base=(v.fr===it.fr);
   if(mode==='gaps'||mode==='order'||mode==='error' || dir==='enfr')
     return {promptText:v.en,promptLang:'en',ansLang:'fr',answerPrimary:v.fr,answers:[v.fr,...(base?(it.frAlt||[]):[])]};
   return {promptText:v.fr,promptLang:'fr',ansLang:'en',answerPrimary:v.en,answers:[v.en,...(v.en===it.en?(it.enAlt||[]):[])]};
 }
 function startPlay(){
   if(mode==='error' && NO_ERROR_TOPICS.has(page)){document.getElementById('menuNote').textContent='"Correct it" isn\'t available for this topic — pick another topic or mode.';return;}
-  session=DATA[page].items.map((it,ii)=>({it,id:`s${page}-i${ii}`})).filter(r=>passFilter(r.id));
+  session=DATA[page].items.map((it,ii)=>({it,id:`s${page}-i${ii}`,vi:(it.pool.length>1 && Math.random()<0.5)?1:0})).filter(r=>passFilter(r.id));
   if(!session.length){const f=document.querySelector('#filtseg button[aria-pressed="true"]').textContent;document.getElementById('menuNote').textContent='Nothing in “'+f+'”. Try All.';return;}
+  for(let i=session.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[session[i],session[j]]=[session[j],session[i]];}  // randomise order each round
   qIdx=0;streak=0;sXP=0;sCorrect=0;sTotal=0;sBest=0;sStart=Date.now();errUsedNotes=new Set();errMissedNotes=new Set();updateScore();
   document.body.classList.add('playing');playEl.hidden=false;renderPlay();
 }
@@ -1103,7 +1104,7 @@ function finishProduce(res,fb,model,id,frText){
 
 function renderPlay(){
   if(TTS)speechSynthesis.cancel();
-  const {it,id}=session[qIdx]; const info=qInfo(it);
+  const row=session[qIdx], {it,id}=row; const info=qInfo(it,row.vi);
   document.getElementById('pbarFill').style.width=(qIdx/session.length*100)+'%';
   document.getElementById('pPos').textContent=`${qIdx+1}/${session.length}`;
   document.getElementById('pBack').hidden = qIdx<=0;
