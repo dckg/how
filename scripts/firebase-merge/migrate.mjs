@@ -37,6 +37,8 @@ import { getFirestore } from 'firebase-admin/firestore';
 const APPLY = process.argv.includes('--apply');
 const SRC_SA = process.env.SRC_SA;
 const DST_SA = process.env.DST_SA;
+// Optional: restrict to specific emails (comma-separated). Empty = migrate everyone.
+const ONLY = new Set((process.env.ONLY || '').toLowerCase().split(',').map(s => s.trim()).filter(Boolean));
 
 if (!SRC_SA || !DST_SA) {
   console.error('Set SRC_SA (f1fluolingo key) and DST_SA (laf1201 key) env vars.');
@@ -104,6 +106,7 @@ async function main() {
     seen++;
     const email = (u.email || '').toLowerCase().trim();
     if (!email) { noEmail++; log('skip (no email)', u.uid); continue; }
+    if (ONLY.size && !ONLY.has(email)) { skipped++; continue; }   // ONLY filter set → skip others
 
     try {
       const srcDoc = await srcDb.collection('users').doc(u.uid).get();
