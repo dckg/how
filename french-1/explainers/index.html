@@ -42,27 +42,31 @@
   .card h2{font-family:var(--display);font-weight:600;font-size:1.3rem;margin:0 0 2px}
   .card .sub{color:var(--ink-2);font-size:.92rem;margin:0 0 18px}
 
-  /* ── contraction stage ── */
-  .stage{display:flex;align-items:center;justify-content:center;gap:10px;min-height:96px;
-    background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px;font-family:var(--display)}
-  .tok{font-size:2.1rem;font-weight:600;display:inline-flex;align-items:baseline;line-height:1}
-  .tok .prep,.tok .art{display:inline-block;transition:opacity .4s ease,max-width .45s ease,margin .45s ease,transform .45s ease;max-width:4ch;overflow:hidden}
-  .tok .op{color:var(--ink-3);font-size:1.3rem;margin:0 .25em;transition:opacity .35s ease}
-  .result{font-family:var(--display);font-weight:700;font-size:2.3rem;color:var(--ink);
-    background:linear-gradient(transparent 56%,var(--fluo) 56%);padding:0 .12em;border-radius:.1em;
-    opacity:0;transform:translateY(6px) scale(.85);transition:opacity .45s ease .25s,transform .45s cubic-bezier(.2,.8,.3,1.4) .25s}
-  .arrow{color:var(--blue);font-size:1.5rem;font-weight:700;opacity:0;transition:opacity .35s ease .15s}
+  /* ── contraction stage: two words visibly fuse (or refuse to) ── */
+  .stage{position:relative;display:grid;place-items:center;min-height:118px;
+    background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px;overflow:hidden}
+  .phrase{display:inline-flex;align-items:baseline;gap:.42em;font-family:var(--display);font-size:2.1rem;font-weight:600;line-height:1;
+    transition:opacity .4s ease,gap .55s cubic-bezier(.5,0,.3,1),transform .5s ease}
+  .phrase .op{color:var(--ink-3);font-size:1.2rem;transition:opacity .3s ease}
+  .phrase .art{border-radius:.1em;padding:0 .06em;transition:background .3s ease}
+  /* the fused result, overlaid in the same spot */
+  .fused{position:absolute;font-family:var(--display);font-weight:700;font-size:2.5rem;color:var(--ink);
+    background:linear-gradient(transparent 56%,var(--fluo) 56%);padding:0 .14em;border-radius:.1em;
+    opacity:0;transform:scale(.7);transition:opacity .4s ease .25s,transform .5s cubic-bezier(.2,.8,.3,1.55) .25s}
+  .nofuse{position:absolute;bottom:12px;font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--marge);
+    border:1px solid var(--marge);border-radius:99px;padding:3px 11px;opacity:0;transform:translateY(4px);
+    transition:opacity .3s ease .35s,transform .3s ease .35s}
 
-  /* merged state */
-  .stage.go .tok .op{opacity:0}
-  .stage.go .tok .prep{margin-right:-.06em}
-  .stage.go.contract .tok .art{opacity:0;max-width:0;transform:translateX(-.3em)}
-  .stage.go .arrow{opacity:1}
-  .stage.go .result{opacity:1;transform:translateY(0) scale(1)}
-  /* no-contract: article stays, result echoes the unchanged phrase */
-  .stage.nocontract .result{background:none;color:var(--ink-2);font-weight:600;font-size:1.5rem}
-  .stage.nocontract .badge-nc{display:inline}
-  .badge-nc{display:none;font-family:var(--mono);font-size:.7rem;color:var(--marge);border:1px solid var(--marge);border-radius:99px;padding:2px 8px;margin-left:.4em;vertical-align:middle}
+  /* CONTRACT: gap snaps shut, words fade as one, fused form pops in */
+  .stage.contract .phrase{gap:0;opacity:0;transform:scale(.92)}
+  .stage.contract .phrase .op{opacity:0}
+  .stage.contract .fused{opacity:1;transform:scale(1)}
+
+  /* NO-CONTRACT: words lean in, the article holds its own highlight, badge says why */
+  .stage.nocontract .phrase .op{opacity:0}
+  .stage.nocontract .phrase{gap:.14em}
+  .stage.nocontract .phrase .art{background:linear-gradient(transparent 58%,var(--fluo) 58%)}
+  .stage.nocontract .nofuse{opacity:1;transform:translateY(0)}
 
   .cases{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:6px}
   .case-btn{font-family:var(--mono);font-size:.82rem;font-weight:700;color:var(--ink);background:var(--surface);
@@ -97,9 +101,9 @@
     <p class="sub"><span style="font-family:var(--mono)">de</span> / <span style="font-family:var(--mono)">à</span> + the article — when they fuse, and when they don't.</p>
 
     <div class="stage" id="stage" aria-live="polite">
-      <span class="tok"><span class="prep" id="prep">de</span><span class="op">+</span><span class="art" id="art">le</span></span>
-      <span class="arrow">→</span>
-      <span class="result" id="result">du<span class="badge-nc">no change</span></span>
+      <span class="phrase" id="phrase"><span class="prep" id="prep">de</span><span class="op">+</span><span class="art" id="art">le</span></span>
+      <span class="fused" id="fused">du</span>
+      <span class="nofuse" id="nofuse">✕ stays separate</span>
     </div>
 
     <div class="cases" id="cases" role="group" aria-label="Contraction cases"></div>
@@ -114,20 +118,22 @@
 </div>
 
 <script>
-  // de/à + article: which fuse (du, des, au, aux) and which stay (de la, de l', à la, à l')
+  // de/à + article: which fuse (du, des, au, aux) and which stay (de/à + la, l')
   const CASES = [
     { prep:'de', art:'le',  result:'du',    contract:true,  note:'<b>de + le → du.</b> The two words fuse into one. You never write “de le”.' },
     { prep:'de', art:'les', result:'des',   contract:true,  note:'<b>de + les → des.</b> Same fusion in the plural. (Don’t confuse with the article <i>des</i> = “some”.)' },
     { prep:'à',  art:'le',  result:'au',    contract:true,  note:'<b>à + le → au.</b> “Je vais au cinéma.” Never “à le”.' },
     { prep:'à',  art:'les', result:'aux',   contract:true,  note:'<b>à + les → aux.</b> “aux toilettes.” Plural fuses too.' },
     { prep:'de', art:'la',  result:'de la', contract:false, note:'<b>de + la → de la.</b> Feminine stays apart — no fusion. “de la musique.”' },
-    { prep:'de', art:"l’",  result:'de l’', contract:false, note:'<b>de + l’ → de l’.</b> Before a vowel the article is already <i>l’</i>, so nothing fuses. “de l’eau.”' },
+    { prep:'de', art:'l’',  result:'de l’', contract:false, note:'<b>de + l’ → de l’.</b> Before a vowel the article is already <i>l’</i>, so nothing fuses. “de l’eau.”' },
+    { prep:'à',  art:'la',  result:'à la',  contract:false, note:'<b>à + la → à la.</b> Feminine doesn’t fuse with à either. “à la maison.”' },
+    { prep:'à',  art:'l’',  result:'à l’',  contract:false, note:'<b>à + l’ → à l’.</b> Before a vowel it stays apart. “à l’école.”' },
   ];
 
   const stage = document.getElementById('stage');
   const prepEl = document.getElementById('prep');
   const artEl = document.getElementById('art');
-  const resultEl = document.getElementById('result');
+  const fusedEl = document.getElementById('fused');
   const note = document.getElementById('note');
   const casesEl = document.getElementById('cases');
   let current = 0;
@@ -146,7 +152,7 @@
     const c = CASES[i];
     prepEl.textContent = c.prep;
     artEl.textContent = c.art;
-    resultEl.innerHTML = c.result + '<span class="badge-nc">no change</span>';
+    fusedEl.textContent = c.result;   // only shown for contract cases
     note.innerHTML = c.note;
     [...casesEl.children].forEach((b,bi)=>b.setAttribute('aria-pressed', String(bi===i)));
   }
@@ -154,18 +160,17 @@
   function play(i){
     current = i;
     const c = CASES[i];
-    stage.classList.remove('go','contract','nocontract');
+    stage.classList.remove('contract','nocontract');
     setCase(i);
-    // reflow so the transition restarts
-    void stage.offsetWidth;
+    void stage.offsetWidth;            // reflow so the transition restarts
     requestAnimationFrame(() => {
-      stage.classList.add('go', c.contract ? 'contract' : 'nocontract');
+      stage.classList.add(c.contract ? 'contract' : 'nocontract');
     });
   }
 
   document.getElementById('replay').addEventListener('click', () => play(current));
   setCase(0);
-  setTimeout(() => play(0), 350);
+  setTimeout(() => play(0), 400);
 </script>
 </body>
 </html>
