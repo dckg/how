@@ -901,7 +901,7 @@ const PreLesson = (() => {
     }
     try {
       const [{ initializeApp }, { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut: fbSignOut, onAuthStateChanged },
-             { getFirestore, doc, setDoc, getDoc, collection, addDoc, serverTimestamp, deleteDoc }] = await Promise.all([
+             { getFirestore, doc, setDoc, getDoc, collection, addDoc, serverTimestamp, deleteDoc, query, where, getDocs, updateDoc, orderBy, limit }] = await Promise.all([
         import('https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js'),
         import('https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js'),
         import('https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js'),
@@ -911,16 +911,30 @@ const PreLesson = (() => {
       const db = getFirestore(app);
       _firebase = {
         app, auth, db,
-        GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, fbSignOut, onAuthStateChanged,
+        GoogleAuthProvider, signInWithPopup, fbSignOut, onAuthStateChanged,
         doc, setDoc, getDoc, collection, addDoc, serverTimestamp, deleteDoc,
+        query, where, getDocs, updateDoc, orderBy, limit,
       };
-      onAuthStateChanged(auth, (user) => {
+      onAuthStateChanged(auth, async (user) => {
         _currentUser = _aliasUser(user);
+        /* Restore XP from cloud BEFORE notifying callbacks. Without this,
+           a fresh-browser sign-in starts with totalXP=0 in localStorage,
+           and the next syncToLeaderboard() would clobber the user's
+           previously-earned leaderboard entry to 0. Failure is non-fatal. */
+        if (_currentUser) {
+          try { await restoreXPFromCloud(); }
+          catch (e) { console.warn('[PreLesson] restoreXPFromCloud failed:', e); }
+        }
         _authCallbacks.forEach(cb => {
           try { cb(_currentUser); } catch (e) { console.warn(e); }
         });
       });
-      /* Popup auth only — no getRedirectResult path (that was the redirect-loop cause). */
+      /* Sign-in is now popup-only. We don't call getRedirectResult() any
+         more because in storage-partitioned browsers the
+         sessionStorage state is lost between the redirect and the
+         auth handler return, surfacing a scary "missing initial
+         state" error on the firebaseapp.com page even though the
+         user did nothing wrong. */
       _injectTopnavAuth();
       return true;
     } catch (e) {
@@ -977,7 +991,7 @@ const PreLesson = (() => {
 
   async function signInWithGoogle(opts = {}) {
     if (!_firebase) {
-      alert('Sign-in is not available -- Firebase has not been configured for this site.');
+      alert('Sign-in is not available — Firebase has not been configured for this site.');
       return null;
     }
     const provider = new _firebase.GoogleAuthProvider();
@@ -986,14 +1000,28 @@ const PreLesson = (() => {
     if (hd) provider.setCustomParameters({ hd });
     provider.addScope('email');
     provider.addScope('profile');
-    /* Popup sign-in on the shared same-origin session. Popup (not redirect)
-       avoids the cross-domain redirect loop; the shared session means a
-       hub/pretest/reviser sign-in carries across all three. */
+    /* Popup-only sign-in. signInWithRedirect is intentionally avoided —
+       in storage-partitioned browsers (Chrome 113+, Safari ITP, Firefox
+       strict mode) it loses sessionStorage across the auth handler
+       redirect and surfaces a "missing initial state" error on the
+       firebaseapp.com page. Popup keeps everything in the same
+       browsing context. */
     try {
       const result = await _firebase.signInWithPopup(_firebase.auth, provider);
       return result.user;
     } catch (e) {
-      if (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') return null;
+      if (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') {
+        /* User dismissed — silent return. */
+        return null;
+      }
+      if (e.code === 'auth/popup-blocked') {
+        alert('Your browser blocked the sign-in popup. Please allow popups for this site and try again.');
+        return null;
+      }
+      if (e.code === 'auth/web-storage-unsupported') {
+        alert('Sign-in needs browser storage enabled. Please turn off "Block third-party cookies / storage" for this site and try again.');
+        return null;
+      }
       console.error('[PreLesson] Sign-in failed:', e);
       alert('Sign-in failed: ' + (e.message || e.code));
       return null;
@@ -1002,11 +1030,20 @@ const PreLesson = (() => {
 
   async function signOut() {
     if (!_firebase) return;
+    // Clear the cached user IMMEDIATELY so getCurrentUser() returns null
+    // before Firebase's onAuthStateChanged listener has a chance to fire.
+    // Without this, engine code that calls signOut() then repaints would
+    // still see the previous user and keep showing their name/email.
+    _currentUser = null;
     try {
       await _firebase.fbSignOut(_firebase.auth);
     } catch (e) {
       console.error('[PreLesson] Sign-out failed:', e);
     }
+    // Fire a synthetic notification so listeners (the v2 engine) repaint now
+    try {
+      window.dispatchEvent(new CustomEvent('laf1201:auth-changed', { detail: { user: null } }));
+    } catch (e) { /* noop */ }
   }
 
   /**
@@ -1304,7 +1341,85 @@ const PreLesson = (() => {
       freezesEarned: 0,
       lastVisitDate: null,
       skillBests: {},
+      /* SRS (Spaced Repetition System) — every wrong answer records an entry
+         here; correct answers redeem and bump the level. Keyed by
+         `${skillId}--${itemIdx}`. Each value: {skillId, itemIdx, missedAt,
+         attemptCount, level, nextDueAt, lastSeenAt}.
+         level 0 = immediate review, 1 = 1d, 2 = 3d, 3 = 7d, 4 = 14d, 5 = 30d.
+         Reaching level 5 and answering correctly removes the entry entirely. */
+      missedItems: {},
     };
+  }
+
+  /* SRS spacing schedule — days until next due date, indexed by level */
+  const SRS_INTERVAL_DAYS = [0, 1, 3, 7, 14, 30];
+  const SRS_MAX_LEVEL = SRS_INTERVAL_DAYS.length - 1;
+
+  /* Record the outcome of an attempt for SRS purposes. Called by the engine
+     on every quiz answer. Mutates state.missedItems, persists locally, and
+     triggers a Firestore sync.
+       - wrong → upsert entry with level 0, nextDueAt = now (immediate review)
+       - right + entry exists → bump level, recalc nextDueAt; remove if maxed
+       - right + no entry → no-op (don't track items the student already knew) */
+  function recordItemOutcome(skillId, itemIdx, wasCorrect) {
+    if (!skillId || itemIdx == null) return;
+    const state = readXPState();
+    const map = state.missedItems = state.missedItems || {};
+    const key = String(skillId) + '--' + String(itemIdx);
+    const now = Date.now();
+    const existing = map[key];
+    if (!wasCorrect) {
+      // Wrong: reset to level 0, push to immediate review
+      map[key] = {
+        skillId: skillId,
+        itemIdx: Number(itemIdx),
+        missedAt: existing ? existing.missedAt : now,
+        attemptCount: (existing ? existing.attemptCount || 0 : 0) + 1,
+        level: 0,
+        nextDueAt: now,
+        lastSeenAt: now,
+      };
+    } else if (existing) {
+      // Right on a tracked item: bump level
+      const nextLevel = Math.min(SRS_MAX_LEVEL, (existing.level || 0) + 1);
+      if (nextLevel >= SRS_MAX_LEVEL) {
+        // Mastered — drop from queue
+        delete map[key];
+      } else {
+        const daysAhead = SRS_INTERVAL_DAYS[nextLevel];
+        map[key] = Object.assign({}, existing, {
+          level: nextLevel,
+          nextDueAt: now + daysAhead * 24 * 60 * 60 * 1000,
+          lastSeenAt: now,
+        });
+      }
+    }
+    writeXPState(state);
+    if (typeof syncXPState === 'function') syncXPState();
+  }
+
+  /* Return the list of items whose nextDueAt has passed (i.e. due for review). */
+  function getDueMissedItems() {
+    const state = readXPState();
+    const map = state.missedItems || {};
+    const now = Date.now();
+    const due = [];
+    for (const k in map) {
+      const v = map[k];
+      if (v && (v.nextDueAt || 0) <= now) due.push(v);
+    }
+    // Sort: most-recently-missed first within due items (so the student
+    // tackles the freshest mistakes before older ones)
+    due.sort((a, b) => (b.missedAt || 0) - (a.missedAt || 0));
+    return due;
+  }
+
+  /* Return ALL tracked missed items regardless of due date — useful for
+     the home widget's "you have N items in your review queue" total. */
+  function getAllMissedItems() {
+    const state = readXPState();
+    const map = state.missedItems || {};
+    return Object.values(map);
   }
 
   function readXPState() {
@@ -1413,12 +1528,28 @@ const PreLesson = (() => {
   /* Public API: call when student submits any item. Returns the XP awarded
      for this attempt (already streak-multiplied). Also handles streak
      transitions on the day's first submission. */
-  function awardItemAttempt(skillId) {
+  /* H9: track whether streak has been evaluated this page-load so we don't
+     mutate state.currentStreak mid-session if the user crosses midnight. */
+  let _streakEvaluatedThisLoad = false;
+  function awardItemAttempt(skillId, wasCorrect) {
+    /* H1: accept and forward wasCorrect for analytics + per-attempt logging.
+       wasCorrect is optional; older callers that pass only one arg still work. */
     const state = readXPState();
     const today = todayLocalString();
-    evaluateStreakTransition(state, today);
+    if (!_streakEvaluatedThisLoad) {
+      evaluateStreakTransition(state, today);
+      _streakEvaluatedThisLoad = true;
+    }
     const xp = applyMultiplier(XP_PER_ATTEMPT, state);
-    const _xpBefore = state.totalXP - xp;
+    /* H2 FIX: actually add the earned XP to totalXP. Without this line,
+       state.totalXP was never incremented — the level + leaderboard +
+       badge thresholds all looked at a value that stayed at 0 forever. */
+    const _xpBefore = state.totalXP || 0;
+    state.totalXP = _xpBefore + xp;
+    /* M7: also log per-attempt analytics row when the helper is available. */
+    if (wasCorrect !== undefined && typeof logAttempt === 'function') {
+      try { logAttempt(skillId, !!wasCorrect); } catch(e) {}
+    }
     const _lvlBefore = getLevel(_xpBefore);
     const _lvlAfter  = getLevel(state.totalXP);
     if (_lvlAfter.num > _lvlBefore.num && typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
@@ -1439,37 +1570,43 @@ const PreLesson = (() => {
   function awardSkillCompletion(skillId, correct, total) {
     const state = readXPState();
     const today = todayLocalString();
-    /* Defensive: if for some reason no item was submitted today, still
-       evaluate streak. (Shouldn't happen but keeps state consistent.) */
-    evaluateStreakTransition(state, today);
+    if (!_streakEvaluatedThisLoad) {
+      evaluateStreakTransition(state, today);
+      _streakEvaluatedThisLoad = true;
+    }
 
     let baseXP = XP_PER_SKILL_COMPLETE;
 
-    /* Improvement on retake */
-    const prev = state.skillBests[skillId];
+    /* H5: namespace challenge / side-quest IDs to a separate map so they
+       don't pollute state.skillBests (which feeds Momentum, unit-N, etc.
+       badges that should only count real SIO skills). */
+    const isChallenge = typeof skillId === 'string' && skillId.startsWith('challenge-');
+    const bestsMap = isChallenge ? (state.challengeBests = state.challengeBests || {})
+                                 : (state.skillBests || (state.skillBests = {}));
+
+    /* H6: improvement bonus only when comparing apples to apples — same total.
+       Otherwise a 12/15 today vs 10/10 yesterday gives a +40 bonus despite
+       lower accuracy. Switching to same-total comparison fixes that. */
+    const prev = bestsMap[skillId];
     let improvement = 0;
-    if (prev && typeof prev.correct === 'number') {
-      if (correct > prev.correct) {
-        improvement = correct - prev.correct;
-      }
-    } else {
-      /* First attempt: not "improvement" per se. We only award completion XP
-         here; the per-item XP already covered the work. */
-      improvement = 0;
+    if (prev && typeof prev.correct === 'number' && prev.total === total) {
+      if (correct > prev.correct) improvement = correct - prev.correct;
     }
     baseXP += improvement * XP_PER_IMPROVEMENT_POINT;
 
-    /* Update best score record */
-    if (!prev || correct > prev.correct) {
-      state.skillBests[skillId] = {
-        correct: correct,
-        total: total,
-        attemptedAt: today,
-      };
+    /* Update best score record (compare against ratio so a higher % counts as
+       improvement even if absolute count is lower due to smaller pool). */
+    const prevRatio = prev && prev.total ? (prev.correct / prev.total) : -1;
+    const newRatio = total ? (correct / total) : 0;
+    if (!prev || newRatio > prevRatio) {
+      bestsMap[skillId] = { correct: correct, total: total, attemptedAt: today };
     }
 
     const xp = applyMultiplier(baseXP, state);
-    const _xpBefore = state.totalXP - xp;
+    /* H2 FIX (same as awardItemAttempt): increment totalXP before reading it
+       back for the level-up event computation. */
+    const _xpBefore = state.totalXP || 0;
+    state.totalXP = _xpBefore + xp;
     const _lvlBefore = getLevel(_xpBefore);
     const _lvlAfter  = getLevel(state.totalXP);
     if (_lvlAfter.num > _lvlBefore.num && typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
@@ -1669,6 +1806,79 @@ const PreLesson = (() => {
   let _xpSyncInFlight = false;
   let _xpSyncQueued = false;
 
+  /* Restore XP state from cloud, merging with whatever is already in
+     localStorage. For every numeric field we take the MAX of local vs
+     cloud, so a fresh-browser sign-in cannot regress a returning user's
+     XP. skillBests dict is unioned by max per skill. streakHistory is
+     replaced with whichever array is longer. If the cloud doc doesn't
+     exist (first-time sign-in on this account), we leave localStorage
+     alone. After merge, we write back to localStorage and, if the
+     merged state differs from the cloud copy, trigger a sync so server
+     reflects the recovered state. */
+  async function restoreXPFromCloud() {
+    if (!_firebase || !_currentUser) return;
+    try {
+      const { db, doc, getDoc } = _firebase;
+      const uid = _currentUser.uid;
+      const snap = await getDoc(doc(db, 'users', uid, 'state', 'xp'));
+      const local = readXPState();
+      let cloud = {};
+      if (snap.exists()) cloud = snap.data() || {};
+      /* Also read /leaderboard/{uid} as a fallback witness for totalXP.
+         If /state/xp ever got clobbered to 0 while the leaderboard still
+         shows a positive XP, we want to recover from the leaderboard
+         value rather than trust the clobbered state. We only look at
+         totalXP here — leaderboard doesn't store streaks or skillBests. */
+      try {
+        const lbSnap = await getDoc(doc(db, 'leaderboard', uid));
+        if (lbSnap.exists()) {
+          const lbXP = Number((lbSnap.data() || {}).totalXP) || 0;
+          if (lbXP > (Number(cloud.totalXP) || 0)) {
+            cloud = Object.assign({}, cloud, { totalXP: lbXP });
+          }
+        }
+      } catch (e) { /* leaderboard read is best-effort */ }
+      /* If neither /state/xp nor /leaderboard has any data, nothing to restore. */
+      if (!snap.exists() && !(Number(cloud.totalXP) > 0)) return;
+      const merged = Object.assign({}, local);
+      const numFields = ['totalXP', 'currentStreak', 'bestStreak', 'freezeTokens', 'freezesEarned'];
+      for (const k of numFields) {
+        merged[k] = Math.max(Number(local[k]) || 0, Number(cloud[k]) || 0);
+      }
+      // streakHistory: prefer the longer array (more practice days recorded)
+      const lh = Array.isArray(local.streakHistory) ? local.streakHistory : [];
+      const ch = Array.isArray(cloud.streakHistory) ? cloud.streakHistory : [];
+      merged.streakHistory = (ch.length > lh.length) ? ch.slice() : lh.slice();
+      // skillBests: union by max per skill key
+      const lb = (local.skillBests && typeof local.skillBests === 'object') ? local.skillBests : {};
+      const cb = (cloud.skillBests && typeof cloud.skillBests === 'object') ? cloud.skillBests : {};
+      const merged_sb = {};
+      const keys = new Set([...Object.keys(lb), ...Object.keys(cb)]);
+      for (const k of keys) {
+        merged_sb[k] = Math.max(Number(lb[k]) || 0, Number(cb[k]) || 0);
+      }
+      merged.skillBests = merged_sb;
+      // lastVisitDate: prefer the more recent (string ISO date comparison works)
+      const ld = local.lastVisitDate || '';
+      const cd = cloud.lastVisitDate || '';
+      merged.lastVisitDate = (cd > ld) ? cd : (ld || null);
+      writeXPState(merged);
+      // If we recovered anything, push merged state back so server stays in sync
+      const changed =
+        merged.totalXP !== (Number(cloud.totalXP) || 0) ||
+        merged.bestStreak !== (Number(cloud.bestStreak) || 0) ||
+        Object.keys(merged_sb).length !== Object.keys(cb).length;
+      if (changed) {
+        /* schedule a sync; don't await — UI shouldn't block on this */
+        setTimeout(() => { try { syncXPState(); } catch (e) {} }, 50);
+      }
+      /* Tell any home-page or progress widget to repaint with restored stats */
+      try { document.dispatchEvent(new CustomEvent('pre-lesson:xp-restored', { detail: merged })); } catch (e) {}
+    } catch (e) {
+      console.warn('[PreLesson] restoreXPFromCloud failed:', e);
+    }
+  }
+
   async function syncXPState() {
     if (!_firebase || !_currentUser) return;
     if (_xpSyncInFlight) { _xpSyncQueued = true; return; }
@@ -1688,7 +1898,12 @@ const PreLesson = (() => {
         await syncToLeaderboard(optedIn);
       } catch (e) { /* non-fatal */ }
     } catch (e) {
-      console.warn('[PreLesson] syncXPState failed:', e);
+      /* H8: louder than warn — surface as error so it's visible in console
+         and dispatch an event so the v2 engine can show a sync indicator. */
+      console.error('[PreLesson] syncXPState failed:', e);
+      if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+        try { window.dispatchEvent(new CustomEvent('laf1201:sync-failed', { detail: { error: String(e) } })); } catch(_) {}
+      }
     } finally {
       _xpSyncInFlight = false;
       if (_xpSyncQueued) {
@@ -1722,16 +1937,30 @@ const PreLesson = (() => {
         return;
       }
       const state = readXPState();
+      /* Guard: never overwrite an existing positive leaderboard entry
+         with totalXP=0. A 0 in localStorage almost always means a
+         fresh browser / cleared site data, not zero actual progress.
+         This is belt-and-braces alongside restoreXPFromCloud(). */
+      if ((Number(state.totalXP) || 0) === 0) {
+        try {
+          const { getDoc } = _firebase;
+          const existing = await getDoc(doc(db, 'leaderboard', uid));
+          if (existing.exists() && (Number(existing.data().totalXP) || 0) > 0) {
+            console.info('[PreLesson] syncToLeaderboard: skipping 0-XP write — board has', existing.data().totalXP, 'XP.');
+            return;
+          }
+        } catch (e) { /* read failure is non-fatal; fall through */ }
+      }
       const fullName = (_currentUser.displayName || '').trim();
       const firstName = fullName ? fullName.split(/\s+/)[0] : 'Student';
       const pretestXP = state.totalXP || 0;
-      /* Unified French-1 board: add the reviser's XP (read from the shared
-         users/{uid} doc) so totalXP spans the whole ecosystem. */
+      /* Unified French-1 board: add the reviser's XP (shared users/{uid} doc)
+         so the leaderboard total spans the whole ecosystem. */
       let reviserXP = 0;
       try {
         const { getDoc } = _firebase;
         const us = await getDoc(doc(db, 'users', uid));
-        if (us.exists()) reviserXP = us.data().xp || 0;
+        if (us.exists()) reviserXP = Number(us.data().xp) || 0;
       } catch (e) { /* offline — fall back to pretest-only */ }
       await setDoc(doc(db, 'leaderboard', uid), {
         uid: uid,
@@ -1888,6 +2117,9 @@ const PreLesson = (() => {
         syncXPState();
         checkAndPromptConsent();
         logAuthEvent('signed-in');
+        /* Claim XP for any feedback reports Dr Chan validated since the
+           student's last visit. Fire-and-forget — failures are non-fatal. */
+        claimValidatedFeedback().catch(e => console.warn('[PreLesson] claim failed:', e));
       }
     });
   }
@@ -1898,6 +2130,121 @@ const PreLesson = (() => {
      since those are the only mutation entry points used by the pretest engine.
      The wrapper-pattern alternative would only catch calls via the public API,
      which isn't sufficient because makePretest calls the closure-bound originals. */
+
+  /* Deduct XP for using a HINT (or other penalty actions). Clamps totalXP
+     to 0 so a student never goes negative. Persists locally and syncs to
+     Firestore. Returns the amount actually deducted. */
+  function deductXP(amount) {
+    const n = Number(amount) || 0;
+    if (n <= 0) return 0;
+    const state = readXPState();
+    const _xpBefore = state.totalXP || 0;
+    const actual = Math.min(n, _xpBefore);
+    state.totalXP = _xpBefore - actual;
+    writeXPState(state);
+    if (typeof syncXPState === 'function') syncXPState();
+    return actual;
+  }
+
+  /* Award an arbitrary XP bonus (used by the SOS / Feedback flow which
+     rewards students 250 XP for valid bug reports). Mirrors awardItemAttempt's
+     bookkeeping: increments totalXP, fires level-up event if crossed, updates
+     badges, persists locally, and triggers a Firestore sync. Returns awarded XP. */
+  function awardBonusXP(amount) {
+    const n = Number(amount) || 0;
+    if (n <= 0) return 0;
+    const state = readXPState();
+    const _xpBefore = state.totalXP || 0;
+    state.totalXP = _xpBefore + n;
+    const _lvlBefore = getLevel(_xpBefore);
+    const _lvlAfter  = getLevel(state.totalXP);
+    if (_lvlAfter.num > _lvlBefore.num && typeof window !== 'undefined') {
+      try { window.dispatchEvent(new CustomEvent('laf1201:level-up', { detail: _lvlAfter })); } catch (e) {}
+    }
+    const _newlyEarned = checkAndUpdateBadges(state);
+    if (_newlyEarned.length && typeof window !== 'undefined') {
+      try { window.dispatchEvent(new CustomEvent('laf1201:badges-earned', { detail: _newlyEarned })); } catch (e) {}
+    }
+    writeXPState(state);
+    if (typeof syncXPState === 'function') syncXPState();
+    return n;
+  }
+
+  /* Write a feedback/bug report to /feedback/{auto}. Payload keys allowed by
+     the corresponding Firestore rule: uid, email, name, skillId, itemIdx,
+     itemSnapshot, comment, ts, ua. Returns the new doc id (or null on
+     unauthenticated / failure). Fire-and-forget — never throws. */
+  async function logFeedback(payload) {
+    if (!_firebase || !_currentUser) return null;
+    try {
+      const { db, collection, addDoc, serverTimestamp } = _firebase;
+      const doc = await addDoc(collection(db, 'feedback'), {
+        uid: _currentUser.uid,
+        email: _currentUser.email || null,
+        name: _currentUser.displayName || null,
+        skillId: payload.skillId || null,
+        itemIdx: payload.itemIdx == null ? null : Number(payload.itemIdx),
+        itemSnapshot: payload.itemSnapshot || null,
+        comment: payload.comment || '',
+        ts: serverTimestamp(),
+        ua: (typeof navigator !== 'undefined') ? navigator.userAgent.slice(0, 240) : null,
+        /* Curated-XP workflow:
+           - status starts as 'pending' (instructor reviews in Firebase Console)
+           - instructor sets status='validated' (and optionally bumps xpAmount)
+             on docs that report real bugs; spam/dupes get status='rejected'
+           - student's next sign-in claims XP for any docs that are
+             validated + awardClaimedAt==null via claimValidatedFeedback() */
+        status: 'pending',
+        xpAmount: 250,
+        awardClaimedAt: null,
+      });
+      return doc.id;
+    } catch (e) {
+      console.warn('[PreLesson] logFeedback failed:', e);
+      return null;
+    }
+  }
+
+  /* Called on sign-in to pick up XP from any feedback reports Dr Chan has
+     validated since the student's last visit. Each claimed doc gets its
+     awardClaimedAt set to a server timestamp so it can't be double-claimed. */
+  async function claimValidatedFeedback() {
+    if (!_firebase || !_currentUser) return 0;
+    try {
+      const { db, collection, query, where, getDocs, doc: docRef, updateDoc, serverTimestamp } = _firebase;
+      const q = query(
+        collection(db, 'feedback'),
+        where('uid', '==', _currentUser.uid),
+        where('status', '==', 'validated'),
+        where('awardClaimedAt', '==', null),
+      );
+      const snap = await getDocs(q);
+      let totalAwarded = 0;
+      const claimed = [];
+      for (const d of snap.docs) {
+        const data = d.data() || {};
+        const amount = Number(data.xpAmount) || 250;
+        try {
+          await updateDoc(docRef(db, 'feedback', d.id), { awardClaimedAt: serverTimestamp() });
+          totalAwarded += awardBonusXP(amount);
+          claimed.push({ id: d.id, skillId: data.skillId, amount });
+        } catch (e) {
+          console.warn('[PreLesson] claim update failed for', d.id, e);
+        }
+      }
+      if (totalAwarded > 0 && typeof window !== 'undefined') {
+        try {
+          window.dispatchEvent(new CustomEvent('laf1201:feedback-validated', {
+            detail: { totalAwarded, claimed },
+          }));
+        } catch (e) {}
+      }
+      return totalAwarded;
+    } catch (e) {
+      console.warn('[PreLesson] claimValidatedFeedback failed:', e);
+      return 0;
+    }
+  }
 
   /* ---- Public Phase 2 helpers (for admin/debug pages) ---- */
   function getRetakeNumber(skillId) {
@@ -2141,6 +2488,20 @@ const PreLesson = (() => {
     syncToLeaderboard,
     loadLeaderboard,
     initTheme,
+    /* Feedback / SOS — added 2026-05-26 */
+    awardBonusXP,
+    deductXP,
+    logFeedback,
+    claimValidatedFeedback,
+    /* SRS — added 2026-05-27 */
+    recordItemOutcome,
+    getDueMissedItems,
+    getAllMissedItems,
+    /* Expose the internal Firestore handle for admin tooling (the instructor
+       feedback dashboard at #admin-feedback). Returns the {db, collection,
+       query, where, orderBy, limit, getDocs, doc, updateDoc, …} bag or null
+       if Firebase hasn't initialised yet. */
+    getFirebaseHandle: () => _firebase,
   };
 
 })();
