@@ -46,7 +46,13 @@
   /* ── four verb-roles; only the article merges inside each sentence ── */
   .roles-list{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
   .role-row{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;
-    border-left:5px solid var(--rl, var(--blue))}
+    border-left:5px solid var(--rl, var(--blue));cursor:pointer;
+    transition:box-shadow .12s ease,transform .08s ease,border-color .12s ease}
+  .role-row:hover{border-color:var(--ink-3);box-shadow:var(--shadow-lift)}
+  .role-row:active{transform:translate(1px,1px)}
+  .role-row:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  @keyframes lePulse{0%{transform:scale(1)}45%{transform:scale(1.22)}100%{transform:scale(1)}}
+  .role-row.static.pulse .art-base{display:inline-block;animation:lePulse .5s ease}
   .r-sent{font-family:var(--display);font-size:clamp(1.3rem,3.7vw,1.72rem);font-weight:600;line-height:1.2;
     display:flex;align-items:baseline;gap:.3em;flex-wrap:wrap}
   .r-noun{background:linear-gradient(transparent 56%,var(--fluo) 56%);padding:0 .08em;border-radius:.1em}
@@ -105,12 +111,12 @@
 
       <div class="role-row" style="--rl:var(--blue)">
         <div class="r-sent"><span>Je vais</span> <span class="art-slot"><span class="art-base"><span class="pp">à</span>&nbsp;le</span><span class="art-fused">au</span></span> <span class="r-noun">théâtre</span></div>
-        <div class="r-meaning"><span class="ic">🚶</span><span class="r-rule">aller → au / à la</span> · destination — theatre as <b>where I go</b>.</div>
+        <div class="r-meaning"><span class="ic">🚶</span><span class="r-rule">aller → au / à la</span> · destination — theatre as <b>where I go</b> <i>(trajectory (destination))</i> or <b>where I am</b> <i>(place (location))</i>.</div>
       </div>
 
       <div class="role-row" style="--rl:#8a5bd0">
         <div class="r-sent"><span>Je viens</span> <span class="art-slot"><span class="art-base"><span class="pp">de</span>&nbsp;le</span><span class="art-fused">du</span></span> <span class="r-noun">théâtre</span></div>
-        <div class="r-meaning"><span class="ic">↩️</span><span class="r-rule">venir → du / de la</span> · origin — theatre as <b>where I come from</b>.</div>
+        <div class="r-meaning"><span class="ic">↩️</span><span class="r-rule">venir → du / de la</span> · origin — theatre as <b>where I come from</b> <i>(trajectory (origin))</i> or <b>where I am from</b> <i>(place (origin))</i>.</div>
       </div>
 
     </div>
@@ -129,11 +135,28 @@
   const rows = [...document.querySelectorAll('.role-row')];
   const animated = rows.filter(r => !r.classList.contains('static'));
 
+  // replay a single row's merge (or the "stays as le" pulse for aimer)
+  function playRow(r){
+    if (r.classList.contains('static')){
+      r.classList.remove('pulse'); void r.offsetWidth; r.classList.add('pulse');
+    } else {
+      r.classList.remove('go'); void r.offsetWidth; r.classList.add('go');
+    }
+  }
+
   function playAll(){
     rows.forEach(r => r.classList.remove('go'));
     void document.body.offsetWidth;        // restart transitions
     animated.forEach((r, k) => setTimeout(() => r.classList.add('go'), 450 + k * 750));
   }
+
+  // each row is individually reactive — tap (or Enter/Space) to replay it
+  rows.forEach(r => {
+    r.setAttribute('role', 'button');
+    r.setAttribute('tabindex', '0');
+    r.addEventListener('click', () => playRow(r));
+    r.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); playRow(r); } });
+  });
 
   document.getElementById('replay').addEventListener('click', playAll);
   setTimeout(playAll, 550);
