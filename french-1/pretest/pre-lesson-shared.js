@@ -1724,12 +1724,23 @@ const PreLesson = (() => {
       const state = readXPState();
       const fullName = (_currentUser.displayName || '').trim();
       const firstName = fullName ? fullName.split(/\s+/)[0] : 'Student';
+      const pretestXP = state.totalXP || 0;
+      /* Unified French-1 board: add the reviser's XP (read from the shared
+         users/{uid} doc) so totalXP spans the whole ecosystem. */
+      let reviserXP = 0;
+      try {
+        const { getDoc } = _firebase;
+        const us = await getDoc(doc(db, 'users', uid));
+        if (us.exists()) reviserXP = us.data().xp || 0;
+      } catch (e) { /* offline — fall back to pretest-only */ }
       await setDoc(doc(db, 'leaderboard', uid), {
         uid: uid,
         displayName: firstName,
-        totalXP: state.totalXP || 0,
+        pretestXP: pretestXP,
+        reviserXP: reviserXP,
+        totalXP: pretestXP + reviserXP,
         lastUpdated: serverTimestamp(),
-      });
+      }, { merge: true });
     } catch (e) {
       console.warn('[PreLesson] syncToLeaderboard failed:', e);
     }

@@ -1603,36 +1603,61 @@ if(!configured){
     }, 700);
   };
 
+  /* teacher / admin accounts — tracked, but never shown on the leaderboard */
+  const LB_EXCLUDE = new Set([
+    'drneilchan@gmail.com','monsieur.chan@gmail.com','dan@chank.wang',
+    'kaygeedan@gmail.com','daniel.chan@nus.edu.sg','kwangguan@gmail.com'
+  ]);
+  // current-user facts the leaderboard write needs (set on sign-in / nick / XP change)
+  let myReviserXP = 0, myEmail = '', myDisplay = '', myNick = '';
+
+  /* Unified French-1 leaderboard: both apps write the COMBINED total into the
+     shared leaderboard/{uid} doc. Reviser XP is raw (no multiplier); the pretest
+     contributes its own total, read from users/{uid}/state/xp. */
+  let lbTimer = null;
+  function syncReviserLeaderboard() {
+    if (!uid) return;
+    if (LB_EXCLUDE.has((myEmail||'').toLowerCase())) return;   // admins never on the board
+    clearTimeout(lbTimer);
+    lbTimer = setTimeout(async () => {
+      let pretestXP = 0;
+      try { const x = await getDoc(doc(db,'users',uid,'state','xp')); if (x.exists()) pretestXP = x.data().totalXP || 0; } catch(e){}
+      const name = (myNick && myNick.trim()) || myDisplay || 'Student';
+      setDoc(doc(db, 'leaderboard', uid),
+        { uid, displayName:name, reviserXP:myReviserXP, pretestXP, totalXP: myReviserXP + pretestXP, lastUpdated: Date.now() },
+        { merge:true }).catch(()=>{});
+    }, 900);
+  }
+
   /* the classic script calls this whenever XP / stats change */
   let mtimer = null;
   window.__cloudSaveMeta = (meta) => {
     if (!uid) return;
+    myReviserXP = meta.xp || 0;
     clearTimeout(mtimer);
     mtimer = setTimeout(() => {
       setDoc(doc(db, 'users', uid),
         { xp:meta.xp||0, answered:meta.answered||0, correct:meta.correct||0, best:meta.best||0, updated:Date.now() },
         { merge:true }).catch(()=>{});
     }, 800);
+    syncReviserLeaderboard();
   };
 
-  /* leaderboard: save my nickname, and read the top players by XP */
+  /* leaderboard: save my nickname (also refreshes the board entry) */
   window.__saveNick = (nick) => {
     if (!uid) return Promise.resolve();
-    return setDoc(doc(db, 'users', uid), { nick:String(nick||'').slice(0,24) }, { merge:true }).catch(()=>{});
+    myNick = String(nick||'').slice(0,24);
+    syncReviserLeaderboard();
+    return setDoc(doc(db, 'users', uid), { nick:myNick }, { merge:true }).catch(()=>{});
   };
-  /* teacher / admin accounts — tracked, but never shown on the leaderboard */
-  const LB_EXCLUDE = new Set([
-    'drneilchan@gmail.com','monsieur.chan@gmail.com','dan@chank.wang',
-    'kaygeedan@gmail.com','daniel.chan@nus.edu.sg','kwangguan@gmail.com'
-  ]);
+  /* read the unified board: combined French-1 totals, top players first */
   window.__leaderboard = async () => {
     try {
-      const snap = await getDocs(query(collection(db, 'users'), orderBy('xp', 'desc'), limit(80)));
+      const snap = await getDocs(query(collection(db, 'leaderboard'), orderBy('totalXP', 'desc'), limit(80)));
       const out = [];
       snap.forEach(d => {
         const v = d.data() || {};
-        if (LB_EXCLUDE.has((v.email||'').toLowerCase())) return;   // skip admins/teachers
-        out.push({ uid:d.id, nick:v.nick||'', xp:v.xp||0 });
+        out.push({ uid:d.id, nick:v.displayName||'', xp:v.totalXP||0 });
       });
       return out.slice(0, 50);
     } catch (e) { return null; }   // null = offline / blocked
@@ -1647,6 +1672,8 @@ if(!configured){
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       uid = user.uid; window.__uid = uid;
+      myEmail = user.email || '';
+      myDisplay = (user.displayName || '').trim().split(/\s+/)[0] || '';
       uName.textContent = user.displayName || user.email || 'Signed in';
       if (user.photoURL) { uPic.src = user.photoURL; uPic.style.display = 'block'; } else { uPic.style.display = 'none'; }
       chip.hidden = false;
@@ -1655,12 +1682,15 @@ if(!configured){
       try {
         const snap = await getDoc(doc(db, 'users', uid));
         const data = snap.exists() ? snap.data() : {};
+        myReviserXP = data.xp || 0;
+        myNick = data.nick || '';
         window.__mergeRemote(data.progress || {});      // union-merge cloud ⇄ local progress
         if (window.__mergeMeta) window.__mergeMeta(data); // merge XP / stats
         if (window.__setLocalNick) window.__setLocalNick(data.nick || '');
         setDoc(doc(db, 'users', uid),                    // store profile for leaderboards
           { name:user.displayName||'', email:user.email||'', photo:user.photoURL||'' },
           { merge:true }).catch(()=>{});
+        syncReviserLeaderboard();                         // seed/refresh my unified board entry
       } catch (e) { /* offline: keep local progress */ }
     } else {
       uid = null; window.__uid = null;
