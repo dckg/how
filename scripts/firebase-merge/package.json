@@ -1,0 +1,14 @@
+{
+  "name": "fluolingo-firebase-merge",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Merge f1fluolingo reviser users into laf1201 by email (run locally with service-account keys).",
+  "scripts": {
+    "migrate:dry": "node migrate.mjs",
+    "migrate": "node migrate.mjs --apply"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.7.0"
+  }
+}
