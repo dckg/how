@@ -1543,14 +1543,18 @@ import { getFirestore, doc, getDoc, setDoc, addDoc, collection, query, orderBy, 
 import { getAnalytics, isSupported, logEvent }
   from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
 
+// Unified onto the laf1201 project (shared with the pretest) so both apps
+// share one user pool, one Auth domain, and one Firestore. appId/measurementId
+// reuse the pretest's web-app registration; register a dedicated web app in
+// the laf1201 console if you want the reviser's analytics kept separate.
 const firebaseConfig = {
-  apiKey:            "AIzaSyBQcKYqbYgSFPh03eG2qnpqPlk0JUpsaVw",
-  authDomain:        "f1fluolingo.firebaseapp.com",
-  projectId:         "f1fluolingo",
-  storageBucket:     "f1fluolingo.firebasestorage.app",
-  messagingSenderId: "844752527987",
-  appId:             "1:844752527987:web:6c87b93b0d23b120a58006",
-  measurementId:     "G-DMBDY4Q7NZ"
+  apiKey:            "AIzaSyDEEhlkmXTcZ69etUNk2KJWngyp7meeP5M",
+  authDomain:        "laf1201.firebaseapp.com",
+  projectId:         "laf1201",
+  storageBucket:     "laf1201.firebasestorage.app",
+  messagingSenderId: "84075254825",
+  appId:             "1:84075254825:web:5fe21c20a467fab977b838",
+  measurementId:     "G-DHK50S348X"
 };
 
 const gate   = document.getElementById('authgate');
