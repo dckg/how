@@ -9,12 +9,35 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../fluolingo.css">
+<style>
+  .hub-auth{margin-left:auto;display:flex;align-items:center}
+  .hub-signin{font-family:var(--display);background:var(--fluo);color:var(--ink);border:2px solid #93a814;border-radius:12px;
+    padding:9px 14px;font-weight:700;font-size:.9rem;cursor:pointer;box-shadow:3px 4px 0 0 #93a814;transition:transform .1s,box-shadow .1s}
+  .hub-signin:hover{transform:translate(1px,2px);box-shadow:1px 1px 0 0 #93a814}
+  .hub-signin:active{transform:translate(3px,4px);box-shadow:0 0 0 0 #93a814}
+  .hub-user{display:flex;align-items:center;gap:9px}
+  .hub-signin[hidden],.hub-user[hidden]{display:none}
+  .hub-xp{font-family:var(--ui);font-size:.74rem;font-weight:700;color:var(--ink);background:var(--fluo);padding:4px 10px;border-radius:99px}
+  .hub-pic{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--ink);object-fit:cover}
+  .hub-name{font-size:.85rem;font-weight:600;color:var(--ink);max-width:13ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .hub-signout{background:transparent;border:1.5px solid var(--ink);border-radius:10px;padding:6px 11px;font-size:.78rem;font-weight:600;color:var(--ink);cursor:pointer;font-family:var(--body)}
+  .hub-signout:hover{background:var(--ink);color:#fff}
+</style>
 </head>
 <body>
 <div class="wrap">
   <header class="topbar">
     <a class="brand" href="../">Fluolingo</a>
     <span class="crumbs"><a href="../">Home</a> / Français 1</span>
+    <div class="hub-auth">
+      <button class="hub-signin" id="hubSignin" type="button">Sign in with Google</button>
+      <div class="hub-user" id="hubUser" hidden>
+        <span class="hub-xp" id="hubXP" title="Combined French 1 XP (pretest + reviser)">★ 0 XP</span>
+        <img class="hub-pic" id="hubPic" alt="" hidden />
+        <span class="hub-name" id="hubName"></span>
+        <button class="hub-signout" id="hubSignout" type="button">Sign out</button>
+      </div>
+    </div>
   </header>
 
   <section class="hero">
@@ -56,5 +79,65 @@
     <span>French 1 · LAF1201</span>
   </footer>
 </div>
+
+<script type="module">
+// Single ecosystem login: same laf1201 project + same origin as the pretest and
+// reviser, so this sign-in is shared across all three (one session site-wide).
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut }
+  from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import { getFirestore, doc, getDoc }
+  from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDEEhlkmXTcZ69etUNk2KJWngyp7meeP5M",
+  authDomain: "laf1201.firebaseapp.com",
+  projectId: "laf1201",
+  storageBucket: "laf1201.firebasestorage.app",
+  messagingSenderId: "84075254825",
+  appId: "1:84075254825:web:5fe21c20a467fab977b838",
+  measurementId: "G-DHK50S348X"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+const signinBtn = document.getElementById('hubSignin');
+const userBox   = document.getElementById('hubUser');
+const nameEl    = document.getElementById('hubName');
+const picEl     = document.getElementById('hubPic');
+const xpEl      = document.getElementById('hubXP');
+const signoutBtn= document.getElementById('hubSignout');
+
+signinBtn.addEventListener('click', async () => {
+  signinBtn.textContent = 'Redirecting…';
+  try { await signInWithRedirect(auth, provider); }
+  catch (e) { signinBtn.textContent = 'Sign in with Google'; alert('Sign-in failed: ' + (e.message || e.code)); }
+});
+getRedirectResult(auth).catch(()=>{});
+signoutBtn.addEventListener('click', () => signOut(auth));
+
+// Combined French 1 XP = reviser users/{uid}.xp + pretest users/{uid}/state/xp.totalXP
+async function combinedXP(uid){
+  let total = 0;
+  try { const u = await getDoc(doc(db,'users',uid));            if(u.exists()) total += (u.data().xp || 0); } catch(e){}
+  try { const x = await getDoc(doc(db,'users',uid,'state','xp')); if(x.exists()) total += (x.data().totalXP || 0); } catch(e){}
+  return total;
+}
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    signinBtn.hidden = true;
+    userBox.hidden = false;
+    nameEl.textContent = user.displayName || user.email || 'Signed in';
+    if (user.photoURL) { picEl.src = user.photoURL; picEl.hidden = false; } else { picEl.hidden = true; }
+    xpEl.textContent = '★ ' + (await combinedXP(user.uid)) + ' XP';
+  } else {
+    signinBtn.hidden = false;
+    userBox.hidden = true;
+  }
+});
+</script>
 </body>
 </html>
