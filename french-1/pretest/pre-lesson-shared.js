@@ -994,41 +994,15 @@ const PreLesson = (() => {
     if (hd) provider.setCustomParameters({ hd });
     provider.addScope('email');
     provider.addScope('profile');
-    /* Try popup first (faster, no page reload). If it fails for COOP /
-       popup-blocking / "operation-not-supported" reasons, fall back to
-       redirect-based sign-in which works reliably across all browsers. */
+    /* Redirect-based sign-in: navigates to Google in the same tab, so there
+       is no popup for the browser to block. The page reloads after sign-in
+       and getRedirectResult() (called on load) completes the flow. */
     try {
-      const result = await _firebase.signInWithPopup(_firebase.auth, provider);
-      return result.user;
+      await _firebase.signInWithRedirect(_firebase.auth, provider);
+      /* Execution stops here -- page redirects to Google. */
+      return null;
     } catch (e) {
-      const fallbackTriggers = [
-        'auth/popup-blocked',
-        'auth/popup-closed-by-user',
-        'auth/cancelled-popup-request',
-        'auth/operation-not-supported-in-this-environment',
-        'auth/web-storage-unsupported',
-      ];
-      /* COOP errors don't always have a clean code -- they can manifest as
-         a generic "internal-error". Check the message text too. */
-      const looksLikeCOOP = (e.message || '').toLowerCase().includes('cross-origin')
-                         || (e.message || '').toLowerCase().includes('opener');
-      if (fallbackTriggers.includes(e.code) || looksLikeCOOP) {
-        if (e.code === 'auth/popup-closed-by-user') {
-          /* User actively closed the popup -- don't auto-redirect, just return. */
-          return null;
-        }
-        /* Otherwise, fall back to redirect. Page will reload after sign-in. */
-        try {
-          await _firebase.signInWithRedirect(_firebase.auth, provider);
-          /* Execution stops here -- page redirects to Google. */
-          return null;
-        } catch (redirectErr) {
-          console.error('[PreLesson] Redirect sign-in also failed:', redirectErr);
-          alert('Sign-in failed: ' + (redirectErr.message || redirectErr.code));
-          return null;
-        }
-      }
-      console.error('[PreLesson] Sign-in failed:', e);
+      console.error('[PreLesson] Redirect sign-in failed:', e);
       alert('Sign-in failed: ' + (e.message || e.code));
       return null;
     }

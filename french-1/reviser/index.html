@@ -1536,7 +1536,7 @@ wireSetup();syncSeg();updateProgress();updateXP();initTutorial();initReset();ini
 <!-- ============ Firebase: Google sign-in (gates the app) + cloud progress sync ============ -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
+import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut }
   from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, addDoc, collection, query, orderBy, limit, getDocs }
   from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
@@ -1574,17 +1574,19 @@ if(!configured){
   let analytics = null;
   isSupported().then(ok => { if (ok) { try { analytics = getAnalytics(app); } catch (e) {} } }).catch(()=>{});
 
+  const authErr = (e) =>
+    e.code === 'auth/unauthorized-domain' ? 'This domain isn’t authorised in Firebase yet.' :
+    e.code === 'auth/network-request-failed' ? 'Network error — check your connection and try again.' :
+    ('Sign-in failed: ' + (e.message || e.code));
+
+  // redirect-based sign-in: navigates to Google in the same tab (no popup to block)
   gateBtn.addEventListener('click', async () => {
-    gateNote.textContent = '';
-    try { await signInWithPopup(auth, provider); }
-    catch (e) {
-      gateNote.textContent =
-        e.code === 'auth/popup-closed-by-user' ? 'Sign-in was cancelled.' :
-        e.code === 'auth/popup-blocked' ? 'Your browser blocked the popup — allow popups and try again.' :
-        e.code === 'auth/unauthorized-domain' ? 'This domain isn’t authorised in Firebase yet.' :
-        ('Sign-in failed: ' + (e.message || e.code));
-    }
+    gateNote.textContent = 'Redirecting to Google…';
+    try { await signInWithRedirect(auth, provider); }
+    catch (e) { gateNote.textContent = authErr(e); }
   });
+  // finish the flow when Google sends the user back
+  getRedirectResult(auth).catch(e => { gateNote.textContent = authErr(e); });
   signout.addEventListener('click', () => signOut(auth));
 
   /* the classic script calls this on every save() */
