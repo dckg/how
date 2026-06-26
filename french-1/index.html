@@ -84,7 +84,7 @@
 // Single ecosystem login: same laf1201 project + same origin as the pretest and
 // reviser, so this sign-in is shared across all three (one session site-wide).
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut }
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
   from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 import { getFirestore, doc, getDoc }
   from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
@@ -111,11 +111,10 @@ const xpEl      = document.getElementById('hubXP');
 const signoutBtn= document.getElementById('hubSignout');
 
 signinBtn.addEventListener('click', async () => {
-  signinBtn.textContent = 'Redirecting…';
-  try { await signInWithRedirect(auth, provider); }
-  catch (e) { signinBtn.textContent = 'Sign in with Google'; alert('Sign-in failed: ' + (e.message || e.code)); }
+  // popup sign-in (same-origin ecosystem) — no redirect loop
+  try { await signInWithPopup(auth, provider); }
+  catch (e) { if (e.code !== 'auth/popup-closed-by-user') alert('Sign-in failed: ' + (e.message || e.code)); }
 });
-getRedirectResult(auth).catch(()=>{});
 signoutBtn.addEventListener('click', () => signOut(auth));
 
 // Combined French 1 XP = reviser users/{uid}.xp + pretest users/{uid}/state/xp.totalXP

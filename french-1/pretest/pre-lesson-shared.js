@@ -920,15 +920,7 @@ const PreLesson = (() => {
           try { cb(_currentUser); } catch (e) { console.warn(e); }
         });
       });
-      /* If we just came back from a redirect-based sign-in, capture the result.
-         (No-op when there was no redirect -- important for normal page loads.) */
-      try {
-        await getRedirectResult(auth);
-      } catch (e) {
-        if (e?.code && e.code !== 'auth/no-auth-event') {
-          console.warn('[PreLesson] Redirect sign-in result error:', e.code);
-        }
-      }
+      /* Popup auth only — no getRedirectResult path (that was the redirect-loop cause). */
       _injectTopnavAuth();
       return true;
     } catch (e) {
@@ -994,15 +986,15 @@ const PreLesson = (() => {
     if (hd) provider.setCustomParameters({ hd });
     provider.addScope('email');
     provider.addScope('profile');
-    /* Redirect-based sign-in: navigates to Google in the same tab, so there
-       is no popup for the browser to block. The page reloads after sign-in
-       and getRedirectResult() (called on load) completes the flow. */
+    /* Popup sign-in on the shared same-origin session. Popup (not redirect)
+       avoids the cross-domain redirect loop; the shared session means a
+       hub/pretest/reviser sign-in carries across all three. */
     try {
-      await _firebase.signInWithRedirect(_firebase.auth, provider);
-      /* Execution stops here -- page redirects to Google. */
-      return null;
+      const result = await _firebase.signInWithPopup(_firebase.auth, provider);
+      return result.user;
     } catch (e) {
-      console.error('[PreLesson] Redirect sign-in failed:', e);
+      if (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') return null;
+      console.error('[PreLesson] Sign-in failed:', e);
       alert('Sign-in failed: ' + (e.message || e.code));
       return null;
     }
