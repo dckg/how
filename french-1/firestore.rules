@@ -1,0 +1,49 @@
+rules_version = '2';
+// Reconciled rules for the unified laf1201 project (hub · pretest · reviser).
+// House style: owner-only writes, signed-in collection reads for the leaderboard,
+// admin email allowlist, no defensive field validation. Deploy to the laf1201
+// project (Firebase console → Firestore → Rules, or `firebase deploy --only firestore:rules`).
+//
+// Covers every path the live apps use:
+//   users/{uid}                      profile + reviser XP/progress  (owner write, signed-in read)
+//   users/{uid}/{sub=**}             pretest state/skills/runs/attempts + reviser sessions
+//   leaderboard/{uid}                unified combined-total board    (owner write, signed-in read)
+//   events / authEvents              telemetry                        (signed-in create)
+//   feedback                         "report a question"             (signed-in create, admin read)
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(uid) { return isSignedIn() && request.auth.uid == uid; }
+    function isAdmin() {
+      // Same teacher/admin allowlist used in the reviser.
+      return isSignedIn() && request.auth.token.email in [
+        "drneilchan@gmail.com", "monsieur.chan@gmail.com", "dan@chank.wang",
+        "kaygeedan@gmail.com", "daniel.chan@nus.edu.sg", "kwangguan@gmail.com"
+      ];
+    }
+
+    match /users/{uid} {
+      allow read:  if isSignedIn();          // leaderboard + cross-app reads of own/other totals
+      allow write: if isOwner(uid);          // owner writes own XP / progress doc
+      // pretest state/skills/runs/attempts AND reviser sessions
+      match /{sub=**} {
+        allow read:  if isOwner(uid) || isAdmin();
+        allow write: if isOwner(uid);
+      }
+    }
+
+    match /leaderboard/{uid} {
+      allow read:  if isSignedIn();          // any signed-in user can render the board
+      allow write: if isOwner(uid);          // each user writes only their own entry
+    }
+
+    match /events/{id}     { allow create: if isSignedIn(); allow read: if isAdmin(); }
+    match /authEvents/{id} { allow create: if isSignedIn(); allow read: if isAdmin(); }
+
+    match /feedback/{id} {
+      allow create: if isSignedIn();
+      allow read, update: if isAdmin();
+    }
+  }
+}
