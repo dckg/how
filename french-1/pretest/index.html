@@ -15194,4 +15194,45 @@ window.addEventListener('hashchange', closeAnyOpenGrammarPanel);
 })();
 
 </script>
+<style id="fluo-skin">
+/* ===== Fluolingo theme skin — typography + fluo accent to match hub & reviser ===== */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,600&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+:root{
+  --blue:#26407A; --blue2:#26407A; --orange:#DDFB4C;
+  --paper:#FCEEDD; --ink:#141B3C; --line:#ECD9C2; --fluo:#DDFB4C;
+  --display:"Fraunces",Georgia,serif; --ui:"Space Mono",ui-monospace,monospace;
+}
+body{ font-family:"Inter",-apple-system,system-ui,sans-serif !important; }
+
+/* serif headings → Fraunces */
+h1,h2,h3,.topbar h1,.unit-card h3,.scene-card h2,.side-card h2,
+.lesson-name-header,.question h3,.welcome-title,.hep-level-name{
+  font-family:"Fraunces",Georgia,serif !important; font-style:normal !important;
+}
+/* mono eyebrows / tags / labels → Space Mono */
+.welcome-eyebrow,.lesson-unit-tag,.utb-links,.hep-board h3,.qp-counter{
+  font-family:"Space Mono",ui-monospace,monospace !important;
+}
+
+/* brand wordmark: fluo highlighter behind dark ink (matches the hub .brand) */
+.welcome-title{ color:var(--ink) !important; }
+.welcome-title em{
+  font-style:normal !important; color:var(--ink) !important;
+  background:linear-gradient(transparent 58%, var(--fluo) 58%); padding:0 .1em; border-radius:.1em;
+}
+
+/* hero card → theme (fluo left accent, cream gradient) */
+.hero-welcome{
+  border:1px solid rgba(20,27,60,.12) !important; border-left:6px solid var(--fluo) !important;
+  background:linear-gradient(135deg,#FFF7EA 0%,#FCEEDD 100%) !important;
+}
+.hero-welcome .welcome-eyebrow{ color:var(--blue) !important; }
+.hero-welcome .welcome-lede strong{ color:var(--ink) !important; }
+.hero-welcome .welcome-lede em{ color:var(--blue) !important; }
+
+/* warm-accent surfaces → theme */
+.reminder{ border-left-color:var(--fluo) !important; background:#FFF7EA !important; color:var(--ink) !important; }
+.dot{ background:var(--blue) !important; }
+</style>
 </body></html>
