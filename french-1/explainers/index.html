@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Fluolingo · French 1 Explainers</title>
-<meta name="description" content="Short animated explainers for the trickiest French 1 grammar — article contraction and more."/>
+<meta name="description" content="Short animated explainers for the trickiest French 1 grammar — one noun, four verb-roles, and more."/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,600&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -36,48 +36,39 @@
   .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2)}
   .hero h1{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5vw,2.7rem);margin:.2em 0 .1em;letter-spacing:-.01em}
   .hero h1 .hl{background:linear-gradient(transparent 56%,var(--fluo) 56%);padding:0 .06em}
-  .hero p{color:var(--ink-2);max-width:48ch;margin:.6em 0 0}
+  .hero p{color:var(--ink-2);max-width:50ch;margin:.6em 0 0}
 
   .card{background:var(--surface);border:2px solid var(--ink);border-radius:var(--r-card);box-shadow:var(--shadow-pop);padding:22px 22px 24px;margin:26px 0}
-  .card h2{font-family:var(--display);font-weight:600;font-size:1.3rem;margin:0 0 2px}
-  .card .sub{color:var(--ink-2);font-size:.92rem;margin:0 0 18px}
+  .card h2{font-family:var(--display);font-weight:600;font-size:1.35rem;margin:0 0 2px}
+  .card .sub{color:var(--ink-2);font-size:.95rem;margin:0 0 18px}
+  .card .sub b{color:var(--ink)}
 
-  /* ── contraction stage: two words visibly fuse (or refuse to) ── */
-  .stage{position:relative;display:grid;place-items:center;min-height:118px;
-    background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px;overflow:hidden}
-  .phrase{display:inline-flex;align-items:baseline;gap:.42em;font-family:var(--display);font-size:2.1rem;font-weight:600;line-height:1;
-    transition:opacity .4s ease,gap .55s cubic-bezier(.5,0,.3,1),transform .5s ease}
-  .phrase .op{color:var(--ink-3);font-size:1.2rem;transition:opacity .3s ease}
-  .phrase .art{border-radius:.1em;padding:0 .06em;transition:background .3s ease}
-  /* the fused result, overlaid in the same spot */
-  .fused{position:absolute;font-family:var(--display);font-weight:700;font-size:2.5rem;color:var(--ink);
-    background:linear-gradient(transparent 56%,var(--fluo) 56%);padding:0 .14em;border-radius:.1em;
-    opacity:0;transform:scale(.7);transition:opacity .4s ease .25s,transform .5s cubic-bezier(.2,.8,.3,1.55) .25s}
-  .nofuse{position:absolute;bottom:12px;font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--marge);
-    border:1px solid var(--marge);border-radius:99px;padding:3px 11px;opacity:0;transform:translateY(4px);
-    transition:opacity .3s ease .35s,transform .3s ease .35s}
+  /* ── four verb-roles; only the article merges inside each sentence ── */
+  .roles-list{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+  .role-row{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;
+    border-left:5px solid var(--rl, var(--blue))}
+  .r-sent{font-family:var(--display);font-size:clamp(1.3rem,3.7vw,1.72rem);font-weight:600;line-height:1.2;
+    display:flex;align-items:baseline;gap:.3em;flex-wrap:wrap}
+  .r-noun{background:linear-gradient(transparent 56%,var(--fluo) 56%);padding:0 .08em;border-radius:.1em}
+  .r-meaning{font-family:var(--body);font-size:.92rem;color:var(--ink-2);margin-top:7px;line-height:1.5}
+  .r-meaning b{color:var(--ink)}
+  .r-meaning .ic{font-style:normal;margin-right:.25em}
+  .r-rule{font-family:var(--mono);font-size:.74rem;color:var(--blue);font-weight:700}
 
-  /* CONTRACT: gap snaps shut, words fade as one, fused form pops in */
-  .stage.contract .phrase{gap:0;opacity:0;transform:scale(.92)}
-  .stage.contract .phrase .op{opacity:0}
-  .stage.contract .fused{opacity:1;transform:scale(1)}
+  /* article merge slot: "de le" fades and "du" pops in, in the same spot */
+  .art-slot{position:relative;display:inline-grid;place-items:center;min-width:1.7em;vertical-align:baseline}
+  .art-base{display:inline-flex;gap:.16em;color:var(--ink-3);transition:opacity .4s ease,transform .45s ease}
+  .art-base .pp{color:var(--blue);font-weight:700}
+  .art-fused{position:absolute;font-weight:700;color:var(--blue);border-bottom:3px solid var(--blue);padding:0 .02em;
+    opacity:0;transform:scale(.55);transition:opacity .4s ease .18s,transform .46s cubic-bezier(.2,.8,.3,1.55) .18s}
+  .role-row.go .art-base{opacity:0;transform:scale(.8)}
+  .role-row.go .art-fused{opacity:1;transform:scale(1)}
+  /* the 'le' row (aimer): plain definite article, no merge */
+  .role-row.static .art-base{color:var(--blue);font-weight:700;border-bottom:3px solid var(--blue);padding:0 .02em}
 
-  /* NO-CONTRACT: words lean in, the article holds its own highlight, badge says why */
-  .stage.nocontract .phrase .op{opacity:0}
-  .stage.nocontract .phrase{gap:.14em}
-  .stage.nocontract .phrase .art{background:linear-gradient(transparent 58%,var(--fluo) 58%)}
-  .stage.nocontract .nofuse{opacity:1;transform:translateY(0)}
-
-  .cases{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:6px}
-  .case-btn{font-family:var(--mono);font-size:.82rem;font-weight:700;color:var(--ink);background:var(--surface);
-    border:2px solid var(--ink);border-radius:10px;padding:8px 12px;cursor:pointer;box-shadow:var(--shadow-lift);
-    transition:transform .08s,box-shadow .08s,background .12s}
-  .case-btn:hover{transform:translate(1px,2px);box-shadow:1px 1px 0 -1px var(--ink)}
-  .case-btn:active{transform:translate(3px,4px);box-shadow:0 0 0 0 var(--ink)}
-  .case-btn[aria-pressed="true"]{background:var(--fluo)}
-  .rule-note{font-size:.9rem;color:var(--ink-2);margin-top:14px;min-height:2.6em;line-height:1.5}
-  .rule-note b{color:var(--ink)}
-  .replay{font-family:var(--mono);font-size:.78rem;font-weight:700;color:var(--blue);background:none;border:none;cursor:pointer;padding:4px 0;margin-top:6px}
+  .replay{font-family:var(--mono);font-size:.8rem;font-weight:700;color:var(--blue);background:none;border:none;cursor:pointer;padding:6px 0}
+  .takeaway{font-size:.92rem;color:var(--ink-2);margin-top:12px;line-height:1.55;border-top:1px solid var(--line);padding-top:14px}
+  .takeaway b{color:var(--ink)}
 
   .foot{margin-top:30px;font-family:var(--mono);font-size:.74rem;color:var(--ink-3);display:flex;justify-content:space-between}
   .foot a{color:var(--blue);text-decoration:none}
@@ -96,19 +87,36 @@
     <p>Short animations for the moves that are hard to see on paper. Tap a case and watch what happens.</p>
   </section>
 
-  <section class="card" id="contraction">
-    <h2>Article contraction</h2>
-    <p class="sub"><span style="font-family:var(--mono)">de</span> / <span style="font-family:var(--mono)">à</span> + the article — when they fuse, and when they don't.</p>
+  <section class="card" id="roles-card">
+    <h2>One noun, four roles</h2>
+    <p class="sub">Same word — <b>théâtre</b>. The <b>verb</b> picks the article, and the article decides what the noun <i>means</i>. Watch the preposition fuse with <b>le</b>.</p>
 
-    <div class="stage" id="stage" aria-live="polite">
-      <span class="phrase" id="phrase"><span class="prep" id="prep">de</span><span class="op">+</span><span class="art" id="art">le</span></span>
-      <span class="fused" id="fused">du</span>
-      <span class="nofuse" id="nofuse">✕ stays separate</span>
+    <div class="roles-list" id="rolesList">
+
+      <div class="role-row static" style="--rl:var(--marge)">
+        <div class="r-sent"><span>J’aime</span> <span class="art-slot"><span class="art-base">le</span></span> <span class="r-noun">théâtre</span></div>
+        <div class="r-meaning"><span class="ic">❤️</span><span class="r-rule">aimer → le / la / les</span> · preference — theatre as <b>what I like</b> (a domain).</div>
+      </div>
+
+      <div class="role-row" style="--rl:#2e8b57">
+        <div class="r-sent"><span>Je fais</span> <span class="art-slot"><span class="art-base"><span class="pp">de</span>&nbsp;le</span><span class="art-fused">du</span></span> <span class="r-noun">théâtre</span></div>
+        <div class="r-meaning"><span class="ic">💪</span><span class="r-rule">faire → du / de la / des</span> · activity — theatre as <b>what I do</b> (a practice).</div>
+      </div>
+
+      <div class="role-row" style="--rl:var(--blue)">
+        <div class="r-sent"><span>Je vais</span> <span class="art-slot"><span class="art-base"><span class="pp">à</span>&nbsp;le</span><span class="art-fused">au</span></span> <span class="r-noun">théâtre</span></div>
+        <div class="r-meaning"><span class="ic">🚶</span><span class="r-rule">aller → au / à la</span> · destination — theatre as <b>where I go</b>.</div>
+      </div>
+
+      <div class="role-row" style="--rl:#8a5bd0">
+        <div class="r-sent"><span>Je viens</span> <span class="art-slot"><span class="art-base"><span class="pp">de</span>&nbsp;le</span><span class="art-fused">du</span></span> <span class="r-noun">théâtre</span></div>
+        <div class="r-meaning"><span class="ic">↩️</span><span class="r-rule">venir → du / de la</span> · origin — theatre as <b>where I come from</b>.</div>
+      </div>
+
     </div>
 
-    <div class="cases" id="cases" role="group" aria-label="Contraction cases"></div>
-    <button class="replay" id="replay" type="button">↻ replay</button>
-    <p class="rule-note" id="note"></p>
+    <button class="replay" id="replay" type="button">▶ play the merges</button>
+    <p class="takeaway">One word, <b>théâtre</b> — but <b>aimer</b> makes it a domain, <b>faire</b> an activity, <b>aller</b> a destination, <b>venir</b> an origin. The verb sets the article (<b>de</b>/<b>à</b> + <b>le → du</b>/<b>au</b>), and the article carries the meaning.</p>
   </section>
 
   <footer class="foot">
@@ -118,59 +126,17 @@
 </div>
 
 <script>
-  // de/à + article: which fuse (du, des, au, aux) and which stay (de/à + la, l')
-  const CASES = [
-    { prep:'de', art:'le',  result:'du',    contract:true,  note:'<b>de + le → du.</b> The two words fuse into one. You never write “de le”.' },
-    { prep:'de', art:'les', result:'des',   contract:true,  note:'<b>de + les → des.</b> Same fusion in the plural. (Don’t confuse with the article <i>des</i> = “some”.)' },
-    { prep:'à',  art:'le',  result:'au',    contract:true,  note:'<b>à + le → au.</b> “Je vais au cinéma.” Never “à le”.' },
-    { prep:'à',  art:'les', result:'aux',   contract:true,  note:'<b>à + les → aux.</b> “aux toilettes.” Plural fuses too.' },
-    { prep:'de', art:'la',  result:'de la', contract:false, note:'<b>de + la → de la.</b> Feminine stays apart — no fusion. “de la musique.”' },
-    { prep:'de', art:'l’',  result:'de l’', contract:false, note:'<b>de + l’ → de l’.</b> Before a vowel the article is already <i>l’</i>, so nothing fuses. “de l’eau.”' },
-    { prep:'à',  art:'la',  result:'à la',  contract:false, note:'<b>à + la → à la.</b> Feminine doesn’t fuse with à either. “à la maison.”' },
-    { prep:'à',  art:'l’',  result:'à l’',  contract:false, note:'<b>à + l’ → à l’.</b> Before a vowel it stays apart. “à l’école.”' },
-  ];
+  const rows = [...document.querySelectorAll('.role-row')];
+  const animated = rows.filter(r => !r.classList.contains('static'));
 
-  const stage = document.getElementById('stage');
-  const prepEl = document.getElementById('prep');
-  const artEl = document.getElementById('art');
-  const fusedEl = document.getElementById('fused');
-  const note = document.getElementById('note');
-  const casesEl = document.getElementById('cases');
-  let current = 0;
-
-  CASES.forEach((c, i) => {
-    const b = document.createElement('button');
-    b.className = 'case-btn';
-    b.type = 'button';
-    b.textContent = c.prep + ' + ' + c.art;
-    b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
-    b.addEventListener('click', () => play(i));
-    casesEl.appendChild(b);
-  });
-
-  function setCase(i){
-    const c = CASES[i];
-    prepEl.textContent = c.prep;
-    artEl.textContent = c.art;
-    fusedEl.textContent = c.result;   // only shown for contract cases
-    note.innerHTML = c.note;
-    [...casesEl.children].forEach((b,bi)=>b.setAttribute('aria-pressed', String(bi===i)));
+  function playAll(){
+    rows.forEach(r => r.classList.remove('go'));
+    void document.body.offsetWidth;        // restart transitions
+    animated.forEach((r, k) => setTimeout(() => r.classList.add('go'), 450 + k * 750));
   }
 
-  function play(i){
-    current = i;
-    const c = CASES[i];
-    stage.classList.remove('contract','nocontract');
-    setCase(i);
-    void stage.offsetWidth;            // reflow so the transition restarts
-    requestAnimationFrame(() => {
-      stage.classList.add(c.contract ? 'contract' : 'nocontract');
-    });
-  }
-
-  document.getElementById('replay').addEventListener('click', () => play(current));
-  setCase(0);
-  setTimeout(() => play(0), 400);
+  document.getElementById('replay').addEventListener('click', playAll);
+  setTimeout(playAll, 550);
 </script>
 </body>
 </html>
