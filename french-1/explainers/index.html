@@ -53,6 +53,11 @@
   .role-row:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   @keyframes lePulse{0%{transform:scale(1)}45%{transform:scale(1.22)}100%{transform:scale(1)}}
   .role-row.static.pulse .art-base{display:inline-block;animation:lePulse .5s ease}
+  /* rows 3 & 4 split into movement-verb | être pairs */
+  .role-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:580px){.role-pair{grid-template-columns:1fr}}
+  .role-pair .r-sent{font-size:clamp(1.1rem,2.9vw,1.4rem)}
+  .role-pair .r-meaning{font-size:.85rem}
   .r-sent{font-family:var(--display);font-size:clamp(1.3rem,3.7vw,1.72rem);font-weight:600;line-height:1.2;
     display:flex;align-items:baseline;gap:.3em;flex-wrap:wrap}
   .r-noun{background:linear-gradient(transparent 56%,var(--fluo) 56%);padding:0 .08em;border-radius:.1em}
@@ -109,20 +114,32 @@
         <div class="r-meaning"><span class="ic">💪</span><span class="r-rule">faire → du / de la / des</span> · activity — theatre as <b>what I do</b> (a practice).</div>
       </div>
 
-      <div class="role-row" style="--rl:var(--blue)">
-        <div class="r-sent"><span>Je vais</span> <span class="art-slot"><span class="art-base"><span class="pp">à</span>&nbsp;le</span><span class="art-fused">au</span></span> <span class="r-noun">théâtre</span></div>
-        <div class="r-meaning"><span class="ic">🚶</span><span class="r-rule">aller → au / à la</span> · destination — theatre as <b>where I go</b> <i>(trajectory (destination))</i> or <b>where I am</b> <i>(place (location))</i>.</div>
+      <div class="role-pair">
+        <div class="role-row" style="--rl:var(--blue)">
+          <div class="r-sent"><span>Je vais</span> <span class="art-slot"><span class="art-base"><span class="pp">à</span>&nbsp;le</span><span class="art-fused">au</span></span> <span class="r-noun">théâtre</span></div>
+          <div class="r-meaning"><span class="ic">🚶</span><span class="r-rule">aller → au</span> · <b>where I go</b> <i>— trajectory (destination)</i></div>
+        </div>
+        <div class="role-row" style="--rl:#2e8b8b">
+          <div class="r-sent"><span>Je suis</span> <span class="art-slot"><span class="art-base"><span class="pp">à</span>&nbsp;le</span><span class="art-fused">au</span></span> <span class="r-noun">théâtre</span></div>
+          <div class="r-meaning"><span class="ic">📍</span><span class="r-rule">être → au</span> · <b>where I am</b> <i>— place (location)</i></div>
+        </div>
       </div>
 
-      <div class="role-row" style="--rl:#8a5bd0">
-        <div class="r-sent"><span>Je viens</span> <span class="art-slot"><span class="art-base"><span class="pp">de</span>&nbsp;le</span><span class="art-fused">du</span></span> <span class="r-noun">théâtre</span></div>
-        <div class="r-meaning"><span class="ic">↩️</span><span class="r-rule">venir → du / de la</span> · origin — theatre as <b>where I come from</b> <i>(trajectory (origin))</i> or <b>where I am from</b> <i>(place (origin))</i>.</div>
+      <div class="role-pair">
+        <div class="role-row" style="--rl:#8a5bd0">
+          <div class="r-sent"><span>Je viens</span> <span class="art-slot"><span class="art-base"><span class="pp">de</span>&nbsp;le</span><span class="art-fused">du</span></span> <span class="r-noun">théâtre</span></div>
+          <div class="r-meaning"><span class="ic">↩️</span><span class="r-rule">venir → du</span> · <b>where I come from</b> <i>— trajectory (origin)</i></div>
+        </div>
+        <div class="role-row" style="--rl:#2e8b8b">
+          <div class="r-sent"><span>Je suis</span> <span class="art-slot"><span class="art-base"><span class="pp">de</span>&nbsp;le</span><span class="art-fused">du</span></span> <span class="r-noun">théâtre</span></div>
+          <div class="r-meaning"><span class="ic">📍</span><span class="r-rule">être → du</span> · <b>where I am from</b> <i>— place (origin)</i></div>
+        </div>
       </div>
 
     </div>
 
     <button class="replay" id="replay" type="button">▶ play the merges</button>
-    <p class="takeaway">One word, <b>théâtre</b> — but <b>aimer</b> makes it a domain, <b>faire</b> an activity, <b>aller</b> a destination, <b>venir</b> an origin. The verb sets the article (<b>de</b>/<b>à</b> + <b>le → du</b>/<b>au</b>), and the article carries the meaning.</p>
+    <p class="takeaway">The <b>verb</b> does two jobs: it picks the article (<b>de</b>/<b>à</b> + <b>le → du</b>/<b>au</b>) <i>and</i> sets the role. Notice <b>au</b> and <b>du</b> each appear twice — with a movement verb (<b>aller</b>, <b>venir</b>) they mark a <b>trajectory</b>; with <b>être</b> they mark a <b>place</b>. So it’s really the <b>verb</b>, not the article alone, that carries the meaning.</p>
   </section>
 
   <footer class="foot">
@@ -147,7 +164,7 @@
   function playAll(){
     rows.forEach(r => r.classList.remove('go'));
     void document.body.offsetWidth;        // restart transitions
-    animated.forEach((r, k) => setTimeout(() => r.classList.add('go'), 450 + k * 750));
+    animated.forEach((r, k) => setTimeout(() => r.classList.add('go'), 400 + k * 520));
   }
 
   // each row is individually reactive — tap (or Enter/Space) to replay it
